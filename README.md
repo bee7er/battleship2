@@ -1,2 +1,7 @@
-# battleship2
-The classic battleships game between two opponents
+# battleships
+
+Construct a grid
+
+Start the war
+
+Find out the result
