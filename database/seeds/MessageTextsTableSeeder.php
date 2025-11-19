@@ -63,14 +63,7 @@ class MessageTextsTableSeeder extends Seeder {
 
         $messageText = new MessageText();
         $messageText->name = MessageText::MESSAGE_BROADCAST_HIT_ANOTHER_GO;
-        $messageText->text = "Hi %s, just to let you know, you now get another go after a successful hit. System";
-        $messageText->type = MessageText::TYPE_BROADCAST;
-        $messageText->status = MessageText::STATUS_READY;
-        $messageText->save();
-
-        $messageText = new MessageText();
-        $messageText->name = MessageText::MESSAGE_BROADCAST_VOLUME_RANGE;
-        $messageText->text = "Hi %s, there is now a range of volumes to which the sound can be set. System";
+        $messageText->text = "Hi %s, this is version two of the battleships game. System";
         $messageText->type = MessageText::TYPE_BROADCAST;
         $messageText->status = MessageText::STATUS_READY;
         $messageText->save();

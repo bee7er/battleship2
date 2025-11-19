@@ -1,5 +1,7 @@
 
-20250907
+20251118
+    Copied from version 1, battleships-game
+
     Get running native on the M4
 
     Sounds:  https://mixkit.co/free-sound-effects/explosion/
@@ -8,7 +10,7 @@
 
 This version is running native on the M4
 
-    /usr/local/etc/nginx/servers/battleships.test
+    /usr/local/etc/nginx/servers/battleship2.test
 
     sudo vi /etc/hosts
 
@@ -16,11 +18,15 @@ This version is running native on the M4
 
 To run locally in Chrome:
 
-    http://battleships.test
+    http://battleship2.test
 
 Use GIT
 
-    git clone git@github.com:bee7er/battleships.git
+    git refused to use 'battleships'.  Something went wrong when I originally tried to use it and
+    even though I deleted the folder from here and at github, it still would not work.  So
+    had to switch it to a new name, battleships-game, and subsequently battleship2
+
+    git clone git@github.com:bee7er/battleship2.git
 
     # undo a changed file
     git checkout -- <file>
@@ -29,12 +35,12 @@ Mysql:
 
 		mysql -uroot -psecret
 
-        create database battle_db;
+        create database battle2_db;
 
-        CREATE USER 'battle'@'localhost' IDENTIFIED BY 'CanstockAble754&';
-        GRANT ALL ON `battle_db`.* TO 'battle'@'localhost';
+        CREATE USER 'battle2'@'localhost' IDENTIFIED BY 'CanstockAble754&';
+        GRANT ALL ON `battle2_db`.* TO 'battle2'@'localhost';
 
-        use battle_db;
+        use battle2_db;
 
 PHP:
 

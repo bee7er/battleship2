@@ -10,37 +10,35 @@ class VesselsTableSeeder extends Seeder {
     {
         DB::table('vessels')->delete();
 
-//        $vessel = new Vessel();
-//        $vessel->name = 'aircraft carrier';
-//        $vessel->length = 4;
-//        $vessel->points = 7;
-//        $vessel->save();
+        $vessel = new Vessel();
+        $vessel->name = Vessel::VESSEL_TYPE_AIRCRAFT_CARRIER;
+        $vessel->length = 5;
+        $vessel->points = 7;
+        $vessel->save();
 
         $vessel = new Vessel();
-        $vessel->name = 'battleship';
+        $vessel->name = Vessel::VESSEL_TYPE_BATTLESHIP;
+        $vessel->length = 4;
+        $vessel->points = 6;
+        $vessel->save();
+
+        $vessel = new Vessel();
+        $vessel->name = Vessel::VESSEL_TYPE_CRUISER;
+        $vessel->length = 3;
+        $vessel->points = 5;
+        $vessel->save();
+
+        $vessel = new Vessel();
+        $vessel->name = Vessel::VESSEL_TYPE_SUBMARINE;
         $vessel->length = 3;
         $vessel->points = 5;
         $vessel->save();
 
 
         $vessel = new Vessel();
-        $vessel->name = 'destroyer';
+        $vessel->name = Vessel::VESSEL_TYPE_DESTROYER;
         $vessel->length = 2;
         $vessel->points = 4;
-        $vessel->save();
-
-
-        $vessel = new Vessel();
-        $vessel->name = 'submarine';
-        $vessel->length = 2;
-        $vessel->points = 4;
-        $vessel->save();
-
-
-        $vessel = new Vessel();
-        $vessel->name = 'zodiac';
-        $vessel->length = 1;
-        $vessel->points = 3;
         $vessel->save();
 
     }

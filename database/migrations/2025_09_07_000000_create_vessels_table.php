@@ -20,9 +20,9 @@ class CreateVesselsTable extends Migration
             $table->enum('name', [
                 Vessel::VESSEL_TYPE_AIRCRAFT_CARRIER,
                 Vessel::VESSEL_TYPE_BATTLESHIP,
-                Vessel::VESSEL_TYPE_DESTROYER,
+                Vessel::VESSEL_TYPE_CRUISER,
                 Vessel::VESSEL_TYPE_SUBMARINE,
-                Vessel::VESSEL_TYPE_ZODIAC,
+                Vessel::VESSEL_TYPE_DESTROYER
                 ]
             );
             $table->integer('length')->unsigned();

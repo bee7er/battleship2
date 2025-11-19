@@ -14,9 +14,9 @@ class FleetVesselLocationsTableSeeder extends Seeder {
         DB::table('fleet_vessel_locations')->delete();
 
         $dreadNought = Fleet::where('name', Fleet::FLEET_DREADNOUGHT)->firstOrFail();
-        $zodiac = Vessel::where('name', Vessel::VESSEL_TYPE_ZODIAC)->firstOrFail();
+        $cruiser = Vessel::where('name', Vessel::VESSEL_TYPE_CRUISER)->firstOrFail();
         $fleetVessel = FleetVessel::where('fleet_id', $dreadNought->id)
-            ->where('vessel_id', $zodiac->id)
+            ->where('vessel_id', $cruiser->id)
             ->firstOrFail();
 
         $fleetVesselLocation = new FleetVesselLocation();
@@ -27,7 +27,5 @@ class FleetVesselLocationsTableSeeder extends Seeder {
 
         $fleetVessel->status = FleetVessel::FLEET_VESSEL_PLOTTED;
         $fleetVessel->save();
-
     }
-
 }
