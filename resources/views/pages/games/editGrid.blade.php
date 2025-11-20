@@ -259,10 +259,10 @@ $fleetId = 0;
             if ($(elem).hasClass('bs-pos-cell-started')) {
                 // User re-clicked on an allocated cell, so undo the selection
                 removeCellAllocation(elem, row, col);
-
                 return false;
+
             } else if (0 == fleetVessel.locations.length || $(elem).hasClass('bs-pos-cell-available')) {
-                // Ok, we can start the plotting, or this cell can be plotted
+                // Ok, we can start the plotting (length==0), or this cell can be plotted (it is pinkly available)
             } else {
                 showNotification('Please click on an available (pink) location');
                 return false;
@@ -275,6 +275,12 @@ $fleetId = 0;
                 col: col,
                 vessel_name: fleetVessel.vessel_name
             };
+            // Set the cell as started, as is useful for analysing cells in the callback function
+            $('#cell_' + row + '_' + col).addClass('bs-pos-cell-started');
+
+            // See if we can fill in any gaps in the set of locations
+            fleetVessel = fillLocationGaps(fleetVessel);
+
             // Add game, fleet and opponent ids for some checking server side
             fleetVessel.gameId = gameId;
             fleetVessel.fleetId = fleetId;
@@ -286,8 +292,86 @@ $fleetId = 0;
             // ========================================================================
             // Post the new location to the server and await the return in the callback
             ajaxCall('setVesselLocation', JSON.stringify(fleetVessel), updateFleetVessel);
+        }
 
-            return false;
+        /**
+         * Check the locations, if there are any gaps fill them
+         */
+        function fillLocationGaps(fleetVessel)
+        {
+            if (fleetVessel.locations.length <= 1) {
+                // No gaps available
+                return fleetVessel;
+            }
+
+            let rows = [];
+            let cols = [];
+            // Load the arrays with the current positions
+            for (let i=0; i<fleetVessel.locations.length; i++) {
+                let location = fleetVessel.locations[i];
+                rows[rows.length] = location.row;
+                cols[cols.length] = location.col;
+            }
+
+            // Either the rows will be the same or the cols will
+            if (rows[0] == rows[1]) {
+                // We are dealing with cols, sort with a numeric sort compare function
+                // If the result is negative, a is sorted before b.
+                // If the result is positive, b is sorted before a.
+                // If the result is 0, no changes are done with the sort order of the two values
+                cols.sort(function(a, b){return a - b});
+                let col = 0;
+                let row = rows[0];  // Any row element will do, as they are all the same
+                for (let i=0; i<cols.length; i++) {
+                    if (i == 0) {
+                        col = cols[0];
+                        $('#cell_' + row + '_' + col).addClass('bs-pos-cell-started');
+                        col += 1;   // We start at the next col
+                    } else {
+                        while (col < cols[i]) {
+                            if (!$('#cell_' + row + '_' + col).hasClass('bs-pos-cell-started')) {
+                                fleetVessel.locations[fleetVessel.locations.length] = {
+                                    id: 0,
+                                    fleet_vessel_id: fleetVessel.fleetVesselId,
+                                    row: row,
+                                    col: col,
+                                    vessel_name: fleetVessel.vessel_name
+                                };
+                                $('#cell_' + row + '_' + col).addClass('bs-pos-cell-started');
+                            }
+                            col++;
+                        }
+                    }
+                }
+            } else  {
+                rows.sort(function(a, b){return a - b});
+                let row = 0;
+                let col = cols[0];  // Any col element will do, as they are all the same
+                for (let i=0; i<rows.length; i++) {
+                    if (i == 0) {
+                        row = rows[0];
+                        $('#cell_' + row + '_' + col).addClass('bs-pos-cell-started');
+                        row += 1;   // We start at the next row
+                    } else {
+                        while (row < rows[i]) {
+                            if (!$('#cell_' + row + '_' + col).hasClass('bs-pos-cell-started')) {
+                                // Any col element will do, just use the first one
+                                fleetVessel.locations[fleetVessel.locations.length] = {
+                                    id: 0,
+                                    fleet_vessel_id: fleetVessel.fleetVesselId,
+                                    row: row,
+                                    col: col,
+                                    vessel_name: fleetVessel.vessel_name
+                                };
+                                $('#cell_' + row + '_' + col).addClass('bs-pos-cell-started');
+                            }
+                            row++;
+                        }
+                    }
+                }
+            }
+
+            return fleetVessel;
         }
 
         /**
@@ -304,16 +388,13 @@ $fleetId = 0;
 
             fleetVessel.subjectRow = 0;
             fleetVessel.subjectCol = 0;
-            // TODO We may need this
-            // If there is a second allocated elem then we want to reposition to that on return
-            if (2 == fleetVessel.locations.length) {
-                for (let i=0; i<fleetVessel.locations.length; i++) {
-                    let location = fleetVessel.locations[i];
-                    if (location.row != row || location.col != col) {
-                        fleetVessel.subjectRow = location.row;
-                        fleetVessel.subjectCol = location.col;
-                        break;
-                    }
+            // If there is one or more remaining allocated elems then we want to reposition to one on return
+            for (let i=0; i<fleetVessel.locations.length; i++) {
+                let location = fleetVessel.locations[i];
+                if (location.row != row || location.col != col) {
+                    fleetVessel.subjectRow = location.row;
+                    fleetVessel.subjectCol = location.col;
+                    break;
                 }
             }
             // Ok, release this plotted cell
@@ -337,7 +418,8 @@ $fleetId = 0;
         }
 
         /**
-         * Allocates a cell to a vessel
+         * Selects a vessel to start plotting its locations.  We uncheck any existing
+         * vessel started locations and available spaces
          */
         function onClickSelectVessel(rowElem)
         {
@@ -354,7 +436,7 @@ $fleetId = 0;
                 // No other locations will be involved
                 fleetVesselStarted.subjectRow = 0;
                 fleetVesselStarted.subjectCol = 0;
-                // If there are any started cells then we remove them all
+                // If there are any started cells then we remove them all server side
                 let location = {
                     gameId: gameId,
                     fleetVessel: fleetVesselStarted,
@@ -445,218 +527,186 @@ $fleetId = 0;
          */
         function availableCells(row, col, fleetVessel)
         {
-            // Generic removal of all cells flagged as available
+            // Generic removal of all cells flagged as available, we are going to recalculate which ones are available
             $('.grid-cell').removeClass('bs-pos-cell-available');
 
-            // Exit if the vessel is already plotted
+            // Exit if the vessel is already plotted, we are done with this vessel
             if ('{{FleetVessel::FLEET_VESSEL_PLOTTED}}' == fleetVessel.status) {
                 return;
             }
 
+            let numberOfAvailableHorizontalCells = 0;
+            let numberOfAvailableVerticalCells = 0;
             let numberOfAvailableCells = 0;
-            // For length three we need to examine whether three in a row will fit somewhere
-            if (3 == fleetVessel.length && 2 == fleetVessel.locations.length) {
-                // We need at least one available cell
-                numberOfAvailableCells = lengthThreeTwoAllocated(row, col, fleetVessel);
+            let requiredLen = (fleetVessel.length - fleetVessel.locations.length);
 
-            } else {
+            let tryRow = row - (fleetVessel.length - 1);
+            let tryCol = col - (fleetVessel.length - 1);
 
-                let tryRow = row - (fleetVessel.length - 1);
-                let tryCol = col - (fleetVessel.length - 1);
-
-                let itr = 1;        // Maybe 0, or (2 x length - 1)
-                if (fleetVessel.length == 2) itr = 3;
-                if (fleetVessel.length == 3) itr = 5;
-
-                for (i = 0; i < itr; i++) {
-                    if ((tryRow + i) <= 0 || (tryRow + i) > gridSize) continue;
-
-                    for (j = 0; j < itr; j++) {
-                        if ((tryCol + j) <= 0 || (tryCol + j) > gridSize) continue;
-
-                        let elem = $('#cell_' + (tryRow + i) + '_' + (tryCol + j)); //.html('' + i + j);    // To see offsets
-                        if ($(elem).hasClass('bs-pos-cell-plotted') || $(elem).hasClass('bs-pos-cell-started')) {
-                            // Ignore this location
-                        } else {
-                            let idx = ('' + i + j);
-                            if (fleetVessel.length == 2) {
-                                if ('01' == idx || '10' == idx || '12' == idx || '21' == idx) {
-                                    setElemStatusClass(elem, 'bs-pos-cell-available');
-                                    numberOfAvailableCells += 1;
-                                }
-                            } else {
-                                if ('02' == idx || '12' == idx || '23' == idx || '24' == idx
-                                    || '32' == idx || '42' == idx || '20' == idx || '21' == idx
-                                ) {
-                                    setElemStatusClass(elem, 'bs-pos-cell-available');
-                                    numberOfAvailableCells += 1;
-                                }
-                            }
-                        }
-                    }
+            let enoughRoom = true;
+            if (fleetVessel.locations.length == 1) {
+                // TODO I think just adding these together is no good.  Maybe take the max of the two.
+                numberOfAvailableHorizontalCells += plotAvailableLocations('h', fleetVessel.length, tryRow, tryCol);
+                numberOfAvailableVerticalCells += plotAvailableLocations('v', fleetVessel.length, tryRow, tryCol);
+                if (numberOfAvailableHorizontalCells < requiredLen && numberOfAvailableVerticalCells < requiredLen) {
+                    enoughRoom = false;
                 }
-
-                // For length three with only one allocated we need to examine whether three in a row will fit
-                if (fleetVessel.length == 3 && 1 == fleetVessel.locations.length) {
-                    numberOfAvailableCells = lengthThreeOneAllocated(row, col, fleetVessel);
+            } else {
+                numberOfAvailableCells = plotSubsequentLocations(fleetVessel.length);
+                if (numberOfAvailableCells < requiredLen) {
+                    enoughRoom = false;
                 }
             }
             // Check that there is somewhere to go
-            if (numberOfAvailableCells < (fleetVessel.length - fleetVessel.locations.length)) {
+            if (false == enoughRoom) {
                 showNotification('There is not enough room or no squares available in that position. Please move it elsewhere.');
                 return;
             }
+
             showNotification('Now click on one of the highlighted (pink) locations');
         }
 
-
         /**
-         * Highlight available cells when dealing with length three, when two have already been allocated
+         * Working either horizontally or vertically we examine each potential position
+         * and check whether there is enough space for the vessel. If there is then we mark
+         * the available squares with pink to indicate they are available.
          */
-        function lengthThreeTwoAllocated(row, col, fleetVessel)
+        function plotAvailableLocations(orientation, vesselLength, tryRow, tryCol)
         {
-            let tryRow = row - 2;
-            let tryCol = col - 2;
-            let itr = 5;        // A 5 x 5 set of cells which could possibly available
-            let numberOfAvailableCells = 0;
+            let avail = [];
+            let elem = {};
+            let counter = 0;
+            let itrLen = (2 * vesselLength) - 1;
+            let offset = vesselLength - 1;
 
-            // There can only be 1 or 2 cells already started, as 3 would mean the vessel has been plotted
-            // This reduces the cells that are available
-            // Create an array of all elems with the started class, narrows down those available even more
-            let hasStarted = [];
-            let availableElems = [];
-            for (i = 0; i < itr; i++) {
-                if ((tryRow + i) <= 0 || (tryRow + i) > gridSize) continue;
-
-                for (j = 0; j < itr; j++) {
-                    if ((tryCol + j) <= 0 || (tryCol + j) > gridSize) continue;
-
-                    elem = $('#cell_' + (tryRow + i) + '_' + (tryCol + j)); //.html('' + i + j);    // To see offsets
-                    let elemObj = {
-                        elem: elem,
-                        idx: ('' + i + j)       // Speeds things up below
-                    };
-                    if ($(elem).hasClass('bs-pos-cell-started')) {
-                        hasStarted[hasStarted.length] = elemObj;
+            for (let n=0; n<itrLen; n++) {
+                if ('h' == orientation) {
+                    // We are looking horizontally
+                    if ((tryCol + n) <= 0 || (tryCol + n) > gridSize) continue;
+                    elem = $('#cell_' + (tryRow + offset) + '_' + (tryCol + n));
+                } else {
+                    // We are looking vertically
+                    if ((tryRow + n) <= 0 || (tryRow + n) > gridSize) continue;
+                    elem = $('#cell_' + (tryRow + n) + '_' + (tryCol + offset));
+                }
+                if ($(elem).hasClass('bs-pos-cell-plotted')) {
+                    // If before the centre we clear the array otherwise we just stop
+                    if (n < offset) {
+                        avail = [];
                     } else {
-                        if ($(elem).hasClass('bs-pos-cell-plotted')) {
-                            // Ignore this location
-                        } else {
-                            // This location is possibly available
-                            availableElems[availableElems.length] = elemObj;
-                        }
+                        break;
                     }
+                } else {
+                    avail[avail.length] = n;
                 }
             }
-            // For testing purposes use the .html('' + i + j) in line above to show the matrix of cell locations. It makes
-            // sense of the bank of number tests below.
-            // For each offset cell it can only be used if another required cell is available to complete the set of three
-            // The starting position is always 2,2, the following table can be read as:
-            //      if the other started cell is '02', then only '12' can be used, if it is available
-            //      if the other started cell is '12', then '02' or '32' can be used, if available
-            for (let i = 0; i < hasStarted.length; i++) {
-                let started = hasStarted[i];
-                let n1 = 0;
-                let n2 = 0;
-
-                if ('02' == started.idx) { n1=setAvailableElem(availableElems, '12'); }
-                if ('12' == started.idx) { n1=setAvailableElem(availableElems, '02'); n2=setAvailableElem(availableElems, '32'); }
-                if ('20' == started.idx) { n1=setAvailableElem(availableElems, '21'); }
-                if ('21' == started.idx) { n1=setAvailableElem(availableElems, '20'); n2=setAvailableElem(availableElems, '23'); }
-                if ('23' == started.idx) { n1=setAvailableElem(availableElems, '21'); n2=setAvailableElem(availableElems, '24'); }
-                if ('24' == started.idx) { n1=setAvailableElem(availableElems, '23'); }
-                if ('32' == started.idx) { n1=setAvailableElem(availableElems, '12'); n2=setAvailableElem(availableElems, '42'); }
-                if ('42' == started.idx) { n1=setAvailableElem(availableElems, '32'); }
-
-                numberOfAvailableCells += (n1 + n2);
+            if (avail.length >= (offset + 1)) {
+                // There is enough space for the vessel, but is our position (rowIdx or colIdx) among those available
+                for (let m=0; m<avail.length; m++) {
+                    if ('h' == orientation) {
+                        elem = $('#cell_' + (tryRow + offset) + '_' + (tryCol + avail[m])); // We are looking horizontally
+                    } else {
+                        elem = $('#cell_' + (tryRow + avail[m]) + '_' + (tryCol + offset)); // We are looking vertically
+                    }
+                    setElemStatusClass(elem, 'bs-pos-cell-available');
+                    counter += 1;
+                }
             }
 
-            return numberOfAvailableCells;
+            return counter;
         }
 
         /**
-         * Set the element to be available if not blocked by already being allocated
+         * When more than one location has been started then the available squares can only be in
+         * the same dimension as them.  So where are the started squares and where next can they go.
+         * We mark the available squares with pink to indicate they are available.
          */
-        function setAvailableElem(availableElems, idx)
+        function plotSubsequentLocations(vesselLength)
         {
-            for (let j=0; j<availableElems.length; j++) {
-                let elemObj = availableElems[j];
-                if (idx == elemObj.idx) {
-                    $(elemObj.elem).addClass('bs-pos-cell-available');
-                    return 1;
-                }
-            }
-            return 0;
-        }
-
-        /**
-         * Highlight available cells when dealing with length three, when only one is currently allocated
-         */
-        function lengthThreeOneAllocated(row, col, fleetVessel)
-        {
-            let tryRow = row - 2;
-            let tryCol = col - 2;
-            let itr = 5;        // A 5 x 5 set of cells which could possibly be available
             let numberOfAvailableCells = 0;
 
-            // Create an array of all elems with the available class, these are those that might be possible
-            let hasAvailable = [];
-            for (i = 0; i < itr; i++) {
-                if ((tryRow + i) <= 0 || (tryRow + i) > gridSize) continue;
-
-                for (j = 0; j < itr; j++) {
-                    if ((tryCol + j) <= 0 || (tryCol + j) > gridSize) continue;
-
-                    elem = $('#cell_' + (tryRow + i) + '_' + (tryCol + j));
-                    if ($(elem).hasClass('bs-pos-cell-available')) {
-                        hasAvailable[hasAvailable.length] = {
-                            elem: elem,
-                            idx: ('' + i + j)       // Speeds things up below
-                        };
-                        if (2 == i && 2 == j) {
-                            // Do not count the primary cell, it is always at 2,2
-                        } else {
-                            numberOfAvailableCells += 1;
-                        }
-                    }
-                }
+            let rows = [];
+            let cols = [];
+            let elems = $('.bs-pos-cell-started').get();
+            // How many available cells do we need?
+            let availableCellsNeeded = vesselLength - elems.length;
+            // Extract the rows and cols from the started elements
+            for (let i=0; i<elems.length; i++) {
+                let elem = elems[i];
+                // Get row/col from the started element
+                let elemIdData = $(elem).prop('id').split('_');
+                rows[rows.length] = parseInt(elemIdData[1]);
+                cols[cols.length] = parseInt(elemIdData[2])
             }
-
-            // For each offset cell it can only be used if a required cell is available to complete the set of three
-            // So '02' is only available if '12' is also available
-            for (let i = 0; i < hasAvailable.length; i++) {
-                let avail = hasAvailable[i];
-                if (
-                        '02' == avail.idx && !hasAvailableElem(hasAvailable, '12')
-                        || '12' == avail.idx && (!hasAvailableElem(hasAvailable, '02') && !hasAvailableElem(hasAvailable, '32'))
-                        || '20' == avail.idx && !hasAvailableElem(hasAvailable, '21')
-                        || '21' == avail.idx && (!hasAvailableElem(hasAvailable, '20') && !hasAvailableElem(hasAvailable, '23'))
-                        || '23' == avail.idx && (!hasAvailableElem(hasAvailable, '21') && !hasAvailableElem(hasAvailable, '24'))
-                        || '24' == avail.idx && !hasAvailableElem(hasAvailable, '23')
-                        || '32' == avail.idx && (!hasAvailableElem(hasAvailable, '12') && !hasAvailableElem(hasAvailable, '42'))
-                        || '42' == avail.idx && !hasAvailableElem(hasAvailable, '32')
-                ) {
-                    // The cell cannot be used as a required cell isn't available
-                    setElemStatusClass(avail.elem, '');
-                    numberOfAvailableCells -= 1;
+            // Either the rows will be the same or the cols will
+            // We are plotting available cells, which can go at either end of the started cells
+            if (rows[0] == rows[1]) {
+                // All on the same row, so we are dealing with columns
+                cols.sort(function(a, b){return a - b});
+                let startCol = (cols[0] - 1);
+                let row = rows[0];  // Any row element will do, as they are all the same
+                // Going backwards because we may encounter a plotted location
+                for (let i=availableCellsNeeded; i>0; i--) {
+                    if (startCol <= 0) {
+                        break;
+                    }
+                    let elem = $('#cell_' + row + '_' + startCol);
+                    if (elem.hasClass('bs-pos-cell-plotted')) {
+                        break;
+                    }
+                    setElemStatusClass(elem, 'bs-pos-cell-available');
+                    startCol -= 1;
+                    numberOfAvailableCells += 1;
+                }
+                // Going forwards until the end or a plotted cell
+                startCol = (cols[cols.length - 1] + 1);
+                for (let i=0; i<availableCellsNeeded; i++) {
+                    if (startCol > gridSize) {
+                        break;
+                    }
+                    let elem = $('#cell_' + row + '_' + startCol);
+                    if (elem.hasClass('bs-pos-cell-plotted')) {
+                        break;
+                    }
+                    setElemStatusClass(elem, 'bs-pos-cell-available');
+                    startCol += 1;
+                    numberOfAvailableCells += 1;
+                }
+            } else  {
+                // All on the same column, so we are dealing with rows
+                rows.sort(function(a, b){return a - b});
+                let startRow = (rows[0] - 1);
+                let col = cols[0];  // Any col element will do, as they are all the same
+                // Going backwards because we may encounter a plotted location
+                for (let i=availableCellsNeeded; i>0; i--) {
+                    if (startRow <= 0) {
+                        break;
+                    }
+                    let elem = $('#cell_' + startRow + '_' + col);
+                    if (elem.hasClass('bs-pos-cell-plotted')) {
+                        break;
+                    }
+                    setElemStatusClass(elem, 'bs-pos-cell-available');
+                    startRow -= 1;
+                    numberOfAvailableCells += 1;
+                }
+                // Now go forwards from the highest started location
+                startRow = (rows[rows.length - 1] + 1);
+                for (let i=0; i<availableCellsNeeded; i++) {
+                    if (startRow > gridSize) {
+                        break;
+                    }
+                    let elem = $('#cell_' + startRow + '_' + col);
+                    if (elem.hasClass('bs-pos-cell-plotted')) {
+                        break;
+                    }
+                    setElemStatusClass(elem, 'bs-pos-cell-available');
+                    startRow += 1;
+                    numberOfAvailableCells += 1;
                 }
             }
 
             return numberOfAvailableCells;
-        }
-
-        /**
-         * Try to find the requested elem
-         */
-        function hasAvailableElem(elemAry, idx)
-        {
-            for (let j=0; j<elemAry.length; j++) {
-                let elem = elemAry[j];
-                if (idx == elem.idx) {
-                    return true;
-                }
-            }
-            return false;
         }
 
         /**
