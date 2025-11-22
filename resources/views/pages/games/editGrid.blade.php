@@ -545,7 +545,6 @@ $fleetId = 0;
 
             let enoughRoom = true;
             if (fleetVessel.locations.length == 1) {
-                // TODO I think just adding these together is no good.  Maybe take the max of the two.
                 numberOfAvailableHorizontalCells += plotAvailableLocations('h', fleetVessel.length, tryRow, tryCol);
                 numberOfAvailableVerticalCells += plotAvailableLocations('v', fleetVessel.length, tryRow, tryCol);
                 if (numberOfAvailableHorizontalCells < requiredLen && numberOfAvailableVerticalCells < requiredLen) {
@@ -560,10 +559,13 @@ $fleetId = 0;
             // Check that there is somewhere to go
             if (false == enoughRoom) {
                 showNotification('There is not enough room or no squares available in that position. Please move it elsewhere.');
-                return;
+                return false;
             }
 
             showNotification('Now click on one of the highlighted (pink) locations');
+
+            // There is enough room.  Notify caller, this is needed by the random allocation processing.
+            return true;
         }
 
         /**
@@ -589,7 +591,8 @@ $fleetId = 0;
                     if ((tryRow + n) <= 0 || (tryRow + n) > gridSize) continue;
                     elem = $('#cell_' + (tryRow + n) + '_' + (tryCol + offset));
                 }
-                if ($(elem).hasClass('bs-pos-cell-plotted')) {
+                // Plotted happens in manual mode and started happens in random mode
+                if ($(elem).hasClass('bs-pos-cell-plotted') || $(elem).hasClass('bs-pos-cell-started')) {
                     // If before the centre we clear the array otherwise we just stop
                     if (n < offset) {
                         avail = [];
@@ -624,7 +627,6 @@ $fleetId = 0;
         function plotSubsequentLocations(vesselLength)
         {
             let numberOfAvailableCells = 0;
-
             let rows = [];
             let cols = [];
             let elems = $('.bs-pos-cell-started').get();
@@ -796,49 +798,173 @@ $fleetId = 0;
 
             // Disable all the radio buttons
             $(':radio').prop("disabled", true);
+            // Keep collection of all grid cells
+            let gridCells = $('.grid-cell');
+
             if (null == fleetVesselsClone) {
                 // Back up the fleet vessels so we can go back if the user cancels
                 fleetVesselsClone = jQuery.extend(true, [], fleetVessels);
             }
 
-            for (let i = 0; i < fleetVessels.length; i++) {
-                // For each vessel we allocate a cell for each part of it, its length
+            for (let i=0; i<fleetVessels.length; i++) {
+                // For each vessel we find space on the grid randomly.  The allocate that sapce to the vessel.
                 let fleetVessel = fleetVessels[i];
                 fleetVessel.status = '{{FleetVessel::FLEET_VESSEL_AVAILABLE}}';
-                fleetVessel.locations = [];
-                let location = selectCellAndBuildLocation('unoccupied', fleetVessel);
-                fleetVessel.locations[fleetVessel.locations.length] = location;
+                // Try up to 10 times to find enough space for the vessel
+                for (let j=0; j<10; j++) {
+                    // Select a cell at random from those available
+                    let unoccupiedCell = selectUnoccupiedCell();
+                    // The available processing uses the details of the location to work out available cells
+                    fleetVessel.locations = [];
+                    fleetVessel.locations[0] = {
+                        id: 0,
+                        fleet_vessel_id: fleetVessel.fleetVesselId,
+                        row: unoccupiedCell.rowInt,
+                        col: unoccupiedCell.colInt,
+                        vessel_name: fleetVessel.vessel_name
+                    };
 
-                // If there are more vessel parts, we work out available cells around it and attach one of them
-                if (fleetVessel.length >= 2) {
-                    availableCells(location.row, location.col, fleetVessel);
-                    // Now we select from the bs-pos-cell-available cells
-                    location = selectCellAndBuildLocation('bs-pos-cell-available', fleetVessel);
-                    fleetVessel.locations[fleetVessel.locations.length] = location;
-                }
-
-                if (fleetVessel.length > 2) {
-                    availableCells(location.row, location.col, fleetVessel);
-                    fleetVessel.locations[fleetVessel.locations.length] = selectCellAndBuildLocation('bs-pos-cell-available', fleetVessel);
+                    // Flag available cells and if successful we randonly choose a set
+                    if (availableCells(unoccupiedCell.rowInt, unoccupiedCell.colInt, fleetVessel))
+                    {
+                        let vesselLocationsFulfilled = false;
+                        let randDimension = Math.floor(Math.random() * 2) + 1;   // A number between 1 and 2
+                        for (let k=0; k<2; k++) {
+                            // We know that one of the dimensions has enough locations, so we'll try twice
+                            if (2 == randDimension) {
+                                // Try to get matching row elems
+                                let sortedRowAvailables = getSortedAvailables('byRow', unoccupiedCell.rowInt);
+                                if (sortedRowAvailables.length >= fleetVessel.length) {
+                                    // There are at least enough available cells, grab them and add
+                                    // corresponding locations to the fleet vessel
+                                    addLocationsToFleetVessel(sortedRowAvailables, fleetVessel);
+                                    // Get ready for the next vessel
+                                    gridCells.removeClass('bs-pos-cell-available');
+                                    // We are done with this vessel
+                                    vesselLocationsFulfilled = true;
+                                    break;
+                                }
+                                // Try cols next time
+                                randDimension = 1;
+                            } else {
+                                // Try to get matching col elems
+                                let sortedColAvailables = getSortedAvailables('byCol', unoccupiedCell.colInt);
+                                if (sortedColAvailables.length >= fleetVessel.length) {
+                                    convertArrayAndAddLocationsToFleetVessel(sortedColAvailables, fleetVessel);
+                                    gridCells.removeClass('bs-pos-cell-available');
+                                    vesselLocationsFulfilled = true;
+                                    break;
+                                }
+                                // Try rows next time
+                                randDimension = 2;
+                            }
+                        }
+                        if (true == vesselLocationsFulfilled) {
+                            break;
+                        }
+                    }
                 }
             }
 
-            let gridCell = $('.grid-cell');
-            gridCell.removeClass('unoccupied');
-            gridCell.removeClass('bs-pos-cell-available');
+            gridCells.removeClass('unoccupied');
+            gridCells.removeClass('bs-pos-cell-available');
 
             let checkStartedCells = $('.bs-pos-cell-started' );
             if (fleetLocationSize != checkStartedCells.length) {
-                alert('Fleet vessel overlap detected with count ' + checkStartedCells.length);
+                console.log('Fleet vessel overlap detected with required cells ' + fleetLocationSize + ' and allocated cells ' + checkStartedCells.length);
+                alert('Fleet vessel overlap detected.  Please try again.');
             }
         }
 
         /**
-         * Randomly chooses an available cell, builds and returns a location object
+         * We have a set of locations, but they are in col/row format
+         * Here we convert them to row/col and call the common function to add the corresponding
+         * locations to the fleet vessel
          */
-        function selectCellAndBuildLocation(cellSelector, fleetVessel)
+        function convertArrayAndAddLocationsToFleetVessel(availableCellsColRow, fleetVessel)
         {
-            let selectedAvailableCells = $('.' + cellSelector);
+            // We need to switch around the col/row and then call the common add locations function
+            let availableCellsRowCol = [];
+            for (let i=0; i<availableCellsColRow.length; i++) {
+                let colRow = availableCellsColRow[i];
+                let elemIdData = colRow.split('_');
+                let colInt = parseInt(elemIdData[0]);
+                let rowInt = parseInt(elemIdData[1]);
+                // Do the old switcheroo
+                availableCellsRowCol[availableCellsRowCol.length] = (rowInt + '_' + colInt);
+            }
+            // Now add corresponding locations
+            addLocationsToFleetVessel(availableCellsRowCol, fleetVessel);
+        }
+
+        /**
+         * We have a set of available locations, create location objects and add them to the fleet vessel
+         */
+        function addLocationsToFleetVessel(availableCells, fleetVessel)
+        {
+            // For simplicity we will re-add the existing location
+            fleetVessel.locations = [];
+
+            for (let i=0; i<fleetVessel.length; i++) {
+                let cell = availableCells[i];
+                let elemIdData = cell.split('_');
+                let rowInt = parseInt(elemIdData[0]);
+                let colInt = parseInt(elemIdData[1]);
+                // Set this cell to be occupied and assign the first letter of the vessel type
+                let elem = $('#cell_' + rowInt + '_' + colInt);
+                setElemStatusClass(elem, 'bs-pos-cell-started');
+                elem.removeClass('unoccupied');
+                elem.html(fleetVessel.vessel_name.toUpperCase().charAt(0));
+                fleetVessel.locations[i] = {
+                    id: 0,
+                    fleet_vessel_id: fleetVessel.fleetVesselId,
+                    row: rowInt,
+                    col: colInt,
+                    vessel_name: fleetVessel.vessel_name
+                };
+
+            }
+        }
+
+        /**
+         * We have a number of available cells. They can be both horizontal and vertical.
+         * Here we build an array in either row or col order.
+         * We are called with a randomly selected dimension.
+         * The resulting array is sorted numerically and returned.
+         */
+        function getSortedAvailables(dimension, idxInt)
+        {
+            let sortedAvailables = [];
+            let availables = $('.bs-pos-cell-available');
+
+            for (let i=0; i<availables.length; i++) {
+                let elem = availables[i];
+                let elemIdData = $(elem).prop('id').split('_');
+                let rowInt = parseInt(elemIdData[1]);
+                let colInt = parseInt(elemIdData[2]);
+                // NB When building the arrays we need to keep the cell row and col numbers separate
+                // because we have to allow for row or col 10, when we come to split them up later
+                if ('byRow' == dimension && rowInt == idxInt) {
+                    sortedAvailables[sortedAvailables.length] = (elemIdData[1] + '_' + elemIdData[2]);
+                } else if ('byCol' == dimension && colInt == idxInt) {
+                    sortedAvailables[sortedAvailables.length] = (elemIdData[2] + '_' + elemIdData[1]);
+                }
+
+            }
+            sortedAvailables.sort(function(a, b){return a - b});    // numeric sort ascending
+
+            return sortedAvailables;
+        }
+
+        /**
+         * Here we obtain a collection of unoccupied cells. Then we randomly select one of them and return
+         * it to the caller.  That cell will be used to see if there is enough room around it to plot all the
+         * locations of the fleet vessel under consideration.  If not we will try again, otherwise either the
+         * rows or cols will be selected to plot the vessel.
+         */
+        function selectUnoccupiedCell()
+        {
+            let selectedAvailableCells = $('.unoccupied');
             // Obtain a random unoccupied cell
             let cellNumber = Math.floor(Math.random() * selectedAvailableCells.length) + 1;
             // Work out its row/col from its id
@@ -846,22 +972,12 @@ $fleetId = 0;
             let elemIdData = elem.prop('id').split('_');
             let rowInt = parseInt(elemIdData[1]);
             let colInt = parseInt(elemIdData[2]);
-            // Set this cell to be occupied and assign the first letter of the vessel type
-            let selectedCell = $('#' + elem.prop('id'));
-            selectedCell.addClass('bs-pos-cell-started');
-            selectedCell.removeClass(cellSelector);
-            selectedCell.removeClass('unoccupied');
-            selectedCell.html(fleetVessel.vessel_name.toUpperCase().charAt(0));
-            // Build a location object which we'll send to the server to update the db
-            let location = {
-                id: 0,
-                fleet_vessel_id: fleetVessel.fleetVesselId,
-                row: rowInt,
-                col: colInt,
-                vessel_name: fleetVessel.vessel_name
-            };
 
-            return location;
+            return {
+                elem: elem,
+                rowInt: rowInt,
+                colInt: colInt
+            };
         }
 
         /**
