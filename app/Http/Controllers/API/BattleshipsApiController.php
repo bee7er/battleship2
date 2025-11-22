@@ -123,7 +123,7 @@ class BattleshipsApiController extends Controller
 
 			// Update the fleet vessel status, returned below
 			$fleetVessel['status'] =
-				FleetVesselLocation::addNewLocation($fleetVessel['fleetVesselId'], $fleetVessel['locations']);
+				FleetVesselLocation::addNewLocations($fleetVessel['fleetVesselId'], $fleetVessel['locations']);
 
 			if (FleetVessel::FLEET_VESSEL_PLOTTED == $fleetVessel['status']) {
 				// Are they all plotted?  If so, we set the game to waiting or ready.
@@ -450,7 +450,7 @@ class BattleshipsApiController extends Controller
 					if (isset($fleetVessel['locations']) && count($fleetVessel['locations']) > 0) {
 						$fleetVesselCount += 1;
 						$fleetVesselLocationCount += count($fleetVessel['locations']);
-						FleetVesselLocation::addNewLocation($fleetVessel['fleetVesselId'], $fleetVessel['locations']);
+						FleetVesselLocation::addNewLocations($fleetVessel['fleetVesselId'], $fleetVessel['locations']);
 					}
 				}
 			}

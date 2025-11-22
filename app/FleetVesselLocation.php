@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class FleetVesselLocation extends Model
 {
@@ -102,7 +103,7 @@ class FleetVesselLocation extends Model
      * @param $fleetVesselId - id of the fleet vessel
      * @param $locations - array of new locations
      */
-    public static function addNewLocation($fleetVesselId, &$locations)
+    public static function addNewLocations($fleetVesselId, &$locations)
     {
         if (isset($locations) && 0 < count($locations)) {
             foreach ($locations as &$location) {

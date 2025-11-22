@@ -562,7 +562,9 @@ $fleetId = 0;
                 return false;
             }
 
-            showNotification('Now click on one of the highlighted (pink) locations');
+            if (false == randomMode) {
+                showNotification('Now click on one of the highlighted (pink) locations');
+            }
 
             // There is enough room.  Notify caller, this is needed by the random allocation processing.
             return true;
@@ -905,7 +907,10 @@ $fleetId = 0;
             // For simplicity we will re-add the existing location
             fleetVessel.locations = [];
 
-            for (let i=0; i<fleetVessel.length; i++) {
+            // We try not to start from the edge all the time
+            let start = (availableCells.length - fleetVessel.length);
+            let idx = 0;
+            for (let i=start; i<(fleetVessel.length + start); i++) {
                 let cell = availableCells[i];
                 let elemIdData = cell.split('_');
                 let rowInt = parseInt(elemIdData[0]);
@@ -915,7 +920,7 @@ $fleetId = 0;
                 setElemStatusClass(elem, 'bs-pos-cell-started');
                 elem.removeClass('unoccupied');
                 elem.html(fleetVessel.vessel_name.toUpperCase().charAt(0));
-                fleetVessel.locations[i] = {
+                fleetVessel.locations[idx++] = {
                     id: 0,
                     fleet_vessel_id: fleetVessel.fleetVesselId,
                     row: rowInt,
