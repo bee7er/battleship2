@@ -18,8 +18,8 @@ class GamesTableSeeder extends Seeder {
         $game = new Game();
         $game->name = Game::GAME_FIRST_NAVAL_BATTLE;
         $game->status = 'edit';
-        $game->protagonist_id = $brian->id;
-        $game->opponent_id = $ben->id;
+        $game->player_one_id = $brian->id;
+        $game->player_two_id = $ben->id;
         $game->started_at = null;
         $game->ended_at = null;
         $game->save();
@@ -27,8 +27,8 @@ class GamesTableSeeder extends Seeder {
         $game = new Game();
         $game->name = Game::GAME_SECOND_NAVAL_BATTLE;
         $game->status = 'edit';
-        $game->protagonist_id = $ben->id;
-        $game->opponent_id = $brian->id;
+        $game->player_one_id = $ben->id;
+        $game->player_two_id = $brian->id;
         $game->started_at = null;
         $game->ended_at = null;
         $game->save();
@@ -36,8 +36,8 @@ class GamesTableSeeder extends Seeder {
         $game = new Game();
         $game->name = Game::GAME_THIRD_NAVAL_BATTLE;
         $game->status = 'edit';
-        $game->protagonist_id = $steve->id;
-        $game->opponent_id = $ben->id;
+        $game->player_one_id = $steve->id;
+        $game->player_two_id = $ben->id;
         $game->started_at = null;
         $game->ended_at = null;
         $game->save();

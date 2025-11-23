@@ -37,7 +37,7 @@ CREATE TABLE `fleet_templates` (
 
 LOCK TABLES `fleet_templates` WRITE;
 /*!40000 ALTER TABLE `fleet_templates` DISABLE KEYS */;
-INSERT INTO `fleet_templates` VALUES (1,1,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(2,1,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(3,2,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(4,2,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(5,3,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(6,3,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(7,4,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(8,4,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(9,5,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(10,5,'2025-11-23 12:29:14','2025-11-23 12:29:14');
+INSERT INTO `fleet_templates` VALUES (1,1,'2025-11-23 20:58:52','2025-11-23 20:58:52'),(2,1,'2025-11-23 20:58:52','2025-11-23 20:58:52'),(3,2,'2025-11-23 20:58:52','2025-11-23 20:58:52'),(4,2,'2025-11-23 20:58:52','2025-11-23 20:58:52'),(5,3,'2025-11-23 20:58:52','2025-11-23 20:58:52'),(6,3,'2025-11-23 20:58:52','2025-11-23 20:58:52'),(7,4,'2025-11-23 20:58:52','2025-11-23 20:58:52'),(8,4,'2025-11-23 20:58:52','2025-11-23 20:58:52'),(9,5,'2025-11-23 20:58:52','2025-11-23 20:58:52'),(10,5,'2025-11-23 20:58:52','2025-11-23 20:58:52');
 /*!40000 ALTER TABLE `fleet_templates` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -135,8 +135,8 @@ CREATE TABLE `games` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
   `status` enum('edit','waiting','ready','engaged','completed','deleted','undeleted') COLLATE utf8mb3_unicode_ci NOT NULL,
-  `protagonist_id` int unsigned NOT NULL,
-  `opponent_id` int unsigned NOT NULL,
+  `player_one_id` int unsigned NOT NULL,
+  `player_two_id` int unsigned NOT NULL,
   `winner_id` int unsigned NOT NULL,
   `started_at` datetime DEFAULT NULL,
   `ended_at` datetime DEFAULT NULL,
@@ -182,7 +182,7 @@ CREATE TABLE `message_texts` (
 
 LOCK TABLES `message_texts` WRITE;
 /*!40000 ALTER TABLE `message_texts` DISABLE KEYS */;
-INSERT INTO `message_texts` VALUES (1,'Invite owner','Hi %s, a game has been created for you by the system called \'%s\' against opponent \'%s\'. System','specific','ready','2025-11-23 12:29:14','2025-11-23 12:29:14'),(2,'Invite player','Hi %s, will you play \'%s\' with me? %s','specific','ready','2025-11-23 12:29:14','2025-11-23 12:29:14'),(3,'Accept invitation','Hi %s, I will love playing \'%s\' with you. %s','specific','ready','2025-11-23 12:29:14','2025-11-23 12:29:14'),(4,'Game ready','Hi %s and %s, I\'m happy to say that \'%s\' is ready to play. System','specific','ready','2025-11-23 12:29:14','2025-11-23 12:29:14'),(5,'Waiting','Hi %s, %s is waiting for you to finish plotting your fleet in the \'%s\' game. System','specific','ready','2025-11-23 12:29:14','2025-11-23 12:29:14'),(6,'Winner','Hi %s, you won the \'%s\' game.  Well done. %s','specific','ready','2025-11-23 12:29:14','2025-11-23 12:29:14'),(7,'Loser','Hi %s, sadly you lost the \'%s\' game.  Try again later. %s','specific','ready','2025-11-23 12:29:14','2025-11-23 12:29:14'),(8,'Welcome to Version 2','Hi %s, welcome to version two of my battleships game. System','broadcast','ready','2025-11-23 12:29:14','2025-11-23 12:29:14');
+INSERT INTO `message_texts` VALUES (1,'Invite owner','Hi %s, a game has been created for you by the system called \'%s\' against opponent \'%s\'. *system_admin','specific','ready','2025-11-23 20:58:52','2025-11-23 20:58:52'),(2,'Invite player','Hi %s, will you play \'%s\' with me? %s','specific','ready','2025-11-23 20:58:52','2025-11-23 20:58:52'),(3,'Accept invitation','Hi %s, I will love playing \'%s\' with you. %s','specific','ready','2025-11-23 20:58:52','2025-11-23 20:58:52'),(4,'Game ready','Hi %s and %s, I\'m happy to say that \'%s\' is ready to play. *system_admin','specific','ready','2025-11-23 20:58:52','2025-11-23 20:58:52'),(5,'Waiting','Hi %s, %s is waiting for you to finish plotting your fleet in the \'%s\' game. *system_admin','specific','ready','2025-11-23 20:58:52','2025-11-23 20:58:52'),(6,'Winner','Hi %s, you won the \'%s\' game.  Well done. %s','specific','ready','2025-11-23 20:58:52','2025-11-23 20:58:52'),(7,'Loser','Hi %s, sadly you lost the \'%s\' game.  Try again later. %s','specific','ready','2025-11-23 20:58:52','2025-11-23 20:58:52'),(8,'Welcome to Version 2','Hi %s, welcome to version two of my battleships game. *system_admin','broadcast','ready','2025-11-23 20:58:52','2025-11-23 20:58:52');
 /*!40000 ALTER TABLE `message_texts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -324,7 +324,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'System','system@gmail.com','$2y$10$kq6l9o5u2iZc0gTcr8UqZu.V7iZ5NLxEvsGWfuSsCTnIdBFfAxEGS','eI89eKmm4WjC4PBo',1,NULL,0,0,0,'2025-11-23 12:29:13','2025-11-23 12:29:13'),(2,'Brian','brian@gmail.com','$2y$10$QZjJ4/GMr.g5kgZQBZz3sO.tBz0tbEH1/4P.cSDlrzbcfb/uXewL2','8iCoP6wd4fVe4Bgu',1,NULL,0,0,0,'2025-11-23 12:29:13','2025-11-23 12:29:13'),(3,'Steve','steve@gmail.com','$2y$10$AbBsEbVb9BrRhMJMy3RvtOa9sESxfkQN8LbrsWeB.6N8bokP5LoDu','VOyZJVNbAGlZyGtQ',0,NULL,0,0,0,'2025-11-23 12:29:13','2025-11-23 12:29:13'),(4,'Phil','phil@gmail.com','$2y$10$TTy1sjEjQXNt5daIXxWjm.xKixGIkcNfUjqE7zIOz82NYy1tNAOVm','CMSQoRTIQbAtyVmf',0,NULL,0,0,0,'2025-11-23 12:29:13','2025-11-23 12:29:13'),(5,'Andrew','andrew@gmail.com','$2y$10$9uyvY2GxWX65gTvooh1JS.A5FpOd8sjb2Tq/hZUIwGfYoPULUjxtO','DyztpaZGFw0f08eX',0,NULL,0,0,0,'2025-11-23 12:29:13','2025-11-23 12:29:13'),(6,'Greg','greg@gmail.com','$2y$10$usxJOt46.k.1QVIkcLtokuvakGt8fVn7uvCGnip6UuOJq2FR.hszm','O8qN6GdWsEwuqebK',0,NULL,0,0,0,'2025-11-23 12:29:13','2025-11-23 12:29:13'),(7,'Tim','tim@gmail.com','$2y$10$1eTqqsHDNZ3aUWGMousM5.g2d21ayEFXWvW/Yk2dvSWocRupw6TcK','9zCMUoSpXzxXAeEq',0,NULL,0,0,0,'2025-11-23 12:29:13','2025-11-23 12:29:13'),(8,'Ben','ben@gmail.com','$2y$10$A64uQooi2Kcw9pS.XDHtS.Cle0PLWDyqr58dZf0Zz9iP8KHBMROuC','K5UMT1exEqdg6RrF',0,NULL,0,0,0,'2025-11-23 12:29:13','2025-11-23 12:29:13'),(9,'Russ','russ@gmail.com','$2y$10$MfLKVE8y2Uu8x/tChM4jGudtrV0LXhKT23v/lXJDe1pcUr6E0u96i','fm8UIFOIwGuLsf9A',0,NULL,0,0,0,'2025-11-23 12:29:13','2025-11-23 12:29:13'),(10,'Kika','kika@gmail.com','$2y$10$QuN5bFbwO79OvJK8CnN1w.SkNi7McrvBMA9j/soGvCYcLwSZjfwpW','Ta2EmLAy3Ac39xnF',0,NULL,0,0,0,'2025-11-23 12:29:13','2025-11-23 12:29:13'),(11,'Ayndie','ayndie@gmail.com','$2y$10$dWXXb1kNU6G7t/149AiqSujPX50n/2aEwlG7a0WxhtUt9p9dbDepG','QfBu9UzGyQ8Z2nVD',0,NULL,0,0,0,'2025-11-23 12:29:13','2025-11-23 12:29:13'),(12,'Ray','ray@gmail.com','$2y$10$hAdTDP9HhWKyJzUEj1jgUecC5d31DJJ9FFoKLP0sPiBx2Vil38V3a','Bh8KsbYapnoDSlsM',0,NULL,0,0,0,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(13,'Leo','leo@gmail.com','$2y$10$vTg8ucnWisz2Ov6jOBv7vOb.cNwPUmPvylpWJRXGrrlt9/AcvxlC.','55Snk2q2l9k3ZStv',0,NULL,0,0,0,'2025-11-23 12:29:14','2025-11-23 12:29:14');
+INSERT INTO `users` VALUES (1,'System Administrator','system@gmail.com','$2y$10$06SbHk7tdKfVQCVx393leeVbsTzIUADFRsd.9qDmkM0ICWLCHPbIq','xDy6xsqvbBHI8BEb',1,NULL,0,0,0,'2025-11-23 20:58:51','2025-11-23 20:58:51'),(2,'Brian','brian@gmail.com','$2y$10$nylQmJrDvAnZ3hMbhoyWoucb7Rsyeq2pmPhZD391v7yAK4.3dT5cy','fOMJf0gg0lpMG5Mk',1,NULL,0,0,0,'2025-11-23 20:58:51','2025-11-23 20:58:51'),(3,'Steve','steve@gmail.com','$2y$10$zm1gfJFj8mzhGihtaOV.uOL.a55UcbIG9kjvh1qclx2boh/e.Mst2','YrEHwISC5JzdgDXE',0,NULL,0,0,0,'2025-11-23 20:58:51','2025-11-23 20:58:51'),(4,'Phil','phil@gmail.com','$2y$10$guZemEU0twPp/mUT5Lja0ePxq52k5UdVxfgFdDSHgvcMgmET9ZZNy','UaZv1usFbAatCk2L',0,NULL,0,0,0,'2025-11-23 20:58:52','2025-11-23 20:58:52'),(5,'Andrew','andrew@gmail.com','$2y$10$W1zk5CAmfJn/dH50/px4TulxFhwMLxZX0zpaCQbkvSbiLtaJ02.yS','JuP7deVV7JgxxVbb',0,NULL,0,0,0,'2025-11-23 20:58:52','2025-11-23 20:58:52'),(6,'Greg','greg@gmail.com','$2y$10$rXCsdbuw2ifsMzi6c97Y..Ndrvs8t/w72dTSygntM8VlznAu.Xbou','BCPyAfoulfFkvq4O',0,NULL,0,0,0,'2025-11-23 20:58:52','2025-11-23 20:58:52'),(7,'Tim','tim@gmail.com','$2y$10$4G0wq39aziCQ1mnfWFXaj.IZTJfR3.b.D43PFaHBiVlhPA8Cdvo92','w07SjGFVBiT4FotB',0,NULL,0,0,0,'2025-11-23 20:58:52','2025-11-23 20:58:52'),(8,'Ben','ben@gmail.com','$2y$10$4MkkhEPd8iOm4lIkXZbcD.ksYEn6vk/zz8vU8kmLDSQMSAupF8o.C','fGAbexp9DYOfHeoV',0,NULL,0,0,0,'2025-11-23 20:58:52','2025-11-23 20:58:52'),(9,'Russ','russ@gmail.com','$2y$10$GCfAA7oDCcaHhxJTVphVUeSTehR1sXTsHSCJCKtbCSF6LweLUOVJS','7NoqFQKk9vR1pPEz',0,NULL,0,0,0,'2025-11-23 20:58:52','2025-11-23 20:58:52'),(10,'Kika','kika@gmail.com','$2y$10$CqnrXGrzjDAyGs.9UcJ8Xu8uWxc07Qj4wPEJGdXSpoBzf4zNx67my','kqdWGyrJyHK7cBa5',0,NULL,0,0,0,'2025-11-23 20:58:52','2025-11-23 20:58:52'),(11,'Ayndie','ayndie@gmail.com','$2y$10$u00KBQBkXFtipZepfuB5huJyhUPRyI0fjM5ai6XKXRHZ.T3idra0C','a5SwdcT97AC3GVdc',0,NULL,0,0,0,'2025-11-23 20:58:52','2025-11-23 20:58:52'),(12,'Ray','ray@gmail.com','$2y$10$NbJgZjkTo9DUyKzp2BPQLuZhn7zHRF/lto/a4wzwa9DXDTrvFJXRy','q5x5ill9KXco2xne',0,NULL,0,0,0,'2025-11-23 20:58:52','2025-11-23 20:58:52'),(13,'Leo','leo@gmail.com','$2y$10$xzq2pnA/Ul3WFFzuMzbLrOhlayqQDg25EmisVpSFxvaj1AYQg4SY.','t4joona9wPDiSfCf',0,NULL,0,0,0,'2025-11-23 20:58:52','2025-11-23 20:58:52');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -352,7 +352,7 @@ CREATE TABLE `vessels` (
 
 LOCK TABLES `vessels` WRITE;
 /*!40000 ALTER TABLE `vessels` DISABLE KEYS */;
-INSERT INTO `vessels` VALUES (1,'aircraft-carrier',5,7,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(2,'battleship',4,6,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(3,'cruiser',3,5,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(4,'submarine',3,5,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(5,'destroyer',2,4,'2025-11-23 12:29:14','2025-11-23 12:29:14');
+INSERT INTO `vessels` VALUES (1,'aircraft-carrier',5,7,'2025-11-23 20:58:52','2025-11-23 20:58:52'),(2,'battleship',4,6,'2025-11-23 20:58:52','2025-11-23 20:58:52'),(3,'cruiser',3,5,'2025-11-23 20:58:52','2025-11-23 20:58:52'),(4,'submarine',3,5,'2025-11-23 20:58:52','2025-11-23 20:58:52'),(5,'destroyer',2,4,'2025-11-23 20:58:52','2025-11-23 20:58:52');
 /*!40000 ALTER TABLE `vessels` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -365,4 +365,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-23 12:30:58
+-- Dump completed on 2025-11-23 20:59:28

@@ -128,19 +128,19 @@ class GamesController extends Controller
 			$game = Game::getGame($gameId);
 			$game->name = $name = Game::getUniqueGameName($request->get('gameName'), $gameId);
 			$game->status = $request->get('status');
-			$game->protagonist_id = $request->get('protagonistId');
-			$game->opponent_id = $request->get('opponentId');
+			$game->player_one_id = $request->get('playerOneId');
+			$game->player_two_id = $request->get('playerTwoId');
 			$game->save();
 			// Check for add mode for the creation of the fleet
 			if ('add' == $mode) {
 				// Create a fleet from the template set of vessels for the user creating the game
-				Fleet::createFleet($game->id, $game->protagonist_id);
+				Fleet::createFleet($game->id, $game->player_one_id);
 				$messageText = MessageText::retrieveMessageText(MessageText::MESSAGE_INVITE_OWNER,
-					[User::getUser($game->protagonist_id)->name,Game::getGame($game->id)->name,User::getUser($game->opponent_id)->name]);
-				Message::addMessage($messageText, User::systemUser()->id, $game->protagonist_id);
+					[User::getUser($game->player_one_id)->name,Game::getGame($game->id)->name,User::getUser($game->player_two_id)->name]);
+				Message::addMessage($messageText, User::systemUser()->id, $game->player_one_id);
 				$messageText = MessageText::retrieveMessageText(MessageText::MESSAGE_INVITE,
-					[User::getUser($game->opponent_id)->name,Game::getGame($game->id)->name,User::getUser($game->protagonist_id)->name]);
-				Message::addMessage($messageText, $game->protagonist_id, $game->opponent_id);
+					[User::getUser($game->player_two_id)->name,Game::getGame($game->id)->name,User::getUser($game->player_one_id)->name]);
+				Message::addMessage($messageText, $game->player_one_id, $game->player_two_id);
 			}
 
 		} catch(Exception $e) {

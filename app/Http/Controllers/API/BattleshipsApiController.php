@@ -128,7 +128,7 @@ class BattleshipsApiController extends Controller
 			if (FleetVessel::FLEET_VESSEL_PLOTTED == $fleetVessel['status']) {
 				// Are they all plotted?  If so, we set the game to waiting or ready.
 				// However, care must be taken because the current user could be either
-				// the protagonist or the opponent.
+				// the player 1 or player 2.
 				$game = Game::getGame($fleetVessel['gameId']);
 				$game->status = Game::setGameStatus($game->id);
 			}
@@ -451,6 +451,10 @@ class BattleshipsApiController extends Controller
 						$fleetVesselCount += 1;
 						$fleetVesselLocationCount += count($fleetVessel['locations']);
 						FleetVesselLocation::addNewLocations($fleetVessel['fleetVesselId'], $fleetVessel['locations']);
+					} else {
+						$fleetVesselObj = FleetVessel::getFleetVessel($fleetVessel['fleetVesselId']);
+						$fleetVesselObj->status = FleetVessel::FLEET_VESSEL_AVAILABLE;
+						$fleetVesselObj->save();
 					}
 				}
 			}

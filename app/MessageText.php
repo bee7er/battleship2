@@ -73,7 +73,10 @@ class MessageText extends Model
      */
     public static function retrieveMessageText($messageName, $msgDataAry)
     {
+        $systemUser = User::systemUser();
+
         $messageText = self::getMessageTextByName($messageName);
+        $messageText->text = str_replace(User::SYSTEM_USER_REPLACE,  $systemUser->name, $messageText->text);
 
         return sprintf($messageText->text, $msgDataAry[0], $msgDataAry[1], $msgDataAry[2]);
     }

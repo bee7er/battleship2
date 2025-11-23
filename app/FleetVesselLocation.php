@@ -121,7 +121,9 @@ class FleetVesselLocation extends Model
         }
         // Get the fleet vessel object, and set the status if it is fully plotted
         $fleetVessel = FleetVessel::getFleetVessel($fleetVesselId);
-        if (count($locations) >= $fleetVessel->length) {
+        if (!isset($locations) || 0 >= count($locations)) {
+            $fleetVessel->status = FleetVessel::FLEET_VESSEL_AVAILABLE;
+        } elseif (count($locations) >= $fleetVessel->length) {
             $fleetVessel->status = FleetVessel::FLEET_VESSEL_PLOTTED;
         } else {
             $fleetVessel->status = FleetVessel::FLEET_VESSEL_STARTED;

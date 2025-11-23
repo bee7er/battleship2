@@ -24,7 +24,8 @@ class User extends Model implements AuthenticatableContract,
     const USER_STEVE = 'steve';
     const USER_BEN = 'ben';
 
-    const SYSTEM_USER_NAME = 'System';
+    const SYSTEM_USER_ID = 1;
+    const SYSTEM_USER_REPLACE = '*system_admin';
 
     /**
      * The database table used by the model.
@@ -52,7 +53,7 @@ class User extends Model implements AuthenticatableContract,
      */
     public static function systemUser()
     {
-        return self::where("users.name", "=", self::SYSTEM_USER_NAME)->get()[0];
+        return self::where("users.id", "=", self::SYSTEM_USER_ID)->get()[0];
     }
 
     /**
@@ -98,7 +99,7 @@ class User extends Model implements AuthenticatableContract,
     public static function getUsers($exceptUserId=null)
     {
         $builder = self::select('*')
-            ->where("users.name", "<>", self::SYSTEM_USER_NAME)
+            ->where("users.id", "<>", self::SYSTEM_USER_ID)
             ->orderBy("users.name");
 
         if (isset($exceptUserId) && $exceptUserId > 0) {
@@ -124,7 +125,7 @@ class User extends Model implements AuthenticatableContract,
                 'points_scored'
             )
         )
-            ->where("users.name", "!=", self::SYSTEM_USER_NAME)
+            ->where("users.id", "!=", self::SYSTEM_USER_ID)
             ->orderBy("users.points_scored", "DESC");
 
         $users = $builder->get();

@@ -34,7 +34,7 @@ class Game extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'status', 'protagonist_id', 'opponent_id', 'winner_id', 'started_at', 'ended_at', 'deleted_at'];
+    protected $fillable = ['name', 'status', 'player_one_id', 'player_two_id', 'winner_id', 'started_at', 'ended_at', 'deleted_at'];
 
     /**
      * Retrieve a game
@@ -51,8 +51,8 @@ class Game extends Model
                 'games.id',
                 'games.name',
                 'games.status',
-                'games.protagonist_id',
-                'games.opponent_id',
+                'games.player_one_id',
+                'games.player_two_id',
                 'games.winner_id',
                 'games.started_at',
                 'games.ended_at',
@@ -107,7 +107,7 @@ class Game extends Model
 
     /**
      * Retrieve all games for the given user, where they created the game and where they
-     * have been nominated as an opponent
+     * have been nominated as player 2
      *
      * @param $userId
      * @param $showDeletedGames - check whether they have been soft deleted
@@ -119,10 +119,10 @@ class Game extends Model
             array(
                 'games.id',
                 'games.name',
-                'games.protagonist_id',
-                'protagonist.name as protagonist_name',
-                'games.opponent_id',
-                'opponent.name as opponent_name',
+                'games.player_one_id',
+                'player_one.name as player_one_name',
+                'games.player_two_id',
+                'player_two.name as player_two_name',
                 'games.winner_id',
                 'games.status',
                 'games.started_at',
@@ -130,8 +130,8 @@ class Game extends Model
                 'games.deleted_at',
             )
         )
-            ->leftjoin('users as opponent', 'opponent.id', '=', 'games.opponent_id')
-            ->leftjoin('users as protagonist', 'protagonist.id', '=', 'games.protagonist_id')
+            ->leftjoin('users as player_two', 'player_two.id', '=', 'games.player_two_id')
+            ->leftjoin('users as player_one', 'player_one.id', '=', 'games.player_one_id')
             ->orderBy("games.name");
 
         if (false == $showDeletedGames) {
@@ -141,8 +141,8 @@ class Game extends Model
 
         if (null != $userId) {
             $builder = $builder
-                ->where("games.protagonist_id", "=", $userId)
-                ->orWhere("games.opponent_id", "=", $userId);
+                ->where("games.player_one_id", "=", $userId)
+                ->orWhere("games.player_two_id", "=", $userId);
         }
 
         $games = $builder->get();
@@ -159,10 +159,10 @@ class Game extends Model
             array(
                 'games.id',
                 'games.name as game_name',
-                'games.protagonist_id',
-                'users1.name as protagonist_name',
-                'games.opponent_id',
-                'users2.name as opponent_name',
+                'games.player_one_id',
+                'users1.name as player_one_name',
+                'games.player_two_id',
+                'users2.name as player_two_name',
                 'games.winner_id',
                 'games.status',
                 'games.started_at',
@@ -170,8 +170,8 @@ class Game extends Model
                 'games.deleted_at',
             )
         )
-            ->join('users as users1', 'users1.id', '=', 'games.protagonist_id')
-            ->join('users as users2', 'users2.id', '=', 'games.opponent_id')
+            ->join('users as users1', 'users1.id', '=', 'games.player_one_id')
+            ->join('users as users2', 'users2.id', '=', 'games.player_two_id')
             ->orderBy("games.name");
 
         $game = $builder
@@ -208,35 +208,35 @@ class Game extends Model
             }
             $gameStatus = self::STATUS_ENGAGED;
 
-            $protagonistFleet = Fleet::getFleet($gameId, $game->protagonist_id);
+            $playerOneFleet = Fleet::getFleet($gameId, $game->player_one_id);
             // Check the fleet vessel locations to see if all parts of all vessels have been destroyed
-            $isFleetDestroyed = FleetVessel::isFleetDestroyed($protagonistFleet->id);
+            $isFleetDestroyed = FleetVessel::isFleetDestroyed($playerOneFleet->id);
             if ($isFleetDestroyed) {
                 $gameStatus = self::STATUS_COMPLETED;
-                $game->winner_id = $game->opponent_id;
+                $game->winner_id = $game->player_two_id;
                 // Notify both parties
                 $messageText = MessageText::retrieveMessageText(MessageText::MESSAGE_LOSER,
-                    [User::getUser($game->protagonist_id)->name,Game::getGame($game->id)->name,User::systemUser()->name]);
-                Message::addMessage($messageText, User::systemUser()->id, $game->protagonist_id);
+                    [User::getUser($game->player_one_id)->name,Game::getGame($game->id)->name,User::systemUser()->name]);
+                Message::addMessage($messageText, User::systemUser()->id, $game->player_one_id);
 
                 $messageText = MessageText::retrieveMessageText(MessageText::MESSAGE_WINNER,
-                    [User::getUser($game->opponent_id)->name,Game::getGame($game->id)->name,User::systemUser()->name]);
-                Message::addMessage($messageText, User::systemUser()->id, $game->opponent_id);
+                    [User::getUser($game->player_two_id)->name,Game::getGame($game->id)->name,User::systemUser()->name]);
+                Message::addMessage($messageText, User::systemUser()->id, $game->player_two_id);
             } else {
                 // Ok, still fighting, check the opponent's fleet
-                $opponentFleet = Fleet::getFleet($gameId, $game->opponent_id);
-                $isFleetDestroyed = FleetVessel::isFleetDestroyed($opponentFleet->id);
+                $playerTwoFleet = Fleet::getFleet($gameId, $game->player_two_id);
+                $isFleetDestroyed = FleetVessel::isFleetDestroyed($playerTwoFleet->id);
                 if ($isFleetDestroyed) {
                     $gameStatus = self::STATUS_COMPLETED;
-                    $game->winner_id = $game->protagonist_id;
+                    $game->winner_id = $game->player_one_id;
                     // Notify both parties
                     $messageText = MessageText::retrieveMessageText(MessageText::MESSAGE_LOSER,
-                        [User::getUser($game->opponent_id)->name,Game::getGame($game->id)->name,User::systemUser()->name]);
-                    Message::addMessage($messageText, User::systemUser()->id, $game->opponent_id);
+                        [User::getUser($game->player_two_id)->name,Game::getGame($game->id)->name,User::systemUser()->name]);
+                    Message::addMessage($messageText, User::systemUser()->id, $game->player_two_id);
 
                     $messageText = MessageText::retrieveMessageText(MessageText::MESSAGE_WINNER,
-                        [User::getUser($game->protagonist_id)->name,Game::getGame($game->id)->name,User::systemUser()->name]);
-                    Message::addMessage($messageText, User::systemUser()->id, $game->protagonist_id);
+                        [User::getUser($game->player_one_id)->name,Game::getGame($game->id)->name,User::systemUser()->name]);
+                    Message::addMessage($messageText, User::systemUser()->id, $game->player_one_id);
                 }
             }
             if ($gameStatus == self::STATUS_COMPLETED) {
@@ -244,31 +244,31 @@ class Game extends Model
                 $game->ended_at = date('Y-m-d H:i:s');
             }
         } else {
-            $protagonistReady = Fleet::isFleetReady($gameId, $game->protagonist_id);
-            $opponentReady = Fleet::isFleetReady($gameId, $game->opponent_id);
-            if ($protagonistReady && $opponentReady) {
+            $playerOneReady = Fleet::isFleetReady($gameId, $game->player_one_id);
+            $playerTwoReady = Fleet::isFleetReady($gameId, $game->player_two_id);
+            if ($playerOneReady && $playerTwoReady) {
                 $gameStatus = self::STATUS_READY;
-                // Message the protagonist and the opponent that the game is ready
+                // Message the player 1 and player 2 that the game is ready
                 $messageText = MessageText::retrieveMessageText(MessageText::MESSAGE_READY,
-                    [User::getUser($game->protagonist_id)->name,User::getUser($game->opponent_id)->name,Game::getGame($game->id)->name]);
-                Message::addMessage($messageText, User::systemUser()->id, $game->protagonist_id);
+                    [User::getUser($game->player_one_id)->name,User::getUser($game->player_two_id)->name,Game::getGame($game->id)->name]);
+                Message::addMessage($messageText, User::systemUser()->id, $game->player_one_id);
 
                 $messageText = MessageText::retrieveMessageText(MessageText::MESSAGE_READY,
-                    [User::getUser($game->opponent_id)->name,User::getUser($game->protagonist_id)->name,Game::getGame($game->id)->name]);
-                Message::addMessage($messageText, User::systemUser()->id, $game->opponent_id);
+                    [User::getUser($game->player_two_id)->name,User::getUser($game->player_one_id)->name,Game::getGame($game->id)->name]);
+                Message::addMessage($messageText, User::systemUser()->id, $game->player_two_id);
 
-            } elseif ($protagonistReady || $opponentReady) {
+            } elseif ($playerOneReady || $playerTwoReady) {
                 $gameStatus = self::STATUS_WAITING;
-                // If the protagonist or opponent is not yet started then send them a message
-                if ($protagonistReady && Fleet::isFleetNotStarted($game->id, $game->opponent_id)) {
+                // If the player 1 or player 2 is not yet started then send them a message
+                if ($playerOneReady && Fleet::isFleetNotStarted($game->id, $game->player_two_id)) {
                     $messageText = MessageText::retrieveMessageText(MessageText::MESSAGE_WAITING,
-                        [User::getUser($game->opponent_id)->name,User::getUser($game->protagonist_id)->name,Game::getGame($game->id)->name]);
-                    Message::addMessage($messageText, User::systemUser()->id, $game->opponent_id);
+                        [User::getUser($game->player_two_id)->name,User::getUser($game->player_one_id)->name,Game::getGame($game->id)->name]);
+                    Message::addMessage($messageText, User::systemUser()->id, $game->player_two_id);
 
-                } elseif ($opponentReady && Fleet::isFleetNotStarted($game->id, $game->protagonist_id)) {
+                } elseif ($playerTwoReady && Fleet::isFleetNotStarted($game->id, $game->player_one_id)) {
                     $messageText = MessageText::retrieveMessageText(MessageText::MESSAGE_WAITING,
-                        [User::getUser($game->protagonist_id)->name,User::getUser($game->opponent_id)->name,Game::getGame($game->id)->name]);
-                    Message::addMessage($messageText, User::systemUser()->id, $game->protagonist_id);
+                        [User::getUser($game->player_one_id)->name,User::getUser($game->player_two_id)->name,Game::getGame($game->id)->name]);
+                    Message::addMessage($messageText, User::systemUser()->id, $game->player_one_id);
                 }
             }
         }

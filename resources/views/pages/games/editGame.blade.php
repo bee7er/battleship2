@@ -49,7 +49,7 @@ use App\Game;
                         </tr>
                         <tr class="">
                             <td class="cell bs-section-title">
-                                Protagonist:
+                                Player 1:
                             </td>
                             <td class="cell">
                                 {{ucfirst($user->name)}}
@@ -58,24 +58,24 @@ use App\Game;
                         @if (isset($game->id))
                             <tr class="">
                                 <td class="cell bs-section-title">
-                                    Your Opponent:
+                                    Player 2:
                                 </td>
                                 <td class="cell">
-                                    <input type="hidden" id="opponentId" value="{{$game->opponent_id}}" />
-                                    {{ucfirst($opponent->name)}}
+                                    <input type="hidden" id="playerTwoId" value="{{$game->player_two_id}}" />
+                                    {{ucfirst($playerTwo->name)}}
                                 </td>
                             </tr>
                         @else
                             <tr class="">
                                 <td class="cell bs-section-title">
-                                    Choose Your Opponent
+                                    Choose Player 2
                                 </td>
                                 <td class="cell">
-                                    <select name="opponentId" id="opponentId" aria-label="Game opponent" class="bs-listbox">
-                                        <option value="" class="">Select a new opponent</option>
+                                    <select name="playerTwoId" id="playerTwoId" aria-label="Player 2" class="bs-listbox">
+                                        <option value="" class="">Select player 2</option>
                                         @if (isset($users) && $users->count() > 0)
                                             @foreach($users as $user)
-                                                    <option value="{{$user->id}}" @if ($user->id == $game->opponent_id) {{'selected'}}@endif>{{ucfirst($user->name)}}</option>
+                                                    <option value="{{$user->id}}" @if ($user->id == $game->player_two_id) {{'selected'}}@endif>{{ucfirst($user->name)}}</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -105,7 +105,7 @@ use App\Game;
         {
             let f = $('#gameForm');
             let gameName = $('#gameName');
-            let opponentId = $('#opponentId');
+            let playerTwoId = $('#playerTwoId');
 
             let errors = [];
             let atLeastOne = false;
@@ -115,10 +115,10 @@ use App\Game;
                 gameName.focus();
             }
 
-            if ('' == opponentId.val()) {
-                errors[errors.length] = 'Please select an opponent for this game';
+            if ('' == playerTwoId.val()) {
+                errors[errors.length] = 'Please select player 2 for this game';
                 atLeastOne = true;
-                opponentId.focus();
+                playerTwoId.focus();
             }
             if (atLeastOne) {
                 let errMsgs = sep = "";

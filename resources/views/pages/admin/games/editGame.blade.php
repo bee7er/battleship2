@@ -63,14 +63,14 @@ use App\Game;
                     </tr>
                     <tr class="">
                         <td class="cell bs-section-title">
-                            Protagonist:
+                            Player 1:
                         </td>
                         <td class="cell">
-                            <select name="protagonistId" id="protagonistId" aria-label="Game protagonist" class="bs-listbox">
-                                <option value="" class="">Select protagonist</option>
+                            <select name="playerOneId" id="playerOneId" aria-label="Player 1" class="bs-listbox">
+                                <option value="" class="">Select player 1</option>
                                 @if (isset($users) && $users->count() > 0)
                                     @foreach($users as $user)
-                                        <option value="{{$user->id}}" @if ($user->id == $game->protagonist_id) {{'selected'}}@endif>{{$user->name}}</option>
+                                        <option value="{{$user->id}}" @if ($user->id == $game->player_one_id) {{'selected'}}@endif>{{$user->name}}</option>
                                     @endforeach
                                 @endif
                             </select>
@@ -78,14 +78,14 @@ use App\Game;
                     </tr>
                     <tr class="">
                         <td class="cell bs-section-title">
-                            Opponent:
+                            Player 2:
                         </td>
                         <td class="cell">
-                            <select name="opponentId" id="opponentId" aria-label="Game opponent" class="bs-listbox">
-                                <option value="" class="">Select a new opponent</option>
+                            <select name="playerTwoId" id="playerTwoId" aria-label="Player 2" class="bs-listbox">
+                                <option value="" class="">Select player two</option>
                                 @if (isset($users) && $users->count() > 0)
                                     @foreach($users as $user)
-                                        <option value="{{$user->id}}" @if ($user->id == $game->opponent_id) {{'selected'}}@endif>{{$user->name}}</option>
+                                        <option value="{{$user->id}}" @if ($user->id == $game->player_two_id) {{'selected'}}@endif>{{$user->name}}</option>
                                     @endforeach
                                 @endif
                             </select>
@@ -115,26 +115,26 @@ use App\Game;
         {
             let f = $('#gameForm');
             let gameName = $('#gameName');
-            let protagonistId = $('#protagonistId');
-            let opponentId = $('#opponentId');
+            let playerOneId = $('#playerOneId');
+            let playerTwoId = $('#playerTwoId');
             let status = $('#status');
 
             let errors = [];
             let atLeastOne = false;
-            if ('' == opponentId.val()) {
-                errors[errors.length] = 'Please select an opponent for this game';
+            if ('' == playerTwoId.val()) {
+                errors[errors.length] = 'Please select player 2 for this game';
                 atLeastOne = true;
-                opponentId.focus();
+                playerTwoId.focus();
             }
-            if ('' == protagonistId.val()) {
-                errors[errors.length] = 'Please select a protagonist for this game';
+            if ('' == playerOneId.val()) {
+                errors[errors.length] = 'Please select player 1 for this game';
                 atLeastOne = true;
-                protagonistId.focus();
+                playerOneId.focus();
             }
-            if (opponentId.val() == protagonistId.val()) {
-                errors[errors.length] = 'Protagonist and opponent cannot be the same user';
+            if (playerTwoId.val() == playerOneId.val()) {
+                errors[errors.length] = 'Players 1 and 2 cannot be the same user';
                 atLeastOne = true;
-                protagonistId.focus();
+                playerOneId.focus();
             }
 
             if ('' == status.val()) {

@@ -67,7 +67,7 @@ class GamesController extends Controller
 			// Get the user's fleet for each game
 			$game->fleet = Fleet::getFleet($game->id, $userId);
 			// Check to see if the opponent's fleet exists
-			$game->opponent_fleet = Fleet::getFleet($game->id, $game->opponent_id);
+			$game->player_two_fleet = Fleet::getFleet($game->id, $game->player_two_id);
 		}
 
 		return view('pages.games.games', compact('loggedIn', 'userId', 'games', 'showDeletedGames', 'errors', 'msgs'));
@@ -128,7 +128,7 @@ class GamesController extends Controller
 		$game = null;
 		try {
 			$game = Game::getGame($gameId);
-			$opponent = User::getUser($game->opponent_id);
+			$playerTwo = User::getUser($game->player_two_id);
 
 		} catch(Exception $e) {
 			Log::notice("Error getting game for edit: {$e->getMessage()} at {$e->getFile()}, {$e->getLine()}");
@@ -137,7 +137,7 @@ class GamesController extends Controller
 
 		$users = User::getUsers($user->id);
 
-		return view('pages.games.editGame', compact('loggedIn', 'game', 'user', 'opponent', 'users', 'errors', 'msgs'));
+		return view('pages.games.editGame', compact('loggedIn', 'game', 'user', 'playerTwo', 'users', 'errors', 'msgs'));
 	}
 
 	/**
@@ -163,8 +163,8 @@ class GamesController extends Controller
 			$game = Game::getGame($gameId);
 			$game->name = $name;
 			if ('add' == $mode) {
-				$game->protagonist_id = $user->id;
-				$game->opponent_id = $request->get('opponentId');
+				$game->player_one_id = $user->id;
+				$game->player_two_id = $request->get('playerTwoId');
 			}
 			$game->save();
 			// Check for add mode again for the creation of the fleet
@@ -172,8 +172,8 @@ class GamesController extends Controller
 				// Create a fleet from the template set of vessels for the user creating the game
 				Fleet::createFleet($game->id, $user->id);
                 $messageText = MessageText::retrieveMessageText(MessageText::MESSAGE_INVITE,
-                    [User::getUser($game->opponent_id)->name,Game::getGame($game->id)->name,User::getUser($game->protagonist_id)->name]);
-                Message::addMessage($messageText, $game->protagonist_id, $game->opponent_id);
+                    [User::getUser($game->player_two_id)->name,Game::getGame($game->id)->name,User::getUser($game->player_one_id)->name]);
+                Message::addMessage($messageText, $game->player_one_id, $game->player_two_id);
 			}
 
 		} catch(Exception $e) {
@@ -244,16 +244,16 @@ class GamesController extends Controller
 			// Create a fleet from the template set of vessels for the user accepting the challenge
 			Fleet::createFleet($gameId, $userId);
 
-			// Message the protagonist that the game is accepted
+			// Message player 1 that the game is accepted
 			$game = Game::getGame($gameId);
             $messageText = MessageText::retrieveMessageText(MessageText::MESSAGE_ACCEPT,
                 [
-                    User::getUser($game->protagonist_id)->name,
+                    User::getUser($game->player_one_id)->name,
                     Game::getGame($game->id)->name,
-                    User::getUser($game->opponent_id)->name,
+                    User::getUser($game->player_two_id)->name,
                 ]
             );
-			Message::addMessage($messageText, $game->opponent_id, $game->protagonist_id);
+			Message::addMessage($messageText, $game->player_two_id, $game->player_one_id);
 
 		} catch(Exception $e) {
 			Log::notice("Error accepting game: {$e->getMessage()} at {$e->getFile()}, {$e->getLine()}");
@@ -298,18 +298,18 @@ class GamesController extends Controller
 			// when we get to the play grid it can be either.  We will call it 'myFleet' and 'theirFleet'
 			$myFleet = Fleet::getFleetDetails($gameId, $myUser->id);
 
-			$currentUserIsProtagonist = ($myUser->id == $game->protagonist_id) ? true: false;
-			if ($currentUserIsProtagonist) {
-				$theirUser = User::getUser($game->opponent_id);
-				$theirFleet = Fleet::getFleetDetails($gameId, $game->opponent_id);
+			$currentUserIsPlayerOne = ($myUser->id == $game->player_one_id) ? true: false;
+			if ($currentUserIsPlayerOne) {
+				$theirUser = User::getUser($game->player_two_id);
+				$theirFleet = Fleet::getFleetDetails($gameId, $game->player_two_id);
 			} else {
-				$theirUser = User::getUser($game->protagonist_id);
-				$theirFleet = Fleet::getFleetDetails($gameId, $game->protagonist_id);
+				$theirUser = User::getUser($game->player_one_id);
+				$theirFleet = Fleet::getFleetDetails($gameId, $game->player_one_id);
 			}
 			$myGo = false;
 			if ($latestMove == null) {
-				if ($currentUserIsProtagonist) {
-					// No previous moves, so protagonist (game owner) starts things off
+				if ($currentUserIsPlayerOne) {
+					// No previous moves, so player 1 (game owner) starts things off
 					$myGo = true;
 				}
 			} elseif ($latestMove->player_id == $myUser->id && 1 == $latestMove->hit_vessel) {
@@ -330,7 +330,7 @@ class GamesController extends Controller
 			$errors[] = $e->getMessage();
 		}
 
-		return view('pages.games.playGrid', compact('loggedIn', 'game', 'currentUserIsProtagonist', 'myFleet', 'theirFleet', 'myUser', 'theirUser', 'myGo', 'myMoves', 'theirMoves', 'errors', 'msgs'));
+		return view('pages.games.playGrid', compact('loggedIn', 'game', 'currentUserIsPlayerOne', 'myFleet', 'theirFleet', 'myUser', 'theirUser', 'myGo', 'myMoves', 'theirMoves', 'errors', 'msgs'));
 	}
 
     /**
@@ -354,7 +354,7 @@ class GamesController extends Controller
 
         $game = $theirUser = null;
         $myFleet = $theirFleet = null;
-        $currentUserIsProtagonist = $myGo = false;
+        $currentUserIsPlayerOne = $myGo = false;
         $allMoves = null;
         try {
             $game = Game::getGameDetails($gameId);
@@ -372,13 +372,13 @@ class GamesController extends Controller
             // when we get to the play grid it can be either.  We will call it 'myFleet' and 'theirFleet'
             $myFleet = Fleet::getFleetDetails($gameId, $myUser->id);
 
-            $currentUserIsProtagonist = ($myUser->id == $game->protagonist_id) ? true : false;
-            if ($currentUserIsProtagonist) {
-                $theirUser = User::getUser($game->opponent_id);
-                $theirFleet = Fleet::getFleetDetails($gameId, $game->opponent_id);
+            $currentUserIsPlayerOne = ($myUser->id == $game->player_one_id) ? true : false;
+            if ($currentUserIsPlayerOne) {
+                $theirUser = User::getUser($game->player_two_id);
+                $theirFleet = Fleet::getFleetDetails($gameId, $game->player_two_id);
             } else {
-                $theirUser = User::getUser($game->protagonist_id);
-                $theirFleet = Fleet::getFleetDetails($gameId, $game->protagonist_id);
+                $theirUser = User::getUser($game->player_one_id);
+                $theirFleet = Fleet::getFleetDetails($gameId, $game->player_one_id);
             }
             // For replay purposes we retrieve all moves and use them to simulate the original game
             $allMoves = Move::getMoves($gameId);
@@ -390,7 +390,7 @@ class GamesController extends Controller
             $errors[] = $e->getMessage();
         }
 
-        return view('pages.games.replay', compact('loggedIn', 'game', 'currentUserIsProtagonist', 'myFleet', 'theirFleet', 'myUser', 'theirUser', 'allMoves', 'myGo', 'gameError', 'errors', 'msgs'));
+        return view('pages.games.replay', compact('loggedIn', 'game', 'currentUserIsPlayerOne', 'myFleet', 'theirFleet', 'myUser', 'theirUser', 'allMoves', 'myGo', 'gameError', 'errors', 'msgs'));
     }
 
 	/**

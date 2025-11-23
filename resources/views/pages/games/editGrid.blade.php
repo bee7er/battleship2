@@ -45,18 +45,18 @@ $fleetId = 0;
                         </tr>
                         <tr class="">
                             <td class="cell bs-section-title">
-                                Protagonist:
+                                Player 1:
                             </td>
                             <td class="cell">
-                                {{ucfirst($game->protagonist_name)}}
+                                {{ucfirst($game->player_one_name)}}
                             </td>
                         </tr>
                         <tr class="">
                             <td class="cell bs-section-title">
-                                Opponent:
+                                Player 2:
                             </td>
                             <td class="cell">
-                                {{ucfirst($game->opponent_name)}}
+                                {{ucfirst($game->player_two_name)}}
                             </td>
                         </tr>
                     </tbody>
@@ -121,13 +121,18 @@ $fleetId = 0;
                 </table>
                 <hr />
                 <div>
-                    <button class="button bs-random_button" onclick="return goRandom();">Go Random</button>
+                    <button id="goRandomButtonId" class="button bs-random_button" onclick="return goRandom();">Go Random</button>
                 </div>
                 <div>
-                    <button class="button bs-random_button" onclick="return cancelRandom();">Cancel Random</button>
+                    <button id="cancelRandomButtonId" class="button bs-random_button" disabled="disabled" onclick="return cancelRandom();">Cancel Random</button>
                 </div>
                 <div>
-                    <button class="button bs-random_button" onclick="return saveRandom();">Save Random</button>
+                    <button id="saveRandomButtonId" class="button bs-random_button" disabled="disabled" onclick="return saveRandom();">Save Random</button>
+                </div>
+
+                <hr />
+                <div>
+                    <button id="startAgainButtonId" class="button bs-random_button" onclick="return startAgain();">Start Again</button>
                 </div>
             </div>
 
@@ -183,7 +188,7 @@ $fleetId = 0;
     <script type="text/javascript">
         var gameId = {{$game->id}};
         var fleetId = {{$fleetId}};
-        var opponentId = {{$game->opponent_id}}
+        var playerTwoId = {{$game->player_two_id}}
         var fleetVessels = [];
         var fleetVessel = {};
         var fleetVesselLocations = [];
@@ -290,7 +295,7 @@ $fleetId = 0;
             // Add game, fleet and opponent ids for some checking server side
             fleetVessel.gameId = gameId;
             fleetVessel.fleetId = fleetId;
-            fleetVessel.opponentId = opponentId;
+            fleetVessel.playerTwoId = playerTwoId;
             fleetVessel.subjectRow = row;
             fleetVessel.subjectCol = col;
             fleetVessel.user_token = getCookie('user_token');
@@ -799,6 +804,9 @@ $fleetId = 0;
         {
             randomMode = true;
 
+            $("#cancelRandomButtonId").prop("disabled", false);
+            $("#saveRandomButtonId").prop("disabled", false);
+
             // Uncheck all radio buttons.  User must cancel random to continue editing locations.
             $("input[type='radio'][name='vessel']").prop('checked', false);
             let cells = clearGrid();
@@ -1001,6 +1009,9 @@ $fleetId = 0;
             }
             randomMode = false;
 
+            $("#cancelRandomButtonId").prop("disabled", true);
+            $("#saveRandomButtonId").prop("disabled", true);
+
             // Enable all the radio buttons
             $(':radio').prop("disabled", false);
             // Restore the original set of locations
@@ -1022,6 +1033,9 @@ $fleetId = 0;
             }
             randomMode = false;
 
+            $("#cancelRandomButtonId").prop("disabled", true);
+            $("#saveRandomButtonId").prop("disabled", true);
+
             // Convert all fleet vessel started locations to plotted locations
             $('.bs-pos-cell-started').addClass('bs-pos-cell-plotted');
             $('.bs-pos-cell-plotted').removeClass('bs-pos-cell-started');
@@ -1040,6 +1054,34 @@ $fleetId = 0;
             // Post the new vessel locations to the server and await the return in the callback
             ajaxCall('replaceFleetVesselLocations', JSON.stringify(postData), replacedFleetVesselLocations);
 
+        }
+
+        /**
+         * Start again with the editing of the fleet
+         */
+        function startAgain()
+        {
+            randomMode = false;
+
+            $("#cancelRandomButtonId").prop("disabled", true);
+            $("#saveRandomButtonId").prop("disabled", true);
+            
+            // We are starting again entirely
+            clearGrid();
+            // Clear all current locations
+            for (let i = 0; i < fleetVessels.length; i++) {
+                fleetVessels[i].locations = [];
+            }
+            let postData = {
+                gameId: gameId,
+                fleetId: fleetId,
+                fleetVessels: fleetVessels,
+                user_token: getCookie('user_token')
+            };
+
+            // ========================================================================
+            // Post the new vessel locations to the server and await the return in the callback
+            ajaxCall('replaceFleetVesselLocations', JSON.stringify(postData), replacedFleetVesselLocations);
         }
 
         /**

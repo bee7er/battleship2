@@ -56,7 +56,7 @@
                         <h4 class="title is-5">Game Status</h4>
                         <p>Each game goes through a number of statuses (stati?) depending on the actions of the players.</p>
                         <ol class="is-4">
-                            <li><b>New:</b> The initial status of a game.  Click <span class="has-text-link">Accept</span> to start editing as an opponent.</li>
+                            <li><b>New:</b> The initial status of a game.  Click <span class="has-text-link">Accept</span> to start editing as player 2.</li>
                             <li><b>Edit:</b> When each player is in the process of editing the game. Click <span class="has-text-link">Edit grid</span> to plot vessels.</li>
                             <li><b>Waiting:</b> When one of the players has plotted all their vessels; waiting for the opponent to plot theirs.</li>
                             <li><b>Ready:</b> When both players have plotted all their vessels. Each player clicks <span class="has-text-link">Engage</span> to start playing.</li>

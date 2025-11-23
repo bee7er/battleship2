@@ -14,7 +14,7 @@ class MessageTextsTableSeeder extends Seeder {
 
         $messageText = new MessageText();
         $messageText->name = MessageText::MESSAGE_INVITE_OWNER;
-        $messageText->text = "Hi %s, a game has been created for you by the system called '%s' against opponent '%s'. System";
+        $messageText->text = "Hi %s, a game has been created for you by the system called '%s' against opponent '%s'. *system_admin";
         $messageText->type = MessageText::TYPE_SPECIFIC;
         $messageText->status = MessageText::STATUS_READY;
         $messageText->save();
@@ -35,14 +35,14 @@ class MessageTextsTableSeeder extends Seeder {
 
         $messageText = new MessageText();
         $messageText->name = MessageText::MESSAGE_READY;
-        $messageText->text = "Hi %s and %s, I'm happy to say that '%s' is ready to play. System";
+        $messageText->text = "Hi %s and %s, I'm happy to say that '%s' is ready to play. *system_admin";
         $messageText->type = MessageText::TYPE_SPECIFIC;
         $messageText->status = MessageText::STATUS_READY;
         $messageText->save();
 
         $messageText = new MessageText();
         $messageText->name = MessageText::MESSAGE_WAITING;
-        $messageText->text = "Hi %s, %s is waiting for you to finish plotting your fleet in the '%s' game. System";
+        $messageText->text = "Hi %s, %s is waiting for you to finish plotting your fleet in the '%s' game. *system_admin";
         $messageText->type = MessageText::TYPE_SPECIFIC;
         $messageText->status = MessageText::STATUS_READY;
         $messageText->save();
@@ -63,7 +63,7 @@ class MessageTextsTableSeeder extends Seeder {
 
         $messageText = new MessageText();
         $messageText->name = MessageText::MESSAGE_BROADCAST_WELCOME_VERSION_2;
-        $messageText->text = "Hi %s, welcome to version two of my battleships game. System";
+        $messageText->text = "Hi %s, welcome to version two of my battleships game. *system_admin";
         $messageText->type = MessageText::TYPE_BROADCAST;
         $messageText->status = MessageText::STATUS_READY;
         $messageText->save();

@@ -28,8 +28,8 @@ class CreateGamesTable extends Migration
                     Game::STATUS_UNDELETED,
                 ]
             );
-            $table->unsignedInteger('protagonist_id');
-            $table->unsignedInteger('opponent_id');
+            $table->unsignedInteger('player_one_id');
+            $table->unsignedInteger('player_two_id');
             $table->unsignedInteger('winner_id');
             $table->dateTime('started_at')->nullable();
             $table->dateTime('ended_at')->nullable();

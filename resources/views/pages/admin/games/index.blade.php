@@ -26,8 +26,8 @@ use App\Game;
                     <tr>
                         <th>Id</th>
                         <th>Game Name</th>
-                        <th>Protagonist</th>
-                        <th>Opponent</th>
+                        <th>Player 1</th>
+                        <th>Player 2</th>
                         <th>Status</th>
                         <th>Started at</th>
                         <th>Ended at</th>
@@ -38,8 +38,8 @@ use App\Game;
                     <tr>
                         <th>Id</th>
                         <th>Game Name</th>
-                        <th>Protagonist</th>
-                        <th>Opponent</th>
+                        <th>Player 1</th>
+                        <th>Player 2</th>
                         <th>Status</th>
                         <th>Started at</th>
                         <th>Ended at</th>
@@ -53,8 +53,8 @@ use App\Game;
                             <tr>
                                 <td>{{$game->id}}</td>
                                 <td>{{$game->name}}</td>
-                                <td>{{$game->protagonist_name}} {{($game->protagonist_id == $game->winner_id ? '*': '')}}</td>
-                                <td>{{$game->opponent_name}} {{($game->opponent_id == $game->winner_id ? '*': '')}}</td>
+                                <td>{{$game->player_one_name}} {{($game->player_one_id == $game->winner_id ? '*': '')}}</td>
+                                <td>{{$game->player_two_name}} {{($game->player_two_id == $game->winner_id ? '*': '')}}</td>
                                 <td>{{$game->status}}</td>
                                 <td>{{getFormattedDate($game->started_at)}}</td>
                                 <td>{{getFormattedDate($game->ended_at)}}</td>

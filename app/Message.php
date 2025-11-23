@@ -94,15 +94,17 @@ class Message extends Model
         if (isset($messageTexts) && count($messageTexts) > 0) {
             $users = User::getUsers();
             // Broadcast messages are sent by the System user
-            $systemUserId = User::systemUser()->id;
+            $systemUser = User::systemUser();
             foreach ($messageTexts as $messageText) {
+                // Check for system user substitution
+                $messageText->text = str_replace(User::SYSTEM_USER_REPLACE,  $systemUser->name, $messageText->text);
                 // Send this message to each user
                 foreach ($users as $user) {
                     $message = Message::getMessage();
                     // Standard data to embed is the user name
                     $message->message_text = sprintf($messageText->text, $user->name);
                     $message->status = self::STATUS_OPEN;
-                    $message->sending_user_id = $systemUserId;
+                    $message->sending_user_id = $systemUser->id;
                     $message->receiving_user_id = $user->id;
                     $message->save();
                 }

@@ -26,8 +26,8 @@ use App\Game;
                     <tr>
                         <th>Id</th>
                         <th>Game Name</th>
-                        <th>Protagonist</th>
-                        <th>Opponent</th>
+                        <th>Player 1</th>
+                        <th>Player 2</th>
                         <th>Fleet Name</th>
                         <th>Status</th>
                         <th>Started at</th>
@@ -39,8 +39,8 @@ use App\Game;
                     <tr>
                         <th>Id</th>
                         <th>Game Name</th>
-                        <th>Protagonist</th>
-                        <th>Opponent</th>
+                        <th>Player 1</th>
+                        <th>Player 2</th>
                         <th>Fleet Name</th>
                         <th>Status</th>
                         <th>Started at</th>
@@ -54,9 +54,9 @@ use App\Game;
                         @foreach($games as $game)
                             <tr>
                                 <td>{{$game->id}}</td>
-                                <td>{{$game->name}}</td>
-                                <td>{{$game->protagonist_name}} {{($game->protagonist_id == $game->winner_id ? '*': '')}}</td>
-                                <td>{{$game->opponent_name}} {{($game->opponent_id == $game->winner_id ? '*': '')}}</td>
+                                <td><a class="bs-games-button" href="javascript: gotoEdit({{$game->id}})">{{$game->name}}</a></td>
+                                <td>{{$game->player_one_name}} {{($game->player_one_id == $game->winner_id ? '*': '')}}</td>
+                                <td>{{$game->player_two_name}} {{($game->player_two_id == $game->winner_id ? '*': '')}}</td>
                                 <td>{{isset($game->fleet) ? $game->fleet->fleet_name: 'not set yet'}}</td>
                                 <td>{{$game->status}}</td>
                                 <td>{{getFormattedDate($game->started_at)}}</td>
@@ -67,12 +67,11 @@ use App\Game;
                                     @else
                                         @if ($game->status == Game::STATUS_EDIT
                                          || $game->status == Game::STATUS_WAITING)
-                                            @if ($game->protagonist_id == $userId)
-                                                <div title="Edit the game"><a class="bs-games-button" href="javascript: gotoEdit({{$game->id}})">Edit</a></div>
+                                            @if ($game->player_one_id == $userId)
                                                 <div title="Edit the game grid"><a class="bs-games-button" href="javascript: gotoEditGrid({{$game->id}})">Edit Grid</a></div>
                                             @else
                                                 {{--Current user is an opponent in this game--}}
-                                                @if (isset($game->opponent_fleet))
+                                                @if (isset($game->player_two_fleet))
                                                     <div title="Edit the game grid"><a class="bs-games-button" href="javascript: gotoEditGrid({{$game->id}})">Edit Grid</a></div>
                                                 @else
                                                     <div title="Accept the game"><a class="bs-games-button" href="javascript: gotoAccept({{$game->id}})">Accept</a></div>
@@ -83,7 +82,7 @@ use App\Game;
                                                 <div title="Start the game"><a class="bs-games-button" href="javascript: gotoEngage({{$game->id}})">Engage</a></div>
                                             @endif
                                         @endif
-                                        @if ($game->protagonist_id == $userId)
+                                        @if ($game->player_one_id == $userId)
                                             <div title="Delete the game"><a class="bs-games-button" href="javascript: gotoDelete('{{$game->id}}', '{{$game->name}}')">Delete</a></div>
                                         @endif
                                         @if ($game->status == Game::STATUS_COMPLETED)
