@@ -25,7 +25,7 @@
 
 <div class="bs-footer-spacer">&nbsp;</div>
 <div class="bs-footer">
-    <div class="bs-copyright">&copy; {{ (new DateTime)->format('Y') }} Brian Etheridge</div>
+    <div class="bs-copyright">&copy; {{ (new DateTime)->format('Y') }} Brian Etheridge v2.0</div>
 </div>
 
 @yield('page-scripts')
