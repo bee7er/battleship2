@@ -190,7 +190,13 @@ $fleetId = 0;
         var gridSize = 10;
         var randomMode = false;
         var fleetVesselsClone = null;
-        var fleetLocationSize = {{$fleetLocationSize}};
+
+        const NOTIFICATION_TIMEOUT = 3500;
+        const FLEET_LOCATION_SIZE = {{$fleetLocationSize}};
+        const BY_ROW = 'byRow';
+        const BY_COL = 'byCol';
+        const DIMENSION_HORIZONTAL = 'h';
+        const DIMENSION_VERTICAL = 'v';
 
         // Load all the existing data for the fleet
         @if (isset($fleet) && count($fleet) > 0)
@@ -545,8 +551,8 @@ $fleetId = 0;
 
             let enoughRoom = true;
             if (fleetVessel.locations.length == 1) {
-                numberOfAvailableHorizontalCells += plotAvailableLocations('h', fleetVessel.length, tryRow, tryCol);
-                numberOfAvailableVerticalCells += plotAvailableLocations('v', fleetVessel.length, tryRow, tryCol);
+                numberOfAvailableHorizontalCells += plotAvailableLocations(DIMENSION_HORIZONTAL, fleetVessel.length, tryRow, tryCol);
+                numberOfAvailableVerticalCells += plotAvailableLocations(DIMENSION_VERTICAL, fleetVessel.length, tryRow, tryCol);
                 if (numberOfAvailableHorizontalCells < requiredLen && numberOfAvailableVerticalCells < requiredLen) {
                     enoughRoom = false;
                 }
@@ -575,7 +581,7 @@ $fleetId = 0;
          * and check whether there is enough space for the vessel. If there is then we mark
          * the available squares with pink to indicate they are available.
          */
-        function plotAvailableLocations(orientation, vesselLength, tryRow, tryCol)
+        function plotAvailableLocations(dimension, vesselLength, tryRow, tryCol)
         {
             let avail = [];
             let elem = {};
@@ -584,7 +590,7 @@ $fleetId = 0;
             let offset = vesselLength - 1;
 
             for (let n=0; n<itrLen; n++) {
-                if ('h' == orientation) {
+                if (DIMENSION_HORIZONTAL == dimension) {
                     // We are looking horizontally
                     if ((tryCol + n) <= 0 || (tryCol + n) > gridSize) continue;
                     elem = $('#cell_' + (tryRow + offset) + '_' + (tryCol + n));
@@ -594,7 +600,7 @@ $fleetId = 0;
                     elem = $('#cell_' + (tryRow + n) + '_' + (tryCol + offset));
                 }
                 // Plotted happens in manual mode and started happens in random mode
-                if ($(elem).hasClass('bs-pos-cell-plotted') || $(elem).hasClass('bs-pos-cell-started')) {
+                if ($(elem).hasClass('bs-pos-cell-plotted') || (randomMode && $(elem).hasClass('bs-pos-cell-started'))) {
                     // If before the centre we clear the array otherwise we just stop
                     if (n < offset) {
                         avail = [];
@@ -608,7 +614,7 @@ $fleetId = 0;
             if (avail.length >= (offset + 1)) {
                 // There is enough space for the vessel, but is our position (rowIdx or colIdx) among those available
                 for (let m=0; m<avail.length; m++) {
-                    if ('h' == orientation) {
+                    if (DIMENSION_HORIZONTAL == dimension) {
                         elem = $('#cell_' + (tryRow + offset) + '_' + (tryCol + avail[m])); // We are looking horizontally
                     } else {
                         elem = $('#cell_' + (tryRow + avail[m]) + '_' + (tryCol + offset)); // We are looking vertically
@@ -623,7 +629,7 @@ $fleetId = 0;
 
         /**
          * When more than one location has been started then the available squares can only be in
-         * the same dimension as them.  So where are the started squares and where next can they go.
+         * the same dimension as them.  So where are the started squares and where next can they go?
          * We mark the available squares with pink to indicate they are available.
          */
         function plotSubsequentLocations(vesselLength)
@@ -642,10 +648,10 @@ $fleetId = 0;
                 rows[rows.length] = parseInt(elemIdData[1]);
                 cols[cols.length] = parseInt(elemIdData[2])
             }
-            // Either the rows will be the same or the cols will
+            // Either the rows will be the same or the cols will be the same
             // We are plotting available cells, which can go at either end of the started cells
             if (rows[0] == rows[1]) {
-                // All on the same row, so we are dealing with columns
+                // All on the same row, so we are dealing with different columns
                 cols.sort(function(a, b){return a - b});
                 let startCol = (cols[0] - 1);
                 let row = rows[0];  // Any row element will do, as they are all the same
@@ -677,7 +683,7 @@ $fleetId = 0;
                     numberOfAvailableCells += 1;
                 }
             } else  {
-                // All on the same column, so we are dealing with rows
+                // All on the same column, so we are dealing with different rows
                 rows.sort(function(a, b){return a - b});
                 let startRow = (rows[0] - 1);
                 let col = cols[0];  // Any col element will do, as they are all the same
@@ -835,7 +841,7 @@ $fleetId = 0;
                             // We know that one of the dimensions has enough locations, so we'll try twice
                             if (2 == randDimension) {
                                 // Try to get matching row elems
-                                let sortedRowAvailables = getSortedAvailables('byRow', unoccupiedCell.rowInt);
+                                let sortedRowAvailables = getSortedAvailables(BY_ROW, unoccupiedCell.rowInt);
                                 if (sortedRowAvailables.length >= fleetVessel.length) {
                                     // There are at least enough available cells, grab them and add
                                     // corresponding locations to the fleet vessel
@@ -850,7 +856,7 @@ $fleetId = 0;
                                 randDimension = 1;
                             } else {
                                 // Try to get matching col elems
-                                let sortedColAvailables = getSortedAvailables('byCol', unoccupiedCell.colInt);
+                                let sortedColAvailables = getSortedAvailables(BY_COL, unoccupiedCell.colInt);
                                 if (sortedColAvailables.length >= fleetVessel.length) {
                                     convertArrayAndAddLocationsToFleetVessel(sortedColAvailables, fleetVessel);
                                     gridCells.removeClass('bs-pos-cell-available');
@@ -872,8 +878,8 @@ $fleetId = 0;
             gridCells.removeClass('bs-pos-cell-available');
 
             let checkStartedCells = $('.bs-pos-cell-started' );
-            if (fleetLocationSize != checkStartedCells.length) {
-                console.log('Fleet vessel overlap detected with required cells ' + fleetLocationSize + ' and allocated cells ' + checkStartedCells.length);
+            if (FLEET_LOCATION_SIZE != checkStartedCells.length) {
+                console.log('Fleet vessel overlap detected with required cells ' + FLEET_LOCATION_SIZE + ' and allocated cells ' + checkStartedCells.length);
                 alert('Fleet vessel overlap detected.  Please try again.');
             }
         }
@@ -949,9 +955,9 @@ $fleetId = 0;
                 let colInt = parseInt(elemIdData[2]);
                 // NB When building the arrays we need to keep the cell row and col numbers separate
                 // because we have to allow for row or col 10, when we come to split them up later
-                if ('byRow' == dimension && rowInt == idxInt) {
+                if (BY_ROW == dimension && rowInt == idxInt) {
                     sortedAvailables[sortedAvailables.length] = (elemIdData[1] + '_' + elemIdData[2]);
-                } else if ('byCol' == dimension && colInt == idxInt) {
+                } else if (BY_COL == dimension && colInt == idxInt) {
                     sortedAvailables[sortedAvailables.length] = (elemIdData[2] + '_' + elemIdData[1]);
                 }
 
@@ -1085,7 +1091,7 @@ $fleetId = 0;
         {
             let notification = $('#notification');
             notification.html(message).show();
-            notification.delay(3000).fadeOut();
+            notification.delay(NOTIFICATION_TIMEOUT).fadeOut();
         }
 
         $(document).ready( function()

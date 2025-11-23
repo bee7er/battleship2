@@ -23,8 +23,7 @@ class MessageText extends Model
     const MESSAGE_WINNER = "Winner";
     const MESSAGE_LOSER = "Loser";
 
-    const MESSAGE_BROADCAST_HIT_ANOTHER_GO = "Another go for hit";
-    const MESSAGE_BROADCAST_VOLUME_RANGE = "Volume level can be set";
+    const MESSAGE_BROADCAST_WELCOME_VERSION_2 = "Welcome to Version 2";
 
     /**
      * The database table used by the model.

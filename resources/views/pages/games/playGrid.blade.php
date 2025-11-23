@@ -1,6 +1,7 @@
 <?php
 use App\FleetVesselLocation;
 use App\FleetVessel;
+use App\Vessel;
 use App\Game;
 ?>
 
@@ -133,11 +134,23 @@ use App\Game;
 
                     @foreach ($theirFleet as $fleetVessel)
 
-                        <?php $i = 1; ?>
+                        <?php $i = 0; ?>
                         <tr id="progress_row_{{$fleetVessel->fleet_vessel_id}}" class="bs-progress-entry"><td class="bs-pos-cell-{{$fleetVessel->status}}" id="progress_name_{{$fleetVessel->fleet_vessel_id}}">{{$fleetVessel->vessel_name}}</td><td class="bs-pos-cell-blank">{{$fleetVessel->length}}</td><td class="bs-pos-cell-blank">{{$fleetVessel->points}}</td><td class="bs-pos-cell-{{$fleetVessel['status']}}" id="progress_{{$fleetVessel->fleet_vessel_id}}">{{$fleetVessel['status']}}</td></tr>
                             @foreach ($fleetVessel->locations as $fleetVesselLocation)
-                                <tr class="bs-progress-entry"><td class="bs-pos-cell-blank">part {{$i++}}:</td><td class="bs-pos-cell-{{$fleetVesselLocation['vessel_location_status']}}" id="progress_location_{{$fleetVesselLocation['id']}}">{{$fleetVesselLocation['vessel_location_status']}}</td><td class="bs-pos-cell-blank" colspan="2">&nbsp;</td></tr>
-
+                                <tr class="bs-progress-entry">
+                                    <td class="bs-pos-cell-blank">
+                                        <?php
+                                            switch ($i) {
+                                                case (0): print(Vessel::VESSEL_PART_FORE);break;
+                                                case (count($fleetVessel->locations) - 1): print(Vessel::VESSEL_PART_AFT);break;
+                                                default: print(Vessel::VESSEL_PART_MIDSHIP . "$i");
+                                            }
+                                        $i += 1;
+                                        ?>
+                                    </td>
+                                    <td class="bs-pos-cell-{{$fleetVesselLocation['vessel_location_status']}}" id="progress_location_{{$fleetVesselLocation['id']}}">{{$fleetVesselLocation['vessel_location_status']}}</td>
+                                    <td class="bs-pos-cell-blank" colspan="2">&nbsp;</td>
+                                </tr>
                         @endforeach
                     @endforeach
                 </tbody>

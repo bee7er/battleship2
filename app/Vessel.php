@@ -13,6 +13,10 @@ class Vessel extends Model
     const VESSEL_TYPE_SUBMARINE = 'submarine';
     const VESSEL_TYPE_DESTROYER = 'destroyer';
 
+    const VESSEL_PART_FORE = 'fore';
+    const VESSEL_PART_MIDSHIP = 'midship';
+    const VESSEL_PART_AFT = 'aft';
+
     /**
      * The database table used by the model.
      *

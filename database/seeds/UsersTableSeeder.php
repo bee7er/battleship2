@@ -20,7 +20,7 @@ class UsersTableSeeder extends Seeder {
         $user->save();
 
         $user = new User();
-        $user->name = 'brian';
+        $user->name = 'Brian';
         $user->email = 'brian@gmail.com';
         $user->password = Hash::make('battle101');
         $user->user_token = User::getNewToken();
@@ -28,7 +28,7 @@ class UsersTableSeeder extends Seeder {
         $user->save();
 
         $user = new User();
-        $user->name = 'steve';
+        $user->name = 'Steve';
         $user->email = 'steve@gmail.com';
         $user->password = Hash::make('battle101');
         $user->user_token = User::getNewToken();
@@ -36,7 +36,7 @@ class UsersTableSeeder extends Seeder {
         $user->save();
 
         $user = new User();
-        $user->name = 'phil';
+        $user->name = 'Phil';
         $user->email = 'phil@gmail.com';
         $user->password = Hash::make('battle101');
         $user->user_token = User::getNewToken();
@@ -44,7 +44,7 @@ class UsersTableSeeder extends Seeder {
         $user->save();
 
         $user = new User();
-        $user->name = 'andrew';
+        $user->name = 'Andrew';
         $user->email = 'andrew@gmail.com';
         $user->password = Hash::make('battle101');
         $user->user_token = User::getNewToken();
@@ -52,7 +52,7 @@ class UsersTableSeeder extends Seeder {
         $user->save();
 
         $user = new User();
-        $user->name = 'greg';
+        $user->name = 'Greg';
         $user->email = 'greg@gmail.com';
         $user->password = Hash::make('battle101');
         $user->user_token = User::getNewToken();
@@ -60,7 +60,7 @@ class UsersTableSeeder extends Seeder {
         $user->save();
 
         $user = new User();
-        $user->name = 'tim';
+        $user->name = 'Tim';
         $user->email = 'tim@gmail.com';
         $user->password = Hash::make('battle101');
         $user->user_token = User::getNewToken();
@@ -68,7 +68,7 @@ class UsersTableSeeder extends Seeder {
         $user->save();
 
         $user = new User();
-        $user->name = 'ben';
+        $user->name = 'Ben';
         $user->email = 'ben@gmail.com';
         $user->password = Hash::make('battle101');
         $user->user_token = User::getNewToken();
@@ -76,7 +76,7 @@ class UsersTableSeeder extends Seeder {
         $user->save();
 
         $user = new User();
-        $user->name = 'russ';
+        $user->name = 'Russ';
         $user->email = 'russ@gmail.com';
         $user->password = Hash::make('battle101');
         $user->user_token = User::getNewToken();
@@ -84,7 +84,7 @@ class UsersTableSeeder extends Seeder {
         $user->save();
 
         $user = new User();
-        $user->name = 'kika';
+        $user->name = 'Kika';
         $user->email = 'kika@gmail.com';
         $user->password = Hash::make('battle101');
         $user->user_token = User::getNewToken();
@@ -92,8 +92,24 @@ class UsersTableSeeder extends Seeder {
         $user->save();
 
         $user = new User();
-        $user->name = 'ayndie';
+        $user->name = 'Ayndie';
         $user->email = 'ayndie@gmail.com';
+        $user->password = Hash::make('battle101');
+        $user->user_token = User::getNewToken();
+        $user->admin = false;
+        $user->save();
+
+        $user = new User();
+        $user->name = 'Ray';
+        $user->email = 'ray@gmail.com';
+        $user->password = Hash::make('battle101');
+        $user->user_token = User::getNewToken();
+        $user->admin = false;
+        $user->save();
+
+        $user = new User();
+        $user->name = 'Leo';
+        $user->email = 'leo@gmail.com';
         $user->password = Hash::make('battle101');
         $user->user_token = User::getNewToken();
         $user->admin = false;

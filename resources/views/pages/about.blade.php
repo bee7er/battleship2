@@ -32,6 +32,7 @@
                                 @endif
                                 </ul>
                             </li>
+                            <li><b>How many:</b> There are two of each vessel type in a fleet.</li>
                             <li><b>Guessing:</b> Players take turns firing virtual missiles at coordinates (e.g., A5, G7) to attack their opponent's grid.</li>
                             <li><b>Hit or Miss:</b> The opponent's grid shows where the missile hit and the effect it had.</li>
                             <li><b>Hit and Go again:</b> A successful hit is rewarded by having another go, and keep going until you miss.</li>
@@ -46,9 +47,9 @@
                         <p>Click on the <span class="has-text-link">Add Game</span> link to create a new game.</p>
                         <p>Give the game a name, so that it can be identified among all the others and choose an opponent from the list of other players.</p>
                         <p>Edit the grid by selecting a vessel and plotting it on the grid where appropriate.</p>
-                        <p>To distribute the vessels randomly on the grid use the <span class="has-text-link">Go Random</span> button.  Click <span class="has-text-link">Save Random</span>, when a distribution you like is achieved.</p>
-                        <p>Click <span class="has-text-link">Accept</span> against a game to which you have been invited.</p>
-                        <p>When both the game owner and opponent have completed editing their grid the game is ready to play.</p>
+                        <p>To distribute the vessels randomly on the grid use the <span class="has-text-link">Go Random</span> button.  Click <span class="has-text-link">Save Random</span>, when a distribution you like is achieved. Click <span class="has-text-link">Cancel Random</span> to return to any vessels you had previously plotted</p>
+                        <p>Click <span class="has-text-link">Accept</span> against a game to which you have been invited. You will be taken to the <span class="has-text-link">Edit Grid</span> page so that you can plot where on the grid your fleet vessels should go.</p>
+                        <p>When both the game owner and opponent have completed editing their grid the game is <span class="has-text-link">Ready</span> to play.</p>
                         <p>Click <span class="has-text-link">Engage</span> to play the game.</p>
                         <p>The winner is the player who first destroys all the opponent's fleet vessels.</p>
 
@@ -61,15 +62,16 @@
                             <li><b>Ready:</b> When both players have plotted all their vessels. Each player clicks <span class="has-text-link">Engage</span> to start playing.</li>
                             <li><b>Engaged:</b> When the game is being played.</li>
                             <li><b>Completed:</b> When the game has been won by one of the players. Click <span class="has-text-link">Replay</span> to see a simulation of the game. Click <span class="has-text-link">Delete</span> to remove the game from the list (a soft delete).</li>
+                            <li><b>Replaying:</b> When the game is being replayed.</li>
                         </ol>
 
                         <h4 class="title is-5">Battle Progress</h4>
                         <p>When engaged in a battle the <span class="has-text-link">Battle Progress table</span> shows each player the status of the opponent's fleet.</p>
-                        <p>A hit is registered against the opponent's vessel, showing that the vessel has been hit and which part of the vessel, if appropriate.</p>
+                        <p>A hit is registered against the opponent's vessel showing that the vessel has been hit, in red, and which part of the vessel, if appropriate, also shown in red.</p>
                         <p>Once all the parts of a vessel have been hit the status changes to destroyed for all the parts and the vessel overall.</p>
 
                         <h4 class="title is-5">What just happened?</h4>
-                        <p>As mentioned above, when the game is over, it is set to <span class="has-text-link">completed</span> and the <span class="has-text-link">Replay</span> link can be used to see a simulation of how the game progressed. Use this option to improve your strategy when playing next time.  You will have noticed that vessels can only be plotted vertically or horizontally. You should bear this in mind while deciding on your next move.  When replaying the game you get to see the full distribution of your opponent's vessels, and can perhaps see opportunities you missed during the game.</p>
+                        <p>As mentioned above, when the game is over, it is set to <span class="has-text-link">Completed</span> and the <span class="has-text-link">Replay</span> link can be used to see a simulation of how the game progressed. Use this option to improve your strategy when playing next time.  You will have noticed that vessels can only be plotted vertically or horizontally. You should bear this in mind while deciding on your next move.  When replaying the game you get to see the full distribution of your opponent's vessels, and can perhaps see opportunities you missed during the game.</p>
                         <p>The destruction of vessels and the points scored are accumulated in your profile.</p>
                         <p>Go to the <span class="has-text-link">Leaderboard</span> page to see how your performances compare with others.</p>
 

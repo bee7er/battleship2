@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.4.5, for macos14.7 (x86_64)
 --
--- Host: localhost    Database: battle_db
+-- Host: localhost    Database: battle2_db
 -- ------------------------------------------------------
 -- Server version	8.4.5
 
@@ -37,7 +37,7 @@ CREATE TABLE `fleet_templates` (
 
 LOCK TABLES `fleet_templates` WRITE;
 /*!40000 ALTER TABLE `fleet_templates` DISABLE KEYS */;
-INSERT INTO `fleet_templates` VALUES (1,1,'2025-11-11 17:31:15','2025-11-11 17:31:15'),(2,1,'2025-11-11 17:31:15','2025-11-11 17:31:15'),(3,2,'2025-11-11 17:31:15','2025-11-11 17:31:15'),(4,2,'2025-11-11 17:31:15','2025-11-11 17:31:15'),(5,2,'2025-11-11 17:31:15','2025-11-11 17:31:15'),(6,3,'2025-11-11 17:31:15','2025-11-11 17:31:15'),(7,3,'2025-11-11 17:31:15','2025-11-11 17:31:15'),(8,4,'2025-11-11 17:31:15','2025-11-11 17:31:15'),(9,4,'2025-11-11 17:31:15','2025-11-11 17:31:15'),(10,4,'2025-11-11 17:31:15','2025-11-11 17:31:15');
+INSERT INTO `fleet_templates` VALUES (1,1,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(2,1,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(3,2,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(4,2,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(5,3,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(6,3,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(7,4,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(8,4,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(9,5,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(10,5,'2025-11-23 12:29:14','2025-11-23 12:29:14');
 /*!40000 ALTER TABLE `fleet_templates` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -173,7 +173,7 @@ CREATE TABLE `message_texts` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -182,7 +182,7 @@ CREATE TABLE `message_texts` (
 
 LOCK TABLES `message_texts` WRITE;
 /*!40000 ALTER TABLE `message_texts` DISABLE KEYS */;
-INSERT INTO `message_texts` VALUES (1,'Invite owner','Hi %s, a game has been created for you by the system called \'%s\' against opponent \'%s\'. System','specific','ready','2025-11-11 17:31:15','2025-11-11 17:31:15'),(2,'Invite player','Hi %s, will you play \'%s\' with me? %s','specific','ready','2025-11-11 17:31:15','2025-11-11 17:31:15'),(3,'Accept invitation','Hi %s, I will love playing \'%s\' with you. %s','specific','ready','2025-11-11 17:31:15','2025-11-11 17:31:15'),(4,'Game ready','Hi %s and %s, I\'m happy to say that \'%s\' is ready to play. System','specific','ready','2025-11-11 17:31:15','2025-11-11 17:31:15'),(5,'Waiting','Hi %s, %s is waiting for you to finish plotting your fleet in the \'%s\' game. System','specific','ready','2025-11-11 17:31:15','2025-11-11 17:31:15'),(6,'Winner','Hi %s, you won the \'%s\' game.  Well done. %s','specific','ready','2025-11-11 17:31:15','2025-11-11 17:31:15'),(7,'Loser','Hi %s, sadly you lost the \'%s\' game.  Try again later. %s','specific','ready','2025-11-11 17:31:15','2025-11-11 17:31:15'),(8,'Another go for hit','Hi %s, just to let you know, you now get another go after a successful hit. System','broadcast','ready','2025-11-11 17:31:15','2025-11-11 17:31:15'),(9,'Volume level can be set','Hi %s, there is now a range of volumes to which the sound can be set. System','broadcast','ready','2025-11-11 17:31:15','2025-11-11 17:31:15');
+INSERT INTO `message_texts` VALUES (1,'Invite owner','Hi %s, a game has been created for you by the system called \'%s\' against opponent \'%s\'. System','specific','ready','2025-11-23 12:29:14','2025-11-23 12:29:14'),(2,'Invite player','Hi %s, will you play \'%s\' with me? %s','specific','ready','2025-11-23 12:29:14','2025-11-23 12:29:14'),(3,'Accept invitation','Hi %s, I will love playing \'%s\' with you. %s','specific','ready','2025-11-23 12:29:14','2025-11-23 12:29:14'),(4,'Game ready','Hi %s and %s, I\'m happy to say that \'%s\' is ready to play. System','specific','ready','2025-11-23 12:29:14','2025-11-23 12:29:14'),(5,'Waiting','Hi %s, %s is waiting for you to finish plotting your fleet in the \'%s\' game. System','specific','ready','2025-11-23 12:29:14','2025-11-23 12:29:14'),(6,'Winner','Hi %s, you won the \'%s\' game.  Well done. %s','specific','ready','2025-11-23 12:29:14','2025-11-23 12:29:14'),(7,'Loser','Hi %s, sadly you lost the \'%s\' game.  Try again later. %s','specific','ready','2025-11-23 12:29:14','2025-11-23 12:29:14'),(8,'Welcome to Version 2','Hi %s, welcome to version two of my battleships game. System','broadcast','ready','2025-11-23 12:29:14','2025-11-23 12:29:14');
 /*!40000 ALTER TABLE `message_texts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -315,7 +315,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`),
   UNIQUE KEY `users_user_token_unique` (`user_token`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -324,7 +324,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'System','system@gmail.com','$2y$10$ZKBv2QvlPbwV9HXBhqLnk.5JEFSQD4q2dE7lFlGtcVLkMQZGiZb9G','Zxef2bGwpfqT1HS8',1,NULL,0,0,0,'2025-11-11 17:31:15','2025-11-11 17:31:15'),(2,'brian','brian@gmail.com','$2y$10$JCuzQXHrYeA1zXZMlDQO/uYhKIG/uatQcmE1rWFq3GR2OZA/h9s2S','RalsVywgFDIbjf8Q',1,NULL,0,0,0,'2025-11-11 17:31:15','2025-11-11 17:31:15'),(3,'steve','steve@gmail.com','$2y$10$q.7max4YNWckqgwiz9NTc.816wvSAjOgKcBDSb6NkPgCFXZxX7Ja6','vfD88JRrO1zg5a2l',0,NULL,0,0,0,'2025-11-11 17:31:15','2025-11-11 17:31:15'),(4,'phil','phil@gmail.com','$2y$10$4PJIlIk3tobOsUv6J8k7ye5kCzxeX7vX4H2zs9Ry0UDGOWZuoEeGO','rcSOcLpZl0M0pt3S',0,NULL,0,0,0,'2025-11-11 17:31:15','2025-11-11 17:31:15'),(5,'andrew','andrew@gmail.com','$2y$10$yEXY5/p52VXkyvnnzavkAucCWUJA.y7h.NOdDFoosTk6pgUA3xVi2','i2lWQcZDV1QBTJNN',0,NULL,0,0,0,'2025-11-11 17:31:15','2025-11-11 17:31:15'),(6,'greg','greg@gmail.com','$2y$10$IB0n.SRWxmBw1gwmqG/AheWwOH0weKbkS6Kf20WIx5OF5tm2yy4ei','VSuE62Q1bYx8bJei',0,NULL,0,0,0,'2025-11-11 17:31:15','2025-11-11 17:31:15'),(7,'tim','tim@gmail.com','$2y$10$wVjpdMVzNbB3P0Md30BWsePFDM/7bv1L3hYvq4CS2QZ58.vWoLXi6','9KF4dvn69PWdBRXl',0,NULL,0,0,0,'2025-11-11 17:31:15','2025-11-11 17:31:15'),(8,'ben','ben@gmail.com','$2y$10$N.b2mWAuul.w.iW02lZXHu2zPsAEUuj7h/t6HPHj0Fr146kOjRjYe','7zmunP08OjeerrKl',0,NULL,0,0,0,'2025-11-11 17:31:15','2025-11-11 17:31:15'),(9,'russ','russ@gmail.com','$2y$10$86SnmcriZagEHnlD/.CWiOl7jcLC78ncVFvGjYlW8Soi9cOn8/4Ha','CnCROKp9rsfiXKeD',0,NULL,0,0,0,'2025-11-11 17:31:15','2025-11-11 17:31:15'),(10,'kika','kika@gmail.com','$2y$10$fF3E7yI3OBc8twIv71giGO8voPXdEV8q9ogy4PS3c3AW0XrQvJQpW','hzVHTYVzWV3ivAZi',0,NULL,0,0,0,'2025-11-11 17:31:15','2025-11-11 17:31:15'),(11,'ayndie','ayndie@gmail.com','$2y$10$GQcTg9HcwLN00b64x29zKOCbP0LtoTUyq/f6f2AUBptY8YKGUNTiy','T2XINyX7fzE1YB5t',0,NULL,0,0,0,'2025-11-11 17:31:15','2025-11-11 17:31:15');
+INSERT INTO `users` VALUES (1,'System','system@gmail.com','$2y$10$kq6l9o5u2iZc0gTcr8UqZu.V7iZ5NLxEvsGWfuSsCTnIdBFfAxEGS','eI89eKmm4WjC4PBo',1,NULL,0,0,0,'2025-11-23 12:29:13','2025-11-23 12:29:13'),(2,'Brian','brian@gmail.com','$2y$10$QZjJ4/GMr.g5kgZQBZz3sO.tBz0tbEH1/4P.cSDlrzbcfb/uXewL2','8iCoP6wd4fVe4Bgu',1,NULL,0,0,0,'2025-11-23 12:29:13','2025-11-23 12:29:13'),(3,'Steve','steve@gmail.com','$2y$10$AbBsEbVb9BrRhMJMy3RvtOa9sESxfkQN8LbrsWeB.6N8bokP5LoDu','VOyZJVNbAGlZyGtQ',0,NULL,0,0,0,'2025-11-23 12:29:13','2025-11-23 12:29:13'),(4,'Phil','phil@gmail.com','$2y$10$TTy1sjEjQXNt5daIXxWjm.xKixGIkcNfUjqE7zIOz82NYy1tNAOVm','CMSQoRTIQbAtyVmf',0,NULL,0,0,0,'2025-11-23 12:29:13','2025-11-23 12:29:13'),(5,'Andrew','andrew@gmail.com','$2y$10$9uyvY2GxWX65gTvooh1JS.A5FpOd8sjb2Tq/hZUIwGfYoPULUjxtO','DyztpaZGFw0f08eX',0,NULL,0,0,0,'2025-11-23 12:29:13','2025-11-23 12:29:13'),(6,'Greg','greg@gmail.com','$2y$10$usxJOt46.k.1QVIkcLtokuvakGt8fVn7uvCGnip6UuOJq2FR.hszm','O8qN6GdWsEwuqebK',0,NULL,0,0,0,'2025-11-23 12:29:13','2025-11-23 12:29:13'),(7,'Tim','tim@gmail.com','$2y$10$1eTqqsHDNZ3aUWGMousM5.g2d21ayEFXWvW/Yk2dvSWocRupw6TcK','9zCMUoSpXzxXAeEq',0,NULL,0,0,0,'2025-11-23 12:29:13','2025-11-23 12:29:13'),(8,'Ben','ben@gmail.com','$2y$10$A64uQooi2Kcw9pS.XDHtS.Cle0PLWDyqr58dZf0Zz9iP8KHBMROuC','K5UMT1exEqdg6RrF',0,NULL,0,0,0,'2025-11-23 12:29:13','2025-11-23 12:29:13'),(9,'Russ','russ@gmail.com','$2y$10$MfLKVE8y2Uu8x/tChM4jGudtrV0LXhKT23v/lXJDe1pcUr6E0u96i','fm8UIFOIwGuLsf9A',0,NULL,0,0,0,'2025-11-23 12:29:13','2025-11-23 12:29:13'),(10,'Kika','kika@gmail.com','$2y$10$QuN5bFbwO79OvJK8CnN1w.SkNi7McrvBMA9j/soGvCYcLwSZjfwpW','Ta2EmLAy3Ac39xnF',0,NULL,0,0,0,'2025-11-23 12:29:13','2025-11-23 12:29:13'),(11,'Ayndie','ayndie@gmail.com','$2y$10$dWXXb1kNU6G7t/149AiqSujPX50n/2aEwlG7a0WxhtUt9p9dbDepG','QfBu9UzGyQ8Z2nVD',0,NULL,0,0,0,'2025-11-23 12:29:13','2025-11-23 12:29:13'),(12,'Ray','ray@gmail.com','$2y$10$hAdTDP9HhWKyJzUEj1jgUecC5d31DJJ9FFoKLP0sPiBx2Vil38V3a','Bh8KsbYapnoDSlsM',0,NULL,0,0,0,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(13,'Leo','leo@gmail.com','$2y$10$vTg8ucnWisz2Ov6jOBv7vOb.cNwPUmPvylpWJRXGrrlt9/AcvxlC.','55Snk2q2l9k3ZStv',0,NULL,0,0,0,'2025-11-23 12:29:14','2025-11-23 12:29:14');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -337,13 +337,13 @@ DROP TABLE IF EXISTS `vessels`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `vessels` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` enum('battleship','destroyer','submarine','zodiac','custom') COLLATE utf8mb3_unicode_ci NOT NULL,
+  `name` enum('aircraft-carrier','battleship','cruiser','submarine','destroyer') COLLATE utf8mb3_unicode_ci NOT NULL,
   `length` int unsigned NOT NULL,
   `points` int unsigned NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -352,7 +352,7 @@ CREATE TABLE `vessels` (
 
 LOCK TABLES `vessels` WRITE;
 /*!40000 ALTER TABLE `vessels` DISABLE KEYS */;
-INSERT INTO `vessels` VALUES (1,'battleship',3,5,'2025-11-11 17:31:15','2025-11-11 17:31:15'),(2,'destroyer',2,4,'2025-11-11 17:31:15','2025-11-11 17:31:15'),(3,'submarine',2,4,'2025-11-11 17:31:15','2025-11-11 17:31:15'),(4,'zodiac',1,3,'2025-11-11 17:31:15','2025-11-11 17:31:15');
+INSERT INTO `vessels` VALUES (1,'aircraft-carrier',5,7,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(2,'battleship',4,6,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(3,'cruiser',3,5,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(4,'submarine',3,5,'2025-11-23 12:29:14','2025-11-23 12:29:14'),(5,'destroyer',2,4,'2025-11-23 12:29:14','2025-11-23 12:29:14');
 /*!40000 ALTER TABLE `vessels` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -365,4 +365,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-11 17:31:38
+-- Dump completed on 2025-11-23 12:30:58
