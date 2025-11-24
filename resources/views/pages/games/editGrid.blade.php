@@ -164,8 +164,8 @@ $fleetId = 0;
                                             <td class="cell bs-grid-title">&nbsp;</td>
                                         @endif
                                     @else
-                                        <td class="cell grid-cell has-text-centered bs-pos-cell-blank"
-                                            id="cell_{{$row}}_{{$col}}" onclick="onClickAllocateCell(this);">O</td>
+                                        <td class="cell grid-cell has-text-centered bs-pos-cell-blank bs-cursor-default"
+                                            id="cell_{{$row}}_{{$col}}" onclick="onClickAllocateCell(this);" onmouseover="$(this).removeClass('bs-cursor-default').addClass('bs-cursor-pointer')" onmouseout="$(this).removeClass('bs-cursor-pointer').addClass('bs-cursor-default')">O</td>
                                     @endif
                                 @endif
 
@@ -1065,7 +1065,7 @@ $fleetId = 0;
 
             $("#cancelRandomButtonId").prop("disabled", true);
             $("#saveRandomButtonId").prop("disabled", true);
-            
+
             // We are starting again entirely
             clearGrid();
             // Clear all current locations

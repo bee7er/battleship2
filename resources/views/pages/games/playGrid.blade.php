@@ -160,8 +160,7 @@ use App\Game;
 
             <div class="column">
 
-                <table class="table is-bordered is-striped bs-plot-table"
-                       onmouseover="$(this).removeClass('bs-cursor-pointer').addClass('bs-cursor-crosshair')" onmouseout="$(this).removeClass('bs-cursor-crosshair').addClass('bs-cursor-pointer')">
+                <table class="table is-bordered is-striped bs-plot-table">
                     <tbody>
                     <tr class="">
                         <th class="bs-grid-title" colspan="99">Their Fleet Vessel Locations:</th>
@@ -186,8 +185,9 @@ use App\Game;
                                             <td class="cell bs-grid-title">&nbsp;</td>
                                         @endif
                                     @else
-                                        <td class="cell has-text-centered bs-pos-cell-blank"
-                                            id="theirCell_{{$row}}_{{$col}}" onclick="onClickStrikeCell(this);">O</td>
+                                        <td class="cell has-text-centered bs-pos-cell-blank bs-cursor-default"
+                                            id="theirCell_{{$row}}_{{$col}}" onclick="onClickStrikeCell(this);"
+                                            onmouseover="$(this).removeClass('bs-cursor-default').addClass('bs-cursor-crosshair')" onmouseout="$(this).removeClass('bs-cursor-crosshair').addClass('bs-cursor-default')">O</td>
                                     @endif
                                 @endif
 
