@@ -528,6 +528,8 @@ $fleetId = 0;
                     fleetVessel = findFleetVessel(fleetVesselId);
                     if ('{{FleetVessel::FLEET_VESSEL_PLOTTED}}' == fleetVessel.status) {
                         $("input[type='radio'][name='vessel']").prop('checked', false);
+                        // Select the next available one
+                        selectFirstAvailableVessel();
                     }
                 }
             }
@@ -1112,6 +1114,24 @@ $fleetId = 0;
         }
 
         /**
+         * Check the vessels and select the first available radio button
+         */
+        function selectFirstAvailableVessel()
+        {
+            if (null == fleetVessels || [] == fleetVessels || 0 == fleetVessels.length) {
+                return;
+            }
+            for (let i = 0; i < fleetVessels.length; i++) {
+                let fleetVessel = fleetVessels[i];
+                console.log(fleetVessel);
+                if ('{{FleetVessel::FLEET_VESSEL_PLOTTED}}' != fleetVessel.status) {
+                    $('#radio_id_' + fleetVessel.fleetVesselId).prop("checked", true);
+                    break;
+                }
+            }
+        }
+
+        /**
          * Clears the entire grid
          */
         function clearGrid()
@@ -1143,6 +1163,7 @@ $fleetId = 0;
             @endif
 
             plotFleetLocations();
+            selectFirstAvailableVessel();
 
             return true;
         });

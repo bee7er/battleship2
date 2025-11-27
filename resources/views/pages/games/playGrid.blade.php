@@ -522,7 +522,7 @@ use App\Game;
                 // Update their fleet vessel location status
                 let hitOrDestroyed = false;
                 if (null != returnedMoveData.affectedLocations) {
-                    
+                    // Hide all open vessel part details
                     $('.show_locations').hide('slide');
 
                     for (let i = 0; i < returnedMoveData.affectedLocations.length; i++) {
