@@ -1123,7 +1123,6 @@ $fleetId = 0;
             }
             for (let i = 0; i < fleetVessels.length; i++) {
                 let fleetVessel = fleetVessels[i];
-                console.log(fleetVessel);
                 if ('{{FleetVessel::FLEET_VESSEL_PLOTTED}}' != fleetVessel.status) {
                     $('#radio_id_' + fleetVessel.fleetVesselId).prop("checked", true);
                     break;

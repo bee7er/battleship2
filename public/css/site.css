@@ -316,3 +316,30 @@ hr {
 .bs-cursor-crosshair {
     cursor: crosshair;
 }
+
+/* Cookie processing classes */
+.bs-cookie-warning {
+    position: fixed;
+    bottom: -100px; /* hidden initially */
+    left: 0;
+    right: 0;
+    background-color: #333;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    transition: bottom 0.5s ease; /* smooth slide-in effect */
+    z-index: 1000;
+}
+.bs-cookie-warning.bs-show {
+    bottom: 0; /* show when class is added */
+}
+.bs-cookie-warning button {
+    background-color: #525252;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+.bs-show {
+    display: block !important;
+}

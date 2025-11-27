@@ -12,7 +12,7 @@
     <!-- Fonts -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
 
-    <link href="/css/site.css?v15" rel="stylesheet">
+    <link href="/css/site.css?v16" rel="stylesheet">
     <!-- Javascript -->
     <script type="text/javascript" src="/js/battleships.js?v6"></script>
 </head>
@@ -28,13 +28,18 @@
     <div class="bs-copyright">&copy; {{ (new DateTime)->format('Y') }} Brian Etheridge v2.0</div>
 </div>
 
+<div id="cookie-warning" class="bs-cookie-warning">
+    <p>This website uses cookies to ensure you get the best experience on our website.
+    </p>
+    <button id="close-warning">Ok, got it!</button>
+</div>
+
 @yield('page-scripts')
 @yield('global-scripts')
 
 <script type="text/javascript">
     // Delete the cookie for testing purposes
 //    document.cookie = "cookieWarningAccepted=; Max-Age=0; path=/;";
-//    document.cookie = "cookieLoadAll=; Max-Age=0; path=/;";
 //    document.cookie = "user_token=; Max-Age=0; path=/;";
 
     // Function to set a cookie
@@ -68,6 +73,31 @@
         }
         return null;
     }
+
+    document.addEventListener("DOMContentLoaded", function ()
+    {
+        const cookieWarning = document.getElementById('cookie-warning');
+        const closeBtn = document.getElementById('close-warning');
+
+        // Check if the cookie warning has been accepted
+        if (!checkCookie("cookieWarningAccepted")) {
+            // Show the cookie warning with a slide-in effect
+            setTimeout(function() {
+                cookieWarning.classList.add('bs-show');
+            }, 500); // Delay before showing
+        }
+
+        // Hide the cookie warning when the button is clicked
+        closeBtn.addEventListener('click', function () {
+            cookieWarning.classList.remove('bs-show');
+            // Optionally hide it after a short delay
+            setTimeout(function() {
+                cookieWarning.style.display = 'none';
+            }, 500); // Wait for the transition to end
+            // Set a cookie to remember that the user accepted the cookie warning
+            setCookie("cookieWarningAccepted", "true", 30); // Cookie expires in 30 days
+        });
+    });
 
 </script>
 </body>
