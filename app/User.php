@@ -163,13 +163,18 @@ class User extends Model implements AuthenticatableContract,
      */
     public static function checkUserToken($userToken)
     {
+        $error = false;
         if (!isset($userToken)) {
-            throw new \Exception('API authentication not provided. Please report this to the administrator.');
+            $error = true;
+        } else {
+            $builder = self::where("users.user_token", "=", $userToken);
+            $users = $builder->get();
+            if (!isset($users) || count($users) == 0) {
+                $error = true;
+            }
         }
-        $builder = self::where("users.user_token", "=", $userToken);
-        $users = $builder->get();
-        if (!isset($users) || count($users) == 0) {
-            throw new \Exception('API authentication is invalid. Probably due to the session being timed out. Please try logging in once more.');
+        if ($error) {
+            throw new \Exception('Your session has expired. Please log in once more.');
         }
     }
 }

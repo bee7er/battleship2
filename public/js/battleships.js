@@ -37,6 +37,14 @@ function ajaxCall(url, data, callBackFunction) {
             return true;
         }
 
+        let res = responseData.message.indexOf('Your session has timed out');
+        if (0 == res) {
+            // Session timeout
+            alert('Your session has expired. Please log in once more.');
+            location.href = '/home';
+            return;
+        }
+        // Another error
         alert(responseData.message);
 
     }).fail(function (jqXHR, textStatus, errorThrown) {
