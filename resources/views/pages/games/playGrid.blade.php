@@ -135,23 +135,34 @@ use App\Game;
                     @foreach ($theirFleet as $fleetVessel)
 
                         <?php $i = 0; ?>
-                        <tr id="progress_row_{{$fleetVessel->fleet_vessel_id}}" class="bs-progress-entry"><td class="bs-pos-cell-{{$fleetVessel->status}}" id="progress_name_{{$fleetVessel->fleet_vessel_id}}">{{$fleetVessel->vessel_name}}</td><td class="bs-pos-cell-blank">{{$fleetVessel->length}}</td><td class="bs-pos-cell-blank">{{$fleetVessel->points}}</td><td class="bs-pos-cell-{{$fleetVessel['status']}}" id="progress_{{$fleetVessel->fleet_vessel_id}}">{{$fleetVessel['status']}}</td></tr>
-                            @foreach ($fleetVessel->locations as $fleetVesselLocation)
-                                <tr class="bs-progress-entry">
-                                    <td class="bs-pos-cell-blank">
-                                        <?php
-                                            switch ($i) {
-                                                case (0): print(Vessel::VESSEL_PART_FORE);break;
-                                                case (count($fleetVessel->locations) - 1): print(Vessel::VESSEL_PART_AFT);break;
-                                                default: print(Vessel::VESSEL_PART_MIDSHIP . "$i");
-                                            }
-                                        $i += 1;
-                                        ?>
-                                    </td>
-                                    <td class="bs-pos-cell-{{$fleetVesselLocation['vessel_location_status']}}" id="progress_location_{{$fleetVesselLocation['id']}}">{{$fleetVesselLocation['vessel_location_status']}}</td>
-                                    <td class="bs-pos-cell-blank" colspan="2">&nbsp;</td>
-                                </tr>
-                        @endforeach
+                        <tr id="progress_row_{{$fleetVessel->fleet_vessel_id}}" class="bs-progress-entry" onclick="$('#show_locations_{{$fleetVessel->fleet_vessel_id}}').toggle('slide');"><td class="bs-pos-cell-{{$fleetVessel->status}}" id="progress_name_{{$fleetVessel->fleet_vessel_id}}">{{$fleetVessel->vessel_name}}</td><td class="bs-pos-cell-blank">{{$fleetVessel->length}}</td><td class="bs-pos-cell-blank">{{$fleetVessel->points}}</td><td class="bs-pos-cell-{{$fleetVessel['status']}}" id="progress_{{$fleetVessel->fleet_vessel_id}}">{{$fleetVessel['status']}}</td></tr>
+                        <tr>
+                        <td colspan="4">
+                            <div id="show_locations_{{$fleetVessel->fleet_vessel_id}}" class="show_locations" style="display: none;">
+                                <table class="table is-bordered is-striped" style="width: 100%;">
+                                    <tbody>
+                                    @foreach ($fleetVessel->locations as $fleetVesselLocation)
+                                        <tr class="bs-progress-entry">
+                                            <td class="bs-pos-cell-blank">
+                                                    <?php
+                                                        switch ($i) {
+                                                            case (0): print(Vessel::VESSEL_PART_FORE);break;
+                                                            case (count($fleetVessel->locations) - 1): print(Vessel::VESSEL_PART_AFT);break;
+                                                            default: print(Vessel::VESSEL_PART_MIDSHIP . "$i");
+                                                        }
+                                                    $i += 1;
+                                                    ?>
+                                            </td>
+                                            <td class="bs-pos-cell-{{$fleetVesselLocation['vessel_location_status']}}" id="progress_location_{{$fleetVesselLocation['id']}}">{{$fleetVesselLocation['vessel_location_status']}}</td>
+                                            <td class="bs-pos-cell-blank" colspan="2">&nbsp;</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                        </tr>
+
                     @endforeach
                 </tbody>
                 </table>
@@ -511,6 +522,9 @@ use App\Game;
                 // Update their fleet vessel location status
                 let hitOrDestroyed = false;
                 if (null != returnedMoveData.affectedLocations) {
+                    
+                    $('.show_locations').hide('slide');
+
                     for (let i = 0; i < returnedMoveData.affectedLocations.length; i++) {
                         let loc = returnedMoveData.affectedLocations[i];
                         let fleetVessel = findTheirFleetVessel(loc.fleetVesselId);
@@ -544,6 +558,7 @@ use App\Game;
                                 }
 
                                 $('#progress_row_' + fvl.fleet_vessel_id).get(0).scrollIntoView();
+                                $('#show_locations_' + fvl.fleet_vessel_id).show('slide');
 
                                 break;
                             }
