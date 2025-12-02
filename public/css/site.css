@@ -14,6 +14,10 @@ hr {
     padding: 0;
 }
 
+.hero-body {
+    padding-top: 20px !important;
+}
+
 .bs-copyright {
     font-weight: bold;
     padding:10px;
@@ -286,7 +290,7 @@ hr {
 }
 
 .bs-common-block {
-    padding: 10px 50px 10px 50px;
+    padding: 10px 50px 0px 50px;
     margin: 0;
 }
 

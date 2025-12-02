@@ -5,16 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Battleships</title>
+    <title>Sink My Boats</title>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
 
-    <link href="{{env("BASE_URL", "/")}}/css/site.css?v16" rel="stylesheet">
+    <link href="{{env("BASE_URL", "/")}}css/site.css?v17" rel="stylesheet">
     <!-- Javascript -->
-    <script type="text/javascript" src="{{env("BASE_URL", "/")}}/js/battleships.js?v6"></script>
+    <script type="text/javascript" src="{{env("BASE_URL", "/")}}js/smb.js?v1"></script>
 </head>
 <body>
 

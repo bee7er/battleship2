@@ -6,7 +6,7 @@
     <section class="container is-fluid">
 
         <article class="panel is-success">
-            <p class="panel-heading">About Battleships</p>
+            <p class="panel-heading">About Sink My Boats</p>
             @include('common.msgs')
             @include('common.errors')
 

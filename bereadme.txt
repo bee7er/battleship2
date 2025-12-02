@@ -20,6 +20,14 @@ To run locally in Chrome:
 
     http://battleship2.test
 
+LIVE ENVIRONMENT
+
+    https://www.namecheap.com/
+
+    bee7er /
+
+    From the Domain List seelct the middle Products Icon to Go to CPanel
+
 Use GIT
 
     git refused to use 'battleships'.  Something went wrong when I originally tried to use it and
