@@ -13,9 +13,9 @@ class FleetVesselsTableSeeder extends Seeder {
     {
         DB::table('fleet_vessels')->delete();
 
-        $dreadNought = Fleet::where('name', Fleet::FLEET_DREADNOUGHT)->firstOrFail();
-        $victory = Fleet::where('name', Fleet::FLEET_VICTORY)->firstOrFail();
-        $default = Fleet::where('name', Fleet::FLEET_DEFAULT_NAME)->firstOrFail();
+        $dreadNought = Fleet::where('id', 1)->firstOrFail();
+        $victory = Fleet::where('id', 2)->firstOrFail();
+        $default = Fleet::where('id', 3)->firstOrFail();
 
         $vessels = FleetTemplate::select(
             array(

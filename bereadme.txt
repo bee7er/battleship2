@@ -51,3 +51,26 @@ PHP:
 
     php artisan down        - go offline, creates a file 'down' in storage/framework folder
     php artisan up
+
+
+FTP:
+
+    FTP Username: battle@sinkmyboats.co.uk
+    FTP server: ftp.sinkmyboats.co.uk
+    FTP & explicit FTPS port:  21
+    PAth:  /home/sinkmyyr
+
+    Pwd: eOHI1nXUM6My
+
+
+
+Special FTP accounts:
+    FTP Username: sinkmyyr
+    FTP server: ftp.sinkmyboats.co.uk
+    FTP & explicit FTPS port:  21
+
+
+    FTP Username: sinkmyyr_logs
+    FTP server: ftp.sinkmyboats.co.uk
+    FTP & explicit FTPS port:  21
+

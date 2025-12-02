@@ -6,7 +6,7 @@
     RewriteEngine On
 
     RewriteCond %{SERVER_PORT} 80
-    RewriteRule ^(.*)$ https://powerhouse.industries/public/ [R,L]
+    RewriteRule ^(.*)$ https://sinkmyboats.co.uk/public/ [R,L]
 
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d

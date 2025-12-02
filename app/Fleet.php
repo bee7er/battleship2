@@ -11,11 +11,6 @@ use Illuminate\Support\Facades\Log;
 
 class Fleet extends Model
 {
-    const FLEET_DEFAULT_NAME = 'my favourite fleet';
-    const FLEET_DREADNOUGHT = 'dreadnought';
-    const FLEET_VICTORY = 'victory';
-    const FLEET_ENDEAVOUR = 'endeavour';
-
     /**
      * The database table used by the model.
      *
@@ -28,7 +23,7 @@ class Fleet extends Model
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = [];
 
     /**
      * Creates a fleet from the fleet template for a game/user
@@ -36,7 +31,6 @@ class Fleet extends Model
     public static function createFleet($gameId, $userId)
     {
         $fleet = new Fleet();
-        $fleet->name = Fleet::FLEET_DEFAULT_NAME;
         $fleet->user_id = $userId;
         $fleet->game_id = $gameId;
         $fleet->save();
@@ -61,7 +55,6 @@ class Fleet extends Model
         $builder = self::select(
             array(
                 'fleets.id',
-                'fleets.name as fleet_name',
                 'fleets.user_id',
                 'fleets.game_id'
             )
@@ -85,7 +78,6 @@ class Fleet extends Model
         $builder = self::select(
             array(
                 'fleets.id',
-                'fleets.name as fleet_name',
                 'fleets.user_id',
                 'fleets.game_id'
             )
@@ -109,7 +101,6 @@ class Fleet extends Model
         $builder = self::select(
             array(
                 'fleets.id',
-                'fleets.name as fleet_name',
                 'fleets.user_id',
                 'fleets.game_id',
                 'users.name as user_name',

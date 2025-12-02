@@ -20,19 +20,16 @@ class FleetsTableSeeder extends Seeder {
         $game3 = Game::where('name', Game::GAME_THIRD_NAVAL_BATTLE)->firstOrFail();
 
         $fleet = new Fleet();
-        $fleet->name = Fleet::FLEET_DREADNOUGHT;
         $fleet->user_id = $brian->id;
         $fleet->game_id = $game->id;
         $fleet->save();
 
         $fleet = new Fleet();
-        $fleet->name = Fleet::FLEET_VICTORY;
         $fleet->user_id = $ben->id;
         $fleet->game_id = $game2->id;
         $fleet->save();
 
         $fleet = new Fleet();
-        $fleet->name = Fleet::FLEET_DEFAULT_NAME;
         $fleet->user_id = $steve->id;
         $fleet->game_id = $game3->id;
         $fleet->save();

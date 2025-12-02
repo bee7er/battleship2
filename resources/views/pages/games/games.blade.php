@@ -24,11 +24,9 @@ use App\Game;
                 <table class="table is-bordered is-striped bs-form-table">
                     <thead>
                     <tr>
-                        <th>Id</th>
                         <th>Game Name</th>
                         <th>Player 1</th>
                         <th>Player 2</th>
-                        <th>Fleet Name</th>
                         <th>Status</th>
                         <th>Started at</th>
                         <th>Ended at</th>
@@ -37,11 +35,9 @@ use App\Game;
                     </thead>
                     <tfoot>
                     <tr>
-                        <th>Id</th>
                         <th>Game Name</th>
                         <th>Player 1</th>
                         <th>Player 2</th>
-                        <th>Fleet Name</th>
                         <th>Status</th>
                         <th>Started at</th>
                         <th>Ended at</th>
@@ -53,11 +49,9 @@ use App\Game;
                     @if (isset($games) && $games->count() > 0)
                         @foreach($games as $game)
                             <tr>
-                                <td>{{$game->id}}</td>
                                 <td><a class="bs-games-button" href="javascript: gotoEdit({{$game->id}})">{{$game->name}}</a></td>
                                 <td>{{$game->player_one_name}} {{($game->player_one_id == $game->winner_id ? '*': '')}}</td>
                                 <td>{{$game->player_two_name}} {{($game->player_two_id == $game->winner_id ? '*': '')}}</td>
-                                <td>{{isset($game->fleet) ? $game->fleet->fleet_name: 'not set yet'}}</td>
                                 <td>{{$game->status}}</td>
                                 <td>{{getFormattedDate($game->started_at)}}</td>
                                 <td>{{getFormattedDate($game->ended_at)}}</td>

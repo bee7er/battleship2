@@ -18,7 +18,6 @@ class CreateFleetsTable extends Migration
             $table->increments('id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->integer('game_id')->unsigned();
-            $table->string('name');
             $table->timestamps();
         });
     }
