@@ -235,6 +235,7 @@ use App\Game;
         if (gameOver) {
             setMyGoOrTheirGo(winnerId);
         }
+        var currentlyOpenProgressVessel = 0;
 
         // Load all the existing data for my fleet
         @foreach ($myFleet as $fleetVessel)
@@ -522,8 +523,6 @@ use App\Game;
                 // Update their fleet vessel location status
                 let hitOrDestroyed = false;
                 if (null != returnedMoveData.affectedLocations) {
-                    // Hide all open vessel part details
-                    $('.show_locations').hide('slide');
 
                     for (let i = 0; i < returnedMoveData.affectedLocations.length; i++) {
                         let loc = returnedMoveData.affectedLocations[i];
@@ -558,7 +557,13 @@ use App\Game;
                                 }
 
                                 $('#progress_row_' + fvl.fleet_vessel_id).get(0).scrollIntoView();
-                                $('#show_locations_' + fvl.fleet_vessel_id).show('slide');
+
+                                if (currentlyOpenProgressVessel != fvl.fleet_vessel_id) {
+                                    // Hide all open vessel part details
+                                    $('.show_locations').hide('slide');
+                                    $('#show_locations_' + fvl.fleet_vessel_id).show('slide');
+                                    currentlyOpenProgressVessel = fvl.fleet_vessel_id;
+                                }
 
                                 break;
                             }
@@ -686,6 +691,8 @@ use App\Game;
         {
             if (gameOver) {
                 stopCheckingForMoves();
+                // Hide all open vessel part details in progress chart
+                $('.show_locations').hide('slide');
 
                 if (winnerId == myUserId) {
                     playGameSound('success');

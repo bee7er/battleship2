@@ -14,7 +14,7 @@
 
     <link href="{{env("BASE_URL", "/")}}css/site.css?v17" rel="stylesheet">
     <!-- Javascript -->
-    <script type="text/javascript" src="{{env("BASE_URL", "/")}}js/smb.js?v1"></script>
+    <script type="text/javascript" src="{{env("BASE_URL", "/")}}js/smb.js?v2"></script>
 </head>
 <body>
 

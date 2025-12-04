@@ -424,7 +424,8 @@ use App\Game;
         {
             if (allMovesIndex >= allMoves.length) {
                 stopPlottingMoves();
-                gameOver = true;
+                    gameOver = true;
+                    $("#resumeButtonId").prop("disabled", true);
             } else {
                 let elem = allMoves[allMovesIndex];
                 allMovesIndex += 1;

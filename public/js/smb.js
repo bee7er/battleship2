@@ -37,7 +37,7 @@ function ajaxCall(url, data, callBackFunction) {
             return true;
         }
 
-        let res = responseData.message.indexOf('Your session has timed out');
+        let res = responseData.message.indexOf('Your session has expired');
         if (0 == res) {
             // Session timeout
             alert('Your session has expired. Please log in once more.');
