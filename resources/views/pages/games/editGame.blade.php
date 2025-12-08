@@ -68,17 +68,10 @@ use App\Game;
                         @else
                             <tr class="">
                                 <td class="cell bs-section-title">
-                                    Choose Player 2
+                                    Player 2
                                 </td>
                                 <td class="cell">
-                                    <select name="playerTwoId" id="playerTwoId" aria-label="Player 2" class="bs-listbox">
-                                        <option value="" class="">Select player 2</option>
-                                        @if (isset($users) && $users->count() > 0)
-                                            @foreach($users as $user)
-                                                    <option value="{{$user->id}}" @if ($user->id == $game->player_two_id) {{'selected'}}@endif>{{ucfirst($user->name)}}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
+                                    You will send a link to your opponent
                                 </td>
                             </tr>
                         @endif

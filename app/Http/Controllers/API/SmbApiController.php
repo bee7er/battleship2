@@ -16,10 +16,10 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Class BattleshipsApiController
+ * Class SmbApiController
  * @package App\Http\Controllers\API
  */
-class BattleshipsApiController extends Controller
+class SmbApiController extends Controller
 {
 	/**
 	 * Create a new filter instance.
@@ -28,6 +28,50 @@ class BattleshipsApiController extends Controller
 	 */
 	public function __construct()
 	{
+	}
+
+	/**
+	 * Check that a supplied user name is unique
+	 *
+	 * @param Request $request
+	 * @return Response
+	 */
+	public function isUserNameUnique(Request $request)
+	{
+		$message = "Data received OK";
+		$result = 'Error';
+		$isUnique = null;
+		$returnedData = null;
+
+		try {
+			$userName = $request->get('userName');
+			$user = User::getUserByUserName($userName);
+			if (isset($user) && null !== $user) {
+				$message = "User name already exists";
+				$isUnique = false;
+			} else {
+				$isUnique = true;
+			}
+
+			$returnedData = [
+				"isUnique" => $isUnique
+			];
+
+			$result = 'OK';
+
+		} catch(\Exception $exception) {
+			$result = 'Error';
+			$message = $exception->getMessage();
+			Log::info('Error in isUserNameUnique(): ' . $message);
+		}
+
+		$returnData = [
+			"message" => $message,
+			"result" => $result,
+			"returnedData" => $returnedData
+		];
+
+		return $returnData;   // Gets converted to json
 	}
 
 	/**

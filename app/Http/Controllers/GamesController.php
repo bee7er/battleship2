@@ -101,9 +101,7 @@ class GamesController extends Controller
 			$errors[] = $e->getMessage();
 		}
 
-		$users = User::getUsers($userId);
-
-		return view('pages.games.editGame', compact('loggedIn', 'game', 'user', 'users', 'errors', 'msgs'));
+		return view('pages.games.editGame', compact('loggedIn', 'game', 'user', 'errors', 'msgs'));
 	}
 
 	/**
@@ -164,7 +162,8 @@ class GamesController extends Controller
 			$game->name = $name;
 			if ('add' == $mode) {
 				$game->player_one_id = $user->id;
-				$game->player_two_id = $request->get('playerTwoId');
+				$game->player_two_id = null;
+				$game->player_two_link_token = Game::getNewToken();
 			}
 			$game->save();
 			// Check for add mode again for the creation of the fleet
@@ -198,7 +197,6 @@ class GamesController extends Controller
 		$loggedIn = true;
 		$userId = $this->auth->user()->id;
 		$gameId = $request->get('gameId');
-		$fleetId = 0;
 		$fleetLocationSize = 0;
 		$fleet = null;
 
@@ -211,6 +209,9 @@ class GamesController extends Controller
 			if (Game::STATUS_DELETED == $game->status) {
 				// This check is required because an opponent player could have a deleted game showing
 				return redirect()->intended('/games');
+			}
+			if (null == $game->player_two_id) {
+				$game->player_two_link = env("APP_URL", "/") . "playerTwo?gameToken={$game->player_two_link_token}";
 			}
 
 			$fleet = Fleet::getFleetDetails($gameId, $userId);

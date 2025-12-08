@@ -36,6 +36,9 @@
             <div class="navbar-item">
                 <div class="buttons">
                     @if (Auth::guest())
+                        <a class="navbar-item {{(Request::is('auth/register') ? ' is-selected' : '')}}" href="{{url('auth/register')}}">
+                            Register
+                        </a>
                         <a class="navbar-item {{(Request::is('auth/login') ? ' is-selected' : '')}}" href="{{url('auth/login')}}">
                             Login
                         </a>

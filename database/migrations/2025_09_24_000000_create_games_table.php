@@ -29,7 +29,9 @@ class CreateGamesTable extends Migration
                 ]
             );
             $table->unsignedInteger('player_one_id');
-            $table->unsignedInteger('player_two_id');
+            $table->unsignedInteger('player_two_id')->nullable();
+            // For player 2 link
+            $table->string('player_two_link_token', 16)->unique()->nullable()->default(null);
             $table->unsignedInteger('winner_id');
             $table->dateTime('started_at')->nullable();
             $table->dateTime('ended_at')->nullable();

@@ -347,3 +347,9 @@ hr {
 .bs-show {
     display: block !important;
 }
+
+.bs-winner {
+    background-color: #c40000 !important;
+    color: #fff !important;
+    font-weight: bold;
+}

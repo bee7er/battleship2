@@ -12,38 +12,5 @@ class FleetVesselsTableSeeder extends Seeder {
     public function run()
     {
         DB::table('fleet_vessels')->delete();
-
-        $dreadNought = Fleet::where('id', 1)->firstOrFail();
-        $victory = Fleet::where('id', 2)->firstOrFail();
-        $default = Fleet::where('id', 3)->firstOrFail();
-
-        $vessels = FleetTemplate::select(
-            array(
-                'vessel_id',
-            )
-        )->orderBy("id")->get();
-
-        // For each vessel in the template create a fleet vessel for each fleet
-        foreach ($vessels as $vessel) {
-            $fleetVessel = new FleetVessel();
-            $fleetVessel->fleet_id = $dreadNought->id;
-            $fleetVessel->vessel_id = $vessel->vessel_id;
-            $fleetVessel->status = FleetVessel::FLEET_VESSEL_AVAILABLE;
-            $fleetVessel->save();
-
-            $fleetVessel = new FleetVessel();
-            $fleetVessel->fleet_id = $victory->id;
-            $fleetVessel->vessel_id = $vessel->vessel_id;
-            $fleetVessel->status = FleetVessel::FLEET_VESSEL_AVAILABLE;
-            $fleetVessel->save();
-
-            $fleetVessel = new FleetVessel();
-            $fleetVessel->fleet_id = $default->id;
-            $fleetVessel->vessel_id = $vessel->vessel_id;
-            $fleetVessel->status = FleetVessel::FLEET_VESSEL_AVAILABLE;
-            $fleetVessel->save();
-        }
-
     }
-
 }

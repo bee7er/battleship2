@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 /* Games section */
 Route::get('/auth/login', 'Auth\AuthController@getLogin');
 Route::post('/auth/login', 'Auth\AuthController@postLogin');
+Route::get('/auth/register', 'Auth\AuthController@getRegister');
+Route::post('/auth/register', 'Auth\AuthController@postRegister');
 Route::get('/auth/logout', 'Auth\AuthController@getLogout');
 
 Route::get('/', 'HomeController@index');
@@ -39,14 +41,15 @@ Route::get('/deleteGame', 'GamesController@deleteGame');
 Route::get('/leaderboard', 'LeaderboardController@index');
 
 /* API functions */
-Route::post('/setVesselLocation', 'API\BattleshipsApiController@setVesselLocation');
-Route::post('/removeVesselLocation', 'API\BattleshipsApiController@removeVesselLocation');
-Route::post('/getGameStatus', 'API\BattleshipsApiController@getGameStatus');
-Route::post('/markAsRead', 'API\BattleshipsApiController@markAsRead');
-Route::post('/getLatestOpponentMove', 'API\BattleshipsApiController@getLatestOpponentMove');
-Route::post('/strikeVesselLocation', 'API\BattleshipsApiController@strikeVesselLocation');
-Route::post('/replaceFleetVesselLocations', 'API\BattleshipsApiController@replaceFleetVesselLocations');
-Route::post('/removeAllVesselLocations', 'API\BattleshipsApiController@removeAllVesselLocations');
+Route::post('/isUserNameUnique', 'API\SmbApiController@isUserNameUnique');
+Route::post('/setVesselLocation', 'API\SmbApiController@setVesselLocation');
+Route::post('/removeVesselLocation', 'API\SmbApiController@removeVesselLocation');
+Route::post('/getGameStatus', 'API\SmbApiController@getGameStatus');
+Route::post('/markAsRead', 'API\SmbApiController@markAsRead');
+Route::post('/getLatestOpponentMove', 'API\SmbApiController@getLatestOpponentMove');
+Route::post('/strikeVesselLocation', 'API\SmbApiController@strikeVesselLocation');
+Route::post('/replaceFleetVesselLocations', 'API\SmbApiController@replaceFleetVesselLocations');
+Route::post('/removeAllVesselLocations', 'API\SmbApiController@removeAllVesselLocations');
 
 /* Admin section */
 Route::get('/admin/dashboard', 'Admin\AdminController@index');

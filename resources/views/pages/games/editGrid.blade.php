@@ -25,7 +25,7 @@ $fleetId = 0;
                 <table class="table is-bordered is-striped bs-form-table">
                     <tbody>
                         <tr class="">
-                            <td class="cell bs-section-title">
+                            <td class="cell bs-section-title" width="50%">
                                 Game status:
                             </td>
                             <td class="cell bs-status">
@@ -53,10 +53,16 @@ $fleetId = 0;
                         </tr>
                         <tr class="">
                             <td class="cell bs-section-title">
-                                Player 2:
+                                Copy Link and Send to Player 2:
                             </td>
                             <td class="cell">
-                                {{ucfirst($game->player_two_name)}}
+                                @if (null != $game->player_two_name)
+                                    {{$game->player_two_name}}
+                                @else
+                                    <span class="has-text-link" style="cursor:cell;margin-right: 8px;" onclick="copyFunc()" title="Copy to clipboard">{{$game->player_two_link}}</span>
+                                    <img style="cursor:cell;" onclick="copyFunc()" src="{{env("BASE_URL", "/")}}images/clipboard.jpg" width="18px" title="Copy to clipboard" />
+                                    <input type="text" value="{{$game->player_two_link}}" id="copyInp" style="position:absolute;left:-1000px;top:-1000px;">
+                                @endif
                             </td>
                         </tr>
                     </tbody>
@@ -188,7 +194,7 @@ $fleetId = 0;
     <script type="text/javascript">
         var gameId = {{$game->id}};
         var fleetId = {{$fleetId}};
-        var playerTwoId = {{$game->player_two_id}}
+        var playerTwoId = {{$game->player_two_id ? : 0}};
         var fleetVessels = [];
         var fleetVessel = {};
         var fleetVesselLocations = [];
@@ -1153,6 +1159,17 @@ $fleetId = 0;
             let notification = $('#notification');
             notification.html(message).show();
             notification.delay(NOTIFICATION_TIMEOUT).fadeOut();
+        }
+
+        /**
+         * Copies a link to the clipboard
+         */
+        function copyFunc() {
+            var copyText = document.getElementById("copyInp");
+            copyText.select();
+            document.execCommand("copy"); //this function copies the text of the input with ID "copyInp"
+            // Notify the user this has happened
+            showNotification("Link copied to the clipboard");
         }
 
         $(document).ready( function()

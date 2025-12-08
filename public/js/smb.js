@@ -61,23 +61,38 @@ function ajaxCall(url, data, callBackFunction) {
 }
 
 /**
- * From vocal
- *
- * It wasn't necessary to run this function, as the pdf url was available locally
- * but this did in fact work
- * @param pdf
+ * Validate the user register/login form and submit the request
  */
-    function experimental(pdf) {
-        $.ajax({
-            url: 'getTenseDetails',
-            dataType: 'json',
-            data: {'pdf': pdf},
-            success: function (response) {
-                let data = response.data;
-                if (data != '') {
-                    $('#embedId').attr('src', data);
-                    $('#popup-modal').appendTo("body").modal('show');
-                }
-            }
-        });
-    };
+function validateUserForm()
+{
+    let userName = $('#userName');
+    let password = $('#password');
+
+    let errors = [];
+    let atLeastOne = false;
+
+    if ('' == password.val()) {
+        errors[errors.length] = 'Please enter a password';
+        atLeastOne = true;
+        password.focus();
+    }
+
+    if ('' == userName.val()) {
+        errors[errors.length] = 'Please enter a user name';
+        atLeastOne = true;
+        userName.focus();
+    }
+
+    if (atLeastOne) {
+        let errMsgs = sep = "";
+        for (let i=0; i<errors.length; i++) {
+            errMsgs += (sep + errors[i]);
+            sep = '<br />';
+        }
+        let ce = $('#customErrors');
+        ce.html(errMsgs).show().delay(3000).fadeOut();
+        return false;
+    }
+
+    return true;
+}

@@ -50,8 +50,8 @@ use App\Game;
                         @foreach($games as $game)
                             <tr>
                                 <td><a class="bs-games-button" href="javascript: gotoEdit({{$game->id}})">{{$game->name}}</a></td>
-                                <td>{{$game->player_one_name}} {{($game->player_one_id == $game->winner_id ? '*': '')}}</td>
-                                <td>{{$game->player_two_name}} {{($game->player_two_id == $game->winner_id ? '*': '')}}</td>
+                                <td class="{{($game->player_one_id == $game->winner_id ? 'bs-winner': '')}}">{{$game->player_one_name}}</td>
+                                <td class="{{($game->player_two_id && $game->player_two_id == $game->winner_id ? 'bs-winner': '')}}">{{$game->player_two_name ? : 'Not yet set'}}</td>
                                 <td>{{$game->status}}</td>
                                 <td>{{getFormattedDate($game->started_at)}}</td>
                                 <td>{{getFormattedDate($game->ended_at)}}</td>

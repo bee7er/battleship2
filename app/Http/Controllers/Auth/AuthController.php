@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use Exception;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Guard;
+use Illuminate\Database\QueryException;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
@@ -27,6 +29,8 @@ class AuthController extends Controller
     */
 
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+
+    const PWD_MIN_LEN = 6;
 
     /**
      * The Guard implementation.
@@ -64,8 +68,9 @@ class AuthController extends Controller
 
         $errors = [];
         $msgs = [];
+        $userName = '';
 
-        return view('auth.login', compact('loggedIn', 'errors', 'msgs'));
+        return view('auth.login', compact('loggedIn', 'userName', 'errors', 'msgs'));
     }
 
 
@@ -84,42 +89,103 @@ class AuthController extends Controller
         $errors = [];
         $msgs = [];
 
-        if (Auth::attempt(['email' => $request->get('email'), 'password' => $request->get('password')])) {
+        $userName = trim($request->get('userName'));
+        $password = trim($request->get('password'));
+
+        if (Auth::attempt(['name' => $userName, 'password' => $password])) {
             // Authentication passed...
             return redirect()->intended('/home');
         }
 
-        $errors[] = 'Email not found or an incorrect password was used.';
-        return view('auth.login', compact('loggedIn', 'errors', 'msgs'));
+        $errors[] = 'User name not found or an incorrect password was used.';
+        return view('auth.login', compact('loggedIn', 'userName', 'errors', 'msgs'));
     }
 
     /**
-     * Get a validator for an incoming registration request.
+     * Show the register page to the user.
      *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
+     * @param Request $request
+     * @return Response
      */
-    protected function validator(array $data)
+    public function getRegister(Request $request)
     {
-        return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|confirmed|min:6',
-        ]);
+        //dd(Hash::make('battle101'));
+
+        $errors = [];
+        $msgs = [];
+        $userName = '';
+
+        return view('auth.register', compact('userName', 'errors', 'msgs'));
     }
 
+
     /**
-     * Create a new user instance after a valid registration.
+     * If valid register show the application home page to the user.
      *
-     * @param  array  $data
-     * @return User
+     * @param Request $request
+     * @return Response
      */
-    protected function create(array $data)
+    public function postRegister(Request $request)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
+        if ($this->auth->check()) {
+            // User is already logged in
+            return redirect()->intended('/home');
+        }
+        $error = false;
+        $errors = [];
+        $msgs = [];
+
+        try {
+            $userName = trim($request->get('userName'));
+            if (!isset($userName) || '' == $userName) {
+                $errors[] = 'User name is required';
+                $error = true;
+            }
+            $password = trim($request->get('password'));
+            if (!isset($password) || '' == $password) {
+                $errors[] = 'Password is required';
+                $error = true;
+            } elseif (strlen($password) < self::PWD_MIN_LEN) {
+                $errors[] = 'Password must be at least ' . self::PWD_MIN_LEN . ' in length';
+                $error = true;
+            }
+            if (false == $error) {
+                // Get a new user object and create it
+                $user = User::getUser();
+                $user->name = $userName;
+                $user->password = Hash::make($password);
+                // Token required for API calls
+                $user->user_token = User::getNewToken();
+                $user->save();
+
+                // New user, log them in
+                if (Auth::attempt(['name' => $userName, 'password' => $password])) {
+                    // Authentication passed...
+                    return redirect()->intended('/home');
+                }
+            }
+
+        } catch(QueryException $e) {
+            $msg = $e->getMessage();
+            if (starts_with($msg, 'SQLSTATE[23000]')) {
+                // User name already exists in the database
+                $errors[] = 'User name must be unique';
+                $error = true;
+            } else {
+                // Some other SQL error
+                $errors[] = $msg;
+                $error = true;
+            }
+        } catch(Exception $e) {
+            $errors[] = $e->getMessage();
+            $error = true;
+        }
+
+        if (true == $error) {
+            return view('auth.register', compact('userName', 'errors', 'msgs'));
+        }
+
+        // All OK, go to login
+        return redirect()->intended('/auth/login');
     }
 }

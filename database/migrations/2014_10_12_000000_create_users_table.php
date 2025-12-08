@@ -15,8 +15,7 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->string('name')->unique();
             $table->string('password', 60);
             // For user verification when using the API functions
             $table->string('user_token', 16)->unique()->nullable()->default(null);

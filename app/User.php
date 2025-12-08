@@ -39,7 +39,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password', 'user_token', 'games_played', 'vessels_destroyed', 'points_scored'];
+    protected $fillable = ['name', 'password', 'user_token', 'games_played', 'vessels_destroyed', 'points_scored'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -67,6 +67,14 @@ class User extends Model implements AuthenticatableContract,
         }
 
         return self::findOrFail($id);
+    }
+
+    /**
+     * Get user by user_name
+     */
+    public static function getUserByUserName($userName)
+    {
+        return self::where('name', $userName)->first();
     }
 
     /**
@@ -119,7 +127,6 @@ class User extends Model implements AuthenticatableContract,
             array(
                 'users.id',
                 'users.name',
-                'users.email',
                 'games_played',
                 'vessels_destroyed',
                 'points_scored'

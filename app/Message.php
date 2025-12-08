@@ -58,7 +58,7 @@ class Message extends Model
             )
         )
             ->join('users as sender', 'sender.id', '=', 'messages.sending_user_id')
-            ->join('users as receiver', 'receiver.id', '=', 'messages.receiving_user_id')
+            ->leftjoin('users as receiver', 'receiver.id', '=', 'messages.receiving_user_id')
             ->orderBy("messages.created_at", "DESC");
 
         $messages = $builder
@@ -77,6 +77,10 @@ class Message extends Model
      */
     public static function addMessage($messageText, $fromUserId, $toUserId)
     {
+        if (!isset($toUserId) || null == $toUserId) {
+            // No point adding a message to no one
+            return;
+        }
         $message = Message::getMessage();
         $message->message_text = $messageText;
         $message->status = self::STATUS_OPEN;

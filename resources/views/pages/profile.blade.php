@@ -30,14 +30,6 @@
                                 </tr>
                                 <tr class="">
                                     <td class="cell bs-section-title">
-                                        Email:
-                                    </td>
-                                    <td class="cell">
-                                        {{$user->email}}
-                                    </td>
-                                </tr>
-                                <tr class="">
-                                    <td class="cell bs-section-title">
                                         Games played:
                                     </td>
                                     <td class="cell">

@@ -130,6 +130,9 @@ class GamesController extends Controller
 			$game->status = $request->get('status');
 			$game->player_one_id = $request->get('playerOneId');
 			$game->player_two_id = $request->get('playerTwoId');
+			if ('add' == $mode) {
+				$game->player_two_link_token = Game::getNewToken();
+			}
 			$game->save();
 			// Check for add mode for the creation of the fleet
 			if ('add' == $mode) {

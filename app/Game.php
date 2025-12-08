@@ -5,13 +5,10 @@ namespace App;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class Game extends Model
 {
-    const GAME_FIRST_NAVAL_BATTLE = '1st naval battle';
-    const GAME_SECOND_NAVAL_BATTLE = '2nd naval battle';
-    const GAME_THIRD_NAVAL_BATTLE = '3rd naval battle';
-
     const STATUS_EDIT = 'edit';
     const STATUS_WAITING = 'waiting';
     const STATUS_READY = 'ready';
@@ -34,7 +31,9 @@ class Game extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'status', 'player_one_id', 'player_two_id', 'winner_id', 'started_at', 'ended_at', 'deleted_at'];
+    protected $fillable = [
+        'name', 'status', 'player_one_id', 'player_two_id', 'player_two_link_token', 'winner_id', 'started_at', 'ended_at', 'deleted_at'
+    ];
 
     /**
      * Retrieve a game
@@ -53,6 +52,7 @@ class Game extends Model
                 'games.status',
                 'games.player_one_id',
                 'games.player_two_id',
+                'games.player_two_link_token',
                 'games.winner_id',
                 'games.started_at',
                 'games.ended_at',
@@ -122,6 +122,7 @@ class Game extends Model
                 'games.player_one_id',
                 'player_one.name as player_one_name',
                 'games.player_two_id',
+                'games.player_two_link_token',
                 'player_two.name as player_two_name',
                 'games.winner_id',
                 'games.status',
@@ -162,6 +163,7 @@ class Game extends Model
                 'games.player_one_id',
                 'users1.name as player_one_name',
                 'games.player_two_id',
+                'games.player_two_link_token',
                 'users2.name as player_two_name',
                 'games.winner_id',
                 'games.status',
@@ -171,7 +173,7 @@ class Game extends Model
             )
         )
             ->join('users as users1', 'users1.id', '=', 'games.player_one_id')
-            ->join('users as users2', 'users2.id', '=', 'games.player_two_id')
+            ->leftjoin('users as users2', 'users2.id', '=', 'games.player_two_id')
             ->orderBy("games.name");
 
         $game = $builder
@@ -312,4 +314,22 @@ class Game extends Model
         return 0;
     }
 
+
+    /**
+     * Get a new, unique player_two_link_token.
+     */
+    public static function getNewToken()
+    {
+        $token = null;
+        // Try to get a unique token
+        for ($i=0; $i<10; $i++) {
+            $token = Str::random(16);
+            // Check the token is unique
+            $game = Game::where('player_two_link_token', $token)->first();
+            if (!$game) {
+                return $token;  // Ok, is unique
+            }
+        }
+        throw new \Exception("Could not generate a unique token for new game");
+    }
 }

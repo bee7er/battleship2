@@ -1,12 +1,12 @@
 @extends('layouts.app')
-@section('title') login @parent @endsection
+@section('title') register @parent @endsection
 
 @section('content')
 
     <section class="container is-fluid">
 
         <article class="panel is-success">
-            <p class="panel-heading">Login</p>
+            <p class="panel-heading">Register</p>
             @include('common.msgs')
             @include('common.errors')
 
@@ -16,13 +16,13 @@
 
                         <div class="cell bs-errors" id="customErrors"></div>
 
-                        <form id="loginForm" action="{{env("BASE_URL", "/")}}auth/login" method="POST" class="form-horizontal">
+                        <form id="registerForm" action="{{env("BASE_URL", "/")}}auth/register" method="POST" class="form-horizontal">
                             {{ csrf_field() }}
 
                             <div class="field">
                                 <label class="label">User name</label>
                                 <div class="control">
-                                    <input class="input is-success" type="text" placeholder="Enter your unique user name" name="userName" id="userName" value="{{ $userName }}">
+                                    <input class="input is-success" type="text" placeholder="Choose a unique user name" name="userName" id="userName" value="{{ $userName }}">
                                 </div>
                             </div>
 
@@ -33,25 +33,12 @@
                                 </div>
                             </div>
 
-                            <div class="field">
-                                <div class="control">
-                                    <input type="checkbox" name="remember" id="remember"> Remember Me
-                                </div>
-                            </div>
-
                             <div class="field is-grouped">
                                 <div class="control">
                                     <button type="button" class="button is-link" onclick="validate()">Submit</button>
                                 </div>
                                 <div class="control">
-                                    <button class="button is-link is-light" onclick="gotoUrl('loginForm', '{{env("BASE_URL", "/")}}home')">Cancel</button>
-                                </div>
-                            </div>
-
-                            <hr />
-                            <div class="field">
-                                <div class="control">
-                                    Click <a class="" href="{{url('auth/register')}}">here to register</a>
+                                    <button class="button is-link is-light" onclick="gotoUrl('registerForm', '{{env("BASE_URL", "/")}}home')">Cancel</button>
                                 </div>
                             </div>
 
@@ -72,12 +59,39 @@
          */
         function validate()
         {
-            // Validate the form, also used by the register page
+            // Validate the form, also used by the login page
             if (validateUserForm()) {
-                let f = $('#loginForm');
-                f.submit();
+                // Ok so far, check that the name is unique
+                let userName = $('#userName');
+                let data = {
+                    userName: userName.val()
+                };
+                ajaxCall('/isUserNameUnique', JSON.stringify(data), uniqueNameCheck);
+            }
+        }
+
+        /**
+         * Callback function receiving the latest move by the opponent
+         */
+        function uniqueNameCheck(returnedMoveData)
+        {
+            let message = '';
+            if (null != returnedMoveData) {
+                if (true == returnedMoveData.isUnique) {
+                    // All good, submite details
+                    let f = $('#registerForm');
+                    f.submit();
+                    return false;
+                }
+                // Name is not unique
+                message = 'Name is not unique';
+                $('#userName').focus();
+            } else {
+                message = 'Error on call to server';
             }
 
+            let ce = $('#customErrors');
+            ce.html(message).show().delay(3000).fadeOut();
             return false;
         }
     </script>
