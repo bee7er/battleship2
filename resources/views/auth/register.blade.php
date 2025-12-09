@@ -84,8 +84,9 @@
                     return false;
                 }
                 // Name is not unique
-                message = 'Name is not unique';
-                $('#userName').focus();
+                let userName = $('#userName');
+                message = "The name '" + userName.val() + "' has already been take.  Please choose another name.";
+                $('#userName').select().focus();
             } else {
                 message = 'Error on call to server';
             }
