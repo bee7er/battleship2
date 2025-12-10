@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Message;
+use App\MessageText;
 use App\User;
 use Exception;
 use Illuminate\Contracts\Validation\Validator;
@@ -204,15 +206,24 @@ class AuthController extends Controller
             setSessionVariable(self::SESSION_VAR_USER_TOKEN, $user->user_token);
 
             // Authentication passed, but check if we are dealing with a player two logging in
-            $playerTwoGame = getSessionVariable(self::SESSION_VAR_GAME_TOKEN, false);
-            if ($playerTwoGame) {
-                // Update the game to show player two
-                $playerTwoGame->player_two_id = $user->id;
-                $playerTwoGame->save();
-                // Clear the player two session variable
-                setSessionVariable(self::SESSION_VAR_GAME_TOKEN, null);
+            $game = getSessionVariable(self::SESSION_VAR_GAME_TOKEN, false);
+            if ($game) {
+                if ($game->player_one_id == $user->id) {
+                    // The user is trying to play against themselves.  Ignore the request and go home.
+                    $messageText = MessageText::retrieveMessageText(MessageText::MESSAGE_PLAYER_TWO_ERROR,
+                        [User::getUser($game->player_one_id)->name, $game->name, User::systemUser()->name]);
+                    Message::addMessage($messageText, User::systemUser()->id, $game->player_one_id);
+                    // We clear the session variable so that the game token link must be used once more
+                    setSessionVariable(self::SESSION_VAR_GAME_TOKEN, null);
+                } else {
+                    // Update the game to show player two
+                    $game->player_two_id = $user->id;
+                    $game->save();
+                    // Clear the player two session variable
+                    setSessionVariable(self::SESSION_VAR_GAME_TOKEN, null);
 
-                return ('/acceptGame?gameId=' . $playerTwoGame->id);
+                    return ('/acceptGame?gameId=' . $game->id);
+                }
             }
 
             // An authenticated user

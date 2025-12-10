@@ -22,6 +22,7 @@ class MessageText extends Model
     const MESSAGE_WAITING = "Waiting";
     const MESSAGE_WINNER = "Winner";
     const MESSAGE_LOSER = "Loser";
+    const MESSAGE_PLAYER_TWO_ERROR = "Player Two Error";
 
     const MESSAGE_BROADCAST_WELCOME_VERSION_2 = "Welcome to Version 2";
 

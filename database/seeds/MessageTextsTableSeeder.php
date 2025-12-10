@@ -62,6 +62,20 @@ class MessageTextsTableSeeder extends Seeder {
         $messageText->save();
 
         $messageText = new MessageText();
+        $messageText->name = MessageText::MESSAGE_PLAYER_TWO_ERROR;
+        $messageText->text = "Hi %s, sorry you cannot play '%s' against yourself. %s";
+        $messageText->type = MessageText::TYPE_SPECIFIC;
+        $messageText->status = MessageText::STATUS_READY;
+        $messageText->save();
+
+        $messageText = new MessageText();
+        $messageText->name = MessageText::MESSAGE_BROADCAST_WELCOME_VERSION_2;
+        $messageText->text = "Hi %s, welcome to version two of my battleships game. *system_admin";
+        $messageText->type = MessageText::TYPE_BROADCAST;
+        $messageText->status = MessageText::STATUS_READY;
+        $messageText->save();
+
+        $messageText = new MessageText();
         $messageText->name = MessageText::MESSAGE_BROADCAST_WELCOME_VERSION_2;
         $messageText->text = "Hi %s, welcome to version two of my battleships game. *system_admin";
         $messageText->type = MessageText::TYPE_BROADCAST;

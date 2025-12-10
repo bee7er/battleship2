@@ -20,14 +20,15 @@
                         <p>Hope you enjoy the challenge.</p>
                     </div>
                     <div class="content">
-                        <p class="is-size-3">What You Have To Do</p>
-                        <ol class="is-size-4">
+                        <p class="is-size-4">What You Have To Do</p>
+                        <ol class="is-size-5">
                             <li>Go to <span class="has-text-link">My Games</span></li>
                             <li>Click on <span class="has-text-link">Add Game</span></li>
                             <li>Click on <span class="has-text-link">Edit Grid</span></li>
                             <li>Click on the  <span class="has-text-link">Vessel Location Grid</span> to plot each vessel</li>
                             <li>If you want to get the game to plot the vessels just click on the  <span class="has-text-link">Go Random</span> button</li>
-                            <li>XXXXXXXXX  <span class="has-text-link">Copy Link</span> button</li>
+                            <li>When you have finished plotting your vessels the game status will change to <span class="has-text-link">Waiting</span></li>
+                            <li>Invite a friend to join you in battle by sending the <span class="has-text-link">Player 2</span> link to them </li>
                         </ol>
 
                     </div>
