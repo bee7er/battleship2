@@ -102,9 +102,13 @@ hr {
     font-weight: normal;
 }
 
-.bs-msgs {
+.bs-msgs, .bs-ready-to-play {
     color: #c40000 !important;
     font-weight: bold;
+}
+
+.bs-ready-to-play {
+    margin-right: 20px;
 }
 
 .bs-msgs-link {

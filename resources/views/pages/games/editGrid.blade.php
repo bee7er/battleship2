@@ -32,7 +32,7 @@ $fleetId = 0;
                             <td class="cell bs-status">
                                 <span id="gameStatus">{{ucfirst($game->status)}}</span>
                                 <span id="engageLink" class="is-pulled-right">
-                                    <a class="bs-games-button" href="javascript: location.href='{{env("BASE_URL", "/")}}playGrid?gameId={{$game->id}}'">Engage</a>
+                                    <span class="bs-ready-to-play">The game is ready to play &gt;&gt;</span><a class="bs-games-button" href="javascript: location.href='{{env("BASE_URL", "/")}}playGrid?gameId={{$game->id}}'">Engage</a>
                                 </span>
                             </td>
                         </tr>
@@ -76,9 +76,8 @@ $fleetId = 0;
 
         </article>
         <div class="field">
-            <div class="bs-section-help">Select each vessel and plot its positions on the grid.</div>
-            <div class="bs-section-help">Each vessel has a length corresponding with the number of positions which must be plotted.</div>
-            <div class="bs-section-help">Click the <b>Go Random</b> button to have the game generate a random set of positions.</div>
+            <div class="bs-section-help">Select each vessel and plot its positions on the grid. Each vessel has a length corresponding with the number of positions which must be plotted. These changes are <b>saved automatically</b>.</div>
+            <div class="bs-section-help">Click the <b>Go Random</b> button to have the game generate a random set of positions. Click <b>Save Random</b> when you see a combination of locations you like.</div>
             <div class=""><span class="bs-messages-title">Messages:</span> <span id="notification" class="bs-notification">&nbsp;</span></div>
         </div>
 
@@ -1161,9 +1160,7 @@ $fleetId = 0;
          */
         function showNotification(message)
         {
-            let notification = $('#notification');
-            notification.html(message).show();
-            notification.delay(NOTIFICATION_TIMEOUT).fadeOut();
+            $("#notification").html(message).show().delay(NOTIFICATION_TIMEOUT).fadeOut();
         }
 
         /**
@@ -1181,8 +1178,10 @@ $fleetId = 0;
         {
             setCookie('user_token', $('#userToken').val(), 1);
 
-            @if (Game::STATUS_READY != $game->status && Game::STATUS_ENGAGED != $game->status)
-                $('#engageLink').hide();
+            $('#engageLink').hide();
+
+            @if (Game::STATUS_READY == $game->status || Game::STATUS_ENGAGED == $game->status)
+                $('#engageLink').show();
             @endif
 
             plotFleetLocations();
