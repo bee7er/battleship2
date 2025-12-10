@@ -2,6 +2,34 @@
 
 use Illuminate\Support\Arr;
 
+session_start();
+
+if (!function_exists('setSessionVariable')) {
+    /**
+     * Set a session variable to a given value
+     * @param $variableName
+     * @param $value
+     */
+    function setSessionVariable($variableName, $value)
+    {
+        $_SESSION[$variableName] = $value;
+    }
+}
+
+if (!function_exists('getSessionVariable')) {
+    /**
+     * Retrieve a session value providing a default
+     * @param $variableName
+     * @param $default
+     * @return mixed
+     */
+    function getSessionVariable($variableName, $default)
+    {
+        $value = isset($_SESSION[$variableName]) ? $_SESSION[$variableName]: $default;
+        return $value;
+    }
+}
+
 if (!function_exists('segments')) {
     /**
      * Converts individual elements of a url into an array.

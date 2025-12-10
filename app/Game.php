@@ -314,6 +314,15 @@ class Game extends Model
         return 0;
     }
 
+    /**
+     * Retrieve a game by player two link token
+     * @param $playerTwoLinkToken
+     * @return mixed
+     */
+    public static function getGameByPlayerTwoLinkToken($playerTwoLinkToken)
+    {
+        return self::select('*')->where("games.player_two_link_token", "=", $playerTwoLinkToken)->first();
+    }
 
     /**
      * Get a new, unique player_two_link_token.

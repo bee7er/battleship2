@@ -195,7 +195,9 @@ class GamesController extends Controller
 		}
 
 		$loggedIn = true;
-		$userId = $this->auth->user()->id;
+		$user = $this->auth->user();
+		$userId = $user->id;
+		$userToken = $user->user_token;
 		$gameId = $request->get('gameId');
 		$fleetLocationSize = 0;
 		$fleet = null;
@@ -223,7 +225,7 @@ class GamesController extends Controller
 			$errors[] = $e->getMessage();
 		}
 
-		return view('pages.games.editGrid', compact('loggedIn', 'game', 'fleet', 'fleetLocationSize', 'errors', 'msgs'));
+		return view('pages.games.editGrid', compact('loggedIn', 'game', 'userId', 'userToken', 'fleet', 'fleetLocationSize', 'errors', 'msgs'));
 	}
 
 	/**

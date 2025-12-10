@@ -21,6 +21,7 @@ $fleetId = 0;
                 {{ csrf_field() }}
 
                 <input type="hidden" name="gameId" id="gameId" value="{{$game->id}}" />
+                <input type="hidden" id="userToken" value="{{$userToken}}" />
 
                 <table class="table is-bordered is-striped bs-form-table">
                     <tbody>
@@ -40,22 +41,26 @@ $fleetId = 0;
                                 Game name:
                             </td>
                             <td class="cell">
-                                {{ucfirst($game->game_name)}}
+                                {{$game->game_name}}
                             </td>
                         </tr>
                         <tr class="">
                             <td class="cell bs-section-title">
                                 Player 1:
                             </td>
-                            <td class="cell">
-                                {{ucfirst($game->player_one_name)}}
+                            <td class="cell{{$game->player_one_id==$userId ? 'bs-play-status': ''}}">
+                                {{$game->player_one_name}}
                             </td>
                         </tr>
                         <tr class="">
                             <td class="cell bs-section-title">
-                                Copy Link and Send to Player 2:
+                                @if (null != $game->player_two_name)
+                                    Player 2:
+                                @else
+                                    Copy link and send it to player 2:
+                                @endif
                             </td>
-                            <td class="cell">
+                            <td class="cell {{$game->player_two_id==$userId ? 'bs-play-status': ''}}">
                                 @if (null != $game->player_two_name)
                                     {{$game->player_two_name}}
                                 @else
@@ -1174,6 +1179,8 @@ $fleetId = 0;
 
         $(document).ready( function()
         {
+            setCookie('user_token', $('#userToken').val(), 1);
+
             @if (Game::STATUS_READY != $game->status && Game::STATUS_ENGAGED != $game->status)
                 $('#engageLink').hide();
             @endif

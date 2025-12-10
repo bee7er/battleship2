@@ -32,7 +32,7 @@ use App\Game;
                         </td>
                         <td class="cell bs-status" id="gameStatus">
                             @if (isset($game->id))
-                                {{ucfirst($game->status)}}
+                                {{$game->status}}
                             @else
                                 New
                             @endif

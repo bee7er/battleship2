@@ -42,13 +42,13 @@ use App\Game;
                                 You:
                             </td>
                             <td id="myGoId" class="cell">
-                                {{ucfirst($myUser->name)}}
+                                {{$myUser->name}}
                             </td>
                             <td class="cell bs-section-title">
                                 Them:
                             </td>
                             <td id="theirGoId" class="cell">
-                                {{ucfirst($theirUser->name)}}
+                                {{$theirUser->name}}
                             </td>
                         </tr>
                     </tbody>
@@ -184,8 +184,8 @@ use App\Game;
         var fleetVesselLocations = [];
         var myUserId = {{$myUser->id}};
         var theirUserId = {{$theirUser->id}};
-        var myName = '{{ucfirst($myUser->name)}}';
-        var theirName = '{{ucfirst($theirUser->name)}}';
+        var myName = '{{$myUser->name}}';
+        var theirName = '{{$theirUser->name}}';
         var myGo = {{$myGo}};
         var gameOver = false;
 

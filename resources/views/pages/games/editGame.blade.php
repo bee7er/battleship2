@@ -52,7 +52,7 @@ use App\Game;
                                 Player 1:
                             </td>
                             <td class="cell">
-                                {{ucfirst($user->name)}}
+                                {{$user->name}}
                             </td>
                         </tr>
                         @if (isset($game->id))
@@ -62,7 +62,7 @@ use App\Game;
                                 </td>
                                 <td class="cell">
                                     <input type="hidden" id="playerTwoId" value="{{$game->player_two_id}}" />
-                                    {{ucfirst($playerTwo->name)}}
+                                    {{$playerTwo->name}}
                                 </td>
                             </tr>
                         @else

@@ -51,8 +51,6 @@ class HomeController extends Controller
 		if ($this->auth->check()) {
 			$loggedIn = true;
 			$user = $this->auth->user();
-			// We place the user token in the response so it can be obtained
-			// by the client and stored in a cookie
 			$userToken = $user->user_token;
 			// Check if there are any system messages to be broadcast
 			// With just a small number of users this technique is ok.  If lots more come on board then this
@@ -62,10 +60,32 @@ class HomeController extends Controller
 			$msgs = Message::getMessages($user->id)->toArray();
 		}
 
-
-
 		return view('pages.home', compact('loggedIn', 'userToken', 'errors', 'msgs'));
 	}
+
+	/**
+	 * Player 2 responding to an invitation to a game
+	 *
+	 * @param Request $request
+	 * @return Response
+	 */
+	public function playerTwo(Request $request)
+	{
+		$loggedIn = false;
+		if ($this->auth->check()) {
+			$loggedIn = true;
+		}
+
+		$errors = [];
+		$msgs = [];
+
+		$gameToken = $request->get('gameToken');
+		$game = Game::getGameByPlayerTwoLinkToken($gameToken);
+		setSessionVariable(self::SESSION_VAR_GAME_TOKEN, $game);
+
+		return view('pages.playerTwo', compact('loggedIn', 'errors', 'msgs'));
+	}
+
 
 	/**
 	 * Show the about page to the user.

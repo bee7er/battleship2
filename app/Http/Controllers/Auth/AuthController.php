@@ -73,7 +73,6 @@ class AuthController extends Controller
         return view('auth.login', compact('loggedIn', 'userName', 'errors', 'msgs'));
     }
 
-
     /**
      * If valid login show the application dashboard to the user.
      *
@@ -92,9 +91,10 @@ class AuthController extends Controller
         $userName = trim($request->get('userName'));
         $password = trim($request->get('password'));
 
-        if (Auth::attempt(['name' => $userName, 'password' => $password])) {
+        $redirect = self::loggingIn($userName, $password);
+        if (false != $redirect) {
             // Authentication passed...
-            return redirect()->intended('/home');
+            return redirect()->intended($redirect);
         }
 
         $errors[] = 'User name not found or an incorrect password was used.';
@@ -159,9 +159,10 @@ class AuthController extends Controller
                 $user->save();
 
                 // New user, log them in
-                if (Auth::attempt(['name' => $userName, 'password' => $password])) {
+                $redirect = self::loggingIn($userName, $password);
+                if ($redirect) {
                     // Authentication passed...
-                    return redirect()->intended('/home');
+                    return redirect()->intended($redirect);
                 }
             }
 
@@ -185,7 +186,39 @@ class AuthController extends Controller
             return view('auth.register', compact('userName', 'errors', 'msgs'));
         }
 
-        // All OK, go to login
         return redirect()->intended('/auth/login');
+    }
+
+    /**
+     * We are logging the user in, from register or login page.
+     * @param $userName
+     * @param $password
+     * @return bool|string
+     */
+    private function loggingIn($userName, $password)
+    {
+        if (Auth::attempt(['name' => $userName, 'password' => $password])) {
+            $user = $this->auth->user();
+            // We place the user token in the response so it can be obtained
+            // by the client and stored in a cookie
+            setSessionVariable(self::SESSION_VAR_USER_TOKEN, $user->user_token);
+
+            // Authentication passed, but check if we are dealing with a player two logging in
+            $playerTwoGame = getSessionVariable(self::SESSION_VAR_GAME_TOKEN, false);
+            if ($playerTwoGame) {
+                // Update the game to show player two
+                $playerTwoGame->player_two_id = $user->id;
+                $playerTwoGame->save();
+                // Clear the player two session variable
+                setSessionVariable(self::SESSION_VAR_GAME_TOKEN, null);
+
+                return ('/acceptGame?gameId=' . $playerTwoGame->id);
+            }
+
+            // An authenticated user
+            return '/home';
+        }
+
+        return false;
     }
 }

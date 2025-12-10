@@ -13,6 +13,9 @@ abstract class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    const SESSION_VAR_GAME_TOKEN = 'PlayerTwoLinkToken';
+    const SESSION_VAR_USER_TOKEN = 'UserToken';
+
     /**
      * Set a cookie to a given value
      * @param $cookieName
