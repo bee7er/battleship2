@@ -32,8 +32,6 @@ class AuthController extends Controller
 
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
-    const PWD_MIN_LEN = 6;
-
     /**
      * The Guard implementation.
      *
@@ -142,13 +140,16 @@ class AuthController extends Controller
             if (!isset($userName) || '' == $userName) {
                 $errors[] = 'User name is required';
                 $error = true;
+            } elseif (strlen($userName) < User::USR_MIN_LEN) {
+                $errors[] = 'User name must be at least ' . User::USR_MIN_LEN . ' in length';
+                $error = true;
             }
             $password = trim($request->get('password'));
             if (!isset($password) || '' == $password) {
                 $errors[] = 'Password is required';
                 $error = true;
-            } elseif (strlen($password) < self::PWD_MIN_LEN) {
-                $errors[] = 'Password must be at least ' . self::PWD_MIN_LEN . ' in length';
+            } elseif (strlen($password) < User::PWD_MIN_LEN) {
+                $errors[] = 'Password must be at least ' . User::PWD_MIN_LEN . ' in length';
                 $error = true;
             }
             if (false == $error) {

@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @section('title') register @parent @endsection
 
+<?php
+use App\User;
+?>
+
 @section('content')
 
     <section class="container is-fluid">
@@ -20,14 +24,14 @@
                             {{ csrf_field() }}
 
                             <div class="field">
-                                <label class="label">User name</label>
+                                <label class="label">User name (any {{User::USR_MIN_LEN}} or more characters)</label>
                                 <div class="control">
                                     <input class="input is-success" type="text" placeholder="Choose a unique user name" name="userName" id="userName" value="{{ $userName }}">
                                 </div>
                             </div>
 
                             <div class="field">
-                                <label class="label">Password</label>
+                                <label class="label">Password (any {{User::PWD_MIN_LEN}} or more characters)</label>
                                 <div class="control">
                                     <input class="input" type="password" name="password" id="password" placeholder="Password" />
                                 </div>
@@ -40,6 +44,11 @@
                                 <div class="control">
                                     <button class="button is-link is-light" onclick="gotoUrl('registerForm', '{{env("BASE_URL", "/")}}home')">Cancel</button>
                                 </div>
+                            </div>
+
+                            <hr />
+                            <div class="field">
+                                No personal details are recorded on this website.
                             </div>
 
                         </form>

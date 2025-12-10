@@ -45,10 +45,11 @@
                         <h4 class="title is-5">My Games</h4>
                         <p>Go to page <span class="has-text-link">My Games</span> to view available games which you have created or where you have been invited to play by an opponent.</p>
                         <p>Click on the <span class="has-text-link">Add Game</span> link to create a new game.</p>
-                        <p>Give the game a name, so that it can be identified among all the others and choose an opponent from the list of other players.</p>
+                        <p>Give the game a name, so that it can be identified among all the others and choose an opponent from the list of other players. If it is not unique the nae will be appended with a numerique sequence.</p>
                         <p>Edit the grid by selecting a vessel and plotting it on the grid where appropriate.</p>
-                        <p>To distribute the vessels randomly on the grid use the <span class="has-text-link">Go Random</span> button.  Click <span class="has-text-link">Save Random</span>, when a distribution you like is achieved. Click <span class="has-text-link">Cancel Random</span> to return to any vessels you had previously plotted</p>
-                        <p>Click <span class="has-text-link">Accept</span> against a game to which you have been invited. You will be taken to the <span class="has-text-link">Edit Grid</span> page so that you can plot where on the grid your fleet vessels should go.</p>
+                        <p>To distribute the vessels randomly on the grid use the <span class="has-text-link">Go Random</span> button.  You can click <span class="has-text-link">Go Random</span> multiple times. Click <span class="has-text-link">Save Random</span>, when a distribution you like is achieved. Click <span class="has-text-link">Cancel Random</span> to return to any vessels you had previously plotted</p>
+                        <p>Click <span class="has-text-link">Start Again</span> to clear the grid of all vessel locations.</p>
+                        <p>To invite your opponent click on the <span class="has-text-link">Player 2</span> link and sent it to them. They will need to login or register and plot their fleet vessels before the game can be played. The game will switch to a status of <span class="has-text-link">Waiting</span> until player 2 has completed their vessel locations.</p>
                         <p>When both the game owner and opponent have completed editing their grid the game is <span class="has-text-link">Ready</span> to play.</p>
                         <p>Click <span class="has-text-link">Engage</span> to play the game.</p>
                         <p>The winner is the player who first destroys all the opponent's fleet vessels.</p>

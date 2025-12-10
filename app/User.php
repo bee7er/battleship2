@@ -20,6 +20,9 @@ class User extends Model implements AuthenticatableContract,
 
     const USER_TOKEN = 'user_token';
 
+    const USR_MIN_LEN = 4;
+    const PWD_MIN_LEN = 6;
+
     const USER_BRIAN = 'brian';
     const USER_STEVE = 'steve';
     const USER_BEN = 'ben';
