@@ -22,20 +22,9 @@ class FleetTemplatesTableSeeder extends Seeder {
         $fleetTemplate->save();
 
         $fleetTemplate = new FleetTemplate();
-        $fleetTemplate->vessel_id = $aircraftCarrier->id;
-        $fleetTemplate->save();
-
-        $fleetTemplate = new FleetTemplate();
         $fleetTemplate->vessel_id = $battleship->id;
         $fleetTemplate->save();
 
-        $fleetTemplate = new FleetTemplate();
-        $fleetTemplate->vessel_id = $battleship->id;
-        $fleetTemplate->save();
-
-        $fleetTemplate = new FleetTemplate();
-        $fleetTemplate->vessel_id = $cruiser->id;
-        $fleetTemplate->save();
 
         $fleetTemplate = new FleetTemplate();
         $fleetTemplate->vessel_id = $cruiser->id;
@@ -45,13 +34,6 @@ class FleetTemplatesTableSeeder extends Seeder {
         $fleetTemplate->vessel_id = $submarine->id;
         $fleetTemplate->save();
 
-        $fleetTemplate = new FleetTemplate();
-        $fleetTemplate->vessel_id = $submarine->id;
-        $fleetTemplate->save();
-
-        $fleetTemplate = new FleetTemplate();
-        $fleetTemplate->vessel_id = $destroyer->id;
-        $fleetTemplate->save();
 
         $fleetTemplate = new FleetTemplate();
         $fleetTemplate->vessel_id = $destroyer->id;

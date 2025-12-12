@@ -1,10 +1,14 @@
 /**
  * Navigate to the requested page
  */
-function gotoUrl(formId, url) {
+function gotoUrl(formId, url, method) {
     let f = $('#' + formId);
     f.attr("action", url);
-    f.attr("method", "POST");
+    if (undefined = method) {
+        f.attr("method", "POST");
+    } else {
+        f.attr("method", method);
+    }
     f.submit();
 }
 

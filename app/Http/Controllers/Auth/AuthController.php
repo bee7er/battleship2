@@ -127,6 +127,8 @@ class AuthController extends Controller
      */
     public function postRegister(Request $request)
     {
+        Log::info('postRegister');
+
         if ($this->auth->check()) {
             // User is already logged in
             return redirect()->intended('/home');
@@ -172,8 +174,9 @@ class AuthController extends Controller
         } catch(QueryException $e) {
             $msg = $e->getMessage();
             if (starts_with($msg, 'SQLSTATE[23000]')) {
+                Log::info($msg);
                 // User name already exists in the database
-                $errors[] = 'User name must be unique';
+                $errors[] = 'User name must be unique. Please choose another name.';
                 $error = true;
             } else {
                 // Some other SQL error

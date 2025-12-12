@@ -41,10 +41,10 @@
 
                             <div class="field is-grouped">
                                 <div class="control">
-                                    <button type="button" class="button is-link" onclick="validate()">Submit</button>
+                                    <button type="submit" class="button is-link" onclick="validate()">Submit</button>
                                 </div>
                                 <div class="control">
-                                    <button class="button is-link is-light" onclick="gotoUrl('loginForm', '{{env("BASE_URL", "/")}}home')">Cancel</button>
+                                    <button class="button is-link is-light" onclick="gotoUrl('loginForm', '{{env("BASE_URL", "/")}}home', 'GET')">Cancel</button>
                                 </div>
                             </div>
 

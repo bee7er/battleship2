@@ -32,7 +32,6 @@
                                 @endif
                                 </ul>
                             </li>
-                            <li><b>How many:</b> There are two of each vessel type in a fleet.</li>
                             <li><b>Guessing:</b> Players take turns firing virtual missiles at coordinates (e.g., A5, G7) to attack their opponent's grid.</li>
                             <li><b>Hit or Miss:</b> The opponent's grid shows where the missile hit and the effect it had.</li>
                             <li><b>Hit and Go again:</b> A successful hit is rewarded by having another go, and keep going until you miss.</li>

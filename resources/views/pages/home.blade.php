@@ -14,15 +14,17 @@
             <section class="hero">
                 <div class="hero-body">
                     <div class="content">
-                        <p>The classical game of two battling fleets, now played across the web.</p>
-                        <p>You will find all the old favourites, aircraft carriers, battleships and more.</p>
-                        <p>Create a game, choose an opponent, plot where your fleet goes on a grid and engage in battle.</p>
-                        <p>Hope you enjoy the challenge.</p>
+                        <p class="home-text">The classical game of two battling fleets, now played across the web.</p>
+                        <p class="home-text">You will find all the old favourites, aircraft carrier, battleship, destroyer and more.</p>
+                        <p class="home-text">Create a game, plot where your fleet goes on a grid and send an invitation link to a friend.</p>
+                        <p class="home-text">Once you've both plotted the locations of your fleets you can engage in battle.</p>
+                        <p class="home-text">Hope you enjoy the challenge.</p>
                     </div>
                     <div class="content">
                         <p class="is-size-4">What You Have To Do</p>
                         <ol class="is-size-5">
-                            <li>Go to <span class="has-text-link">My Games</span></li>
+                            <li>If this is your first visit then you must <span class="has-text-link">Register</span>, with a simple name and password.</li>
+                            <li>Once you've logged in, go to <span class="has-text-link">My Games</span></li>
                             <li>Click on <span class="has-text-link">Add Game</span></li>
                             <li>Click on <span class="has-text-link">Edit Grid</span></li>
                             <li>Click on the  <span class="has-text-link">Vessel Location Grid</span> to plot each vessel</li>

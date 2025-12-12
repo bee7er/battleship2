@@ -39,10 +39,10 @@ use App\User;
 
                             <div class="field is-grouped">
                                 <div class="control">
-                                    <button type="button" class="button is-link" onclick="validate()">Submit</button>
+                                    <button type="submit" class="button is-link" onclick="return validate()">Submit</button>
                                 </div>
                                 <div class="control">
-                                    <button class="button is-link is-light" onclick="gotoUrl('registerForm', '{{env("BASE_URL", "/")}}home')">Cancel</button>
+                                    <button type="button" class="button is-link is-light" onclick="gotoUrl('registerForm', '{{env("BASE_URL", "/")}}home', 'GET')">Cancel</button>
                                 </div>
                             </div>
 
@@ -68,6 +68,7 @@ use App\User;
          */
         function validate()
         {
+            console.log('In validate');
             // Validate the form, also used by the login page
             if (validateUserForm()) {
                 // Ok so far, check that the name is unique
@@ -77,6 +78,8 @@ use App\User;
                 };
                 ajaxCall('/isUserNameUnique', JSON.stringify(data), uniqueNameCheck);
             }
+
+            return false;
         }
 
         /**
@@ -87,15 +90,22 @@ use App\User;
             let message = '';
             if (null != returnedMoveData) {
                 if (true == returnedMoveData.isUnique) {
+
+                    console.log('Is unique');
+
                     // All good, submite details
                     let f = $('#registerForm');
                     f.submit();
+
+                    console.log('Form submitted');
+
                     return false;
                 }
                 // Name is not unique
                 let userName = $('#userName');
                 message = "The name '" + userName.val() + "' has already been take.  Please choose another name.";
                 $('#userName').select().focus();
+
             } else {
                 message = 'Error on call to server';
             }
