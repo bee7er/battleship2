@@ -17,6 +17,7 @@ class CreateUsersTable extends Migration
             $table->increments('id')->unsigned();
             $table->string('name')->unique();
             $table->string('password', 60);
+            $table->string('password_hint', 60);
             // For user verification when using the API functions
             $table->string('user_token', 16)->unique()->nullable()->default(null);
             $table->boolean('admin')->default(false);

@@ -42,7 +42,9 @@ Route::get('/deleteGame', 'GamesController@deleteGame');
 Route::get('/leaderboard', 'LeaderboardController@index');
 
 /* API functions */
+Route::get('/getCaptchaImage', 'API\SmbApiController@getCaptchaImage');
 Route::post('/isUserNameUnique', 'API\SmbApiController@isUserNameUnique');
+Route::post('/getPasswordHint', 'API\SmbApiController@getPasswordHint');
 Route::post('/setVesselLocation', 'API\SmbApiController@setVesselLocation');
 Route::post('/removeVesselLocation', 'API\SmbApiController@removeVesselLocation');
 Route::post('/getGameStatus', 'API\SmbApiController@getGameStatus');

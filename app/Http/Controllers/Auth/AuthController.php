@@ -114,8 +114,10 @@ class AuthController extends Controller
         $errors = [];
         $msgs = [];
         $userName = '';
+        // Generate a 4 digit random number.  Wwe will use the 3rd digit to choose an obfuscated image.
+        $obfNumber = rand(1289, 8056);
 
-        return view('auth.register', compact('userName', 'errors', 'msgs'));
+        return view('auth.register', compact('userName', 'obfNumber', 'errors', 'msgs'));
     }
 
 
@@ -127,7 +129,8 @@ class AuthController extends Controller
      */
     public function postRegister(Request $request)
     {
-        Log::info('postRegister');
+        Log::info('postRegister: ' . $request->get('obfNumber'));
+        Log::info('postRegister ary: ' . print_r($request->all(), true));
 
         if ($this->auth->check()) {
             // User is already logged in
@@ -136,6 +139,7 @@ class AuthController extends Controller
         $error = false;
         $errors = [];
         $msgs = [];
+        $obfNumber = $request->get('obfNumber');
 
         try {
             $userName = trim($request->get('userName'));
@@ -154,11 +158,22 @@ class AuthController extends Controller
                 $errors[] = 'Password must be at least ' . User::PWD_MIN_LEN . ' in length';
                 $error = true;
             }
-            if (false == $error) {
+            $displayedNumber = trim($request->get('displayedNumber'));
+            if (!isset($displayedNumber) || '' == $displayedNumber) {
+                $errors[] = 'The displayed number is required';
+                $error = true;
+            } elseif (false == self::checkCaptchaImageNumber($obfNumber, $displayedNumber)) {
+                $errors[] = 'The displayed number was incorrect. Are you human?';
+                $error = true;
+            }
+
+            if (false == $error)
+            {
                 // Get a new user object and create it
                 $user = User::getUser();
                 $user->name = $userName;
                 $user->password = Hash::make($password);
+                $user->password_hint = trim($request->get('passwordHint'));
                 // Token required for API calls
                 $user->user_token = User::getNewToken();
                 $user->save();
@@ -189,7 +204,7 @@ class AuthController extends Controller
         }
 
         if (true == $error) {
-            return view('auth.register', compact('userName', 'errors', 'msgs'));
+            return view('auth.register', compact('userName', 'obfNumber', 'errors', 'msgs'));
         }
 
         return redirect()->intended('/auth/login');

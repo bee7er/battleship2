@@ -14,6 +14,7 @@ class UsersTableSeeder extends Seeder {
         $user = new User();
         $user->name = 'System Admin';
         $user->password = Hash::make('battle202');
+        $user->password_hint = 'battle202';
         $user->user_token = User::getNewToken();
         $user->admin = true;
         $user->save();
@@ -21,6 +22,7 @@ class UsersTableSeeder extends Seeder {
         $user = new User();
         $user->name = 'Brian';
         $user->password = Hash::make('battle101');
+        $user->password_hint = 'battle101';
         $user->user_token = User::getNewToken();
         $user->admin = true;
         $user->save();

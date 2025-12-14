@@ -15,6 +15,8 @@ abstract class Controller extends BaseController
 
     const SESSION_VAR_GAME_TOKEN = 'PlayerTwoLinkToken';
     const SESSION_VAR_USER_TOKEN = 'UserToken';
+    const OBFUSCATED_NUMBER_FILES = ['deux.jpeg','zero.jpeg','neuf.jpeg','quartre.jpeg','un.jpeg','huit.jpeg','cinq.jpeg','trois.jpeg','six.jpeg','sept.jpeg'];
+    const OBFUSCATED_NUMBER_FILES_ORDERED = ['zero.jpeg','un.jpeg','deux.jpeg','trois.jpeg','quartre.jpeg','cinq.jpeg','six.jpeg','sept.jpeg','huit.jpeg','neuf.jpeg'];
 
     /**
      * Set a cookie to a given value
@@ -38,4 +40,35 @@ abstract class Controller extends BaseController
         return $value;
     }
 
+    /**
+     * Chooses an image pseudo-randomly from the array and returns it.
+     * This forms the basis of a test that the submission comes from a human.
+     *
+     * @param $obfNumber
+     * @return mixed
+     */
+    public static function getCaptchaImageFileName($obfNumber)
+    {
+        // The $obfNumber was generated randomly and we use the 3rd number to select the image
+        $obfDigit = substr("$obfNumber", 2, 1);
+        $file = self::OBFUSCATED_NUMBER_FILES[$obfDigit];
+
+        return $file;
+    }
+
+    /**
+     * .
+     *
+     * @param $obfNumber
+     * @return mixed
+     */
+    public static function checkCaptchaImageNumber($obfNumber, $displayedNumber)
+    {
+        $fileName = self::getCaptchaImageFileName($obfNumber);
+        $index = array_search($fileName, self::OBFUSCATED_NUMBER_FILES_ORDERED);
+
+        Log::info("Displayed: $displayedNumber, and Index: $index");
+
+        return ($displayedNumber == $index);
+    }
 }

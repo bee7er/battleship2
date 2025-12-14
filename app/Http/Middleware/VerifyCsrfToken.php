@@ -14,6 +14,8 @@ class VerifyCsrfToken extends BaseVerifier
      * @var array
      */
     protected $except = [
+        '/isUserNameUnique',
+        '/getPasswordHint',
         '/setVesselLocation',
         '/removeVesselLocation',
         '/getGameStatus',
@@ -29,7 +31,7 @@ class VerifyCsrfToken extends BaseVerifier
         $response = $next($request);
 
         if (last(explode('\\',get_class($response))) != 'RedirectResponse') {
-            $response->header('P3P', 'CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
+            //$response->header('P3P', 'CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
         }
 
         return $response;

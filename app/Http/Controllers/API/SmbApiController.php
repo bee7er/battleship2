@@ -12,8 +12,10 @@ use App\Move;
 use App\User;
 use Exception;
 use Illuminate\Http\Request;
+//use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
 
 /**
  * Class SmbApiController
@@ -28,6 +30,23 @@ class SmbApiController extends Controller
 	 */
 	public function __construct()
 	{
+	}
+
+	/**
+	 * Chooses an image pseudo-randomly from the array and returns it.
+	 * This forms the basis of a test that the submission comes from a human.
+	 *
+	 * @param Request $request
+	 * @return mixed
+	 */
+	public function getCaptchaImage(Request $request)
+	{
+		$obfNumber = $request->get('n');
+		$file = self::getCaptchaImageFileName($obfNumber);
+		$fileName = ("./images/$file");
+
+		header('Content-Type', 'image/jpeg');
+		return Response::download($fileName);
 	}
 
 	/**
@@ -63,6 +82,52 @@ class SmbApiController extends Controller
 			$result = 'Error';
 			$message = $exception->getMessage();
 			Log::info('Error in isUserNameUnique(): ' . $message);
+		}
+
+		$returnData = [
+			"message" => $message,
+			"result" => $result,
+			"returnedData" => $returnedData
+		];
+
+		return $returnData;   // Gets converted to json
+	}
+
+	/**
+	 * Get the user's password hint
+	 *
+	 * @param Request $request
+	 * @return Response
+	 */
+	public function getPasswordHint(Request $request)
+	{
+		$message = "Data received OK";
+		$result = null;
+		$passwordHint = null;
+		$returnedData = null;
+
+		try {
+			$userName = $request->get('userName');
+			$error = '';
+			$user = User::getUserByUserName($userName);
+			if (isset($user) && null !== $user) {
+				$message = "User name found ok";
+				$passwordHint = $user->password_hint;;
+			} else {
+				$error = "User name not found";
+			}
+
+			$returnedData = [
+				"passwordHint" => $passwordHint,
+				"error" => $error
+			];
+
+			$result = 'OK';
+
+		} catch(\Exception $exception) {
+			$result = 'Error';
+			$message = $exception->getMessage();
+			Log::info('Error in getPasswordHint(): ' . $message);
 		}
 
 		$returnData = [
