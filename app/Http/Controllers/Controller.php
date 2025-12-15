@@ -57,7 +57,8 @@ abstract class Controller extends BaseController
     }
 
     /**
-     * .
+     * Retrieves the obfuscated image file, gets the index of that file in the
+     * proper sequence and compares that index with the number given by the user.
      *
      * @param $obfNumber
      * @return mixed
@@ -67,7 +68,7 @@ abstract class Controller extends BaseController
         $fileName = self::getCaptchaImageFileName($obfNumber);
         $index = array_search($fileName, self::OBFUSCATED_NUMBER_FILES_ORDERED);
 
-        Log::info("Displayed: $displayedNumber, and Index: $index");
+//        Log::info("Displayed: $displayedNumber, and Index: $index");
 
         return ($displayedNumber == $index);
     }
