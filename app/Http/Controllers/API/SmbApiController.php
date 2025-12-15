@@ -43,7 +43,9 @@ class SmbApiController extends Controller
 	{
 		$obfNumber = $request->get('n');
 		$file = self::getCaptchaImageFileName($obfNumber);
-		$fileName = ("./images/$file");
+		$fileName = (public_path() . "/images/$file");
+
+		//Log::info($fileName);
 
 		header('Content-Type', 'image/jpeg');
 		return Response::download($fileName);

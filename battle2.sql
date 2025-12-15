@@ -37,7 +37,7 @@ CREATE TABLE `fleet_templates` (
 
 LOCK TABLES `fleet_templates` WRITE;
 /*!40000 ALTER TABLE `fleet_templates` DISABLE KEYS */;
-INSERT INTO `fleet_templates` VALUES (1,1,'2025-12-12 15:06:51','2025-12-12 15:06:51'),(2,2,'2025-12-12 15:06:51','2025-12-12 15:06:51'),(3,3,'2025-12-12 15:06:51','2025-12-12 15:06:51'),(4,4,'2025-12-12 15:06:51','2025-12-12 15:06:51'),(5,5,'2025-12-12 15:06:51','2025-12-12 15:06:51');
+INSERT INTO `fleet_templates` VALUES (1,1,'2025-12-15 05:49:53','2025-12-15 05:49:53'),(2,2,'2025-12-15 05:49:53','2025-12-15 05:49:53'),(3,3,'2025-12-15 05:49:53','2025-12-15 05:49:53'),(4,4,'2025-12-15 05:49:53','2025-12-15 05:49:53'),(5,5,'2025-12-15 05:49:53','2025-12-15 05:49:53');
 /*!40000 ALTER TABLE `fleet_templates` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -183,7 +183,7 @@ CREATE TABLE `message_texts` (
 
 LOCK TABLES `message_texts` WRITE;
 /*!40000 ALTER TABLE `message_texts` DISABLE KEYS */;
-INSERT INTO `message_texts` VALUES (1,'Invite owner','Hi %s, a game has been created for you by the system called \'%s\' against opponent \'%s\'. *system_admin','specific','ready','2025-12-12 15:06:51','2025-12-12 15:06:51'),(2,'Invite player','Hi %s, will you play \'%s\' with me? %s','specific','ready','2025-12-12 15:06:51','2025-12-12 15:06:51'),(3,'Accept invitation','Hi %s, I will love playing \'%s\' with you. %s','specific','ready','2025-12-12 15:06:51','2025-12-12 15:06:51'),(4,'Game ready','Hi %s and %s, I\'m happy to say that \'%s\' is ready to play. *system_admin','specific','ready','2025-12-12 15:06:51','2025-12-12 15:06:51'),(5,'Waiting','Hi %s, %s is waiting for you to finish plotting your fleet in the \'%s\' game. *system_admin','specific','ready','2025-12-12 15:06:51','2025-12-12 15:06:51'),(6,'Winner','Hi %s, you won the \'%s\' game.  Well done. %s','specific','ready','2025-12-12 15:06:51','2025-12-12 15:06:51'),(7,'Loser','Hi %s, sadly you lost the \'%s\' game.  Try again later. %s','specific','ready','2025-12-12 15:06:51','2025-12-12 15:06:51'),(8,'Player Two Error','Hi %s, sorry you cannot play \'%s\' against yourself. %s','specific','ready','2025-12-12 15:06:51','2025-12-12 15:06:51'),(9,'Welcome to Version 2','Hi %s, welcome to version two of my battleships game. *system_admin','broadcast','ready','2025-12-12 15:06:51','2025-12-12 15:06:51');
+INSERT INTO `message_texts` VALUES (1,'Invite owner','Hi %s, a game has been created for you by the system called \'%s\' against opponent \'%s\'. *system_admin','specific','ready','2025-12-15 05:49:53','2025-12-15 05:49:53'),(2,'Invite player','Hi %s, will you play \'%s\' with me? %s','specific','ready','2025-12-15 05:49:53','2025-12-15 05:49:53'),(3,'Accept invitation','Hi %s, I will love playing \'%s\' with you. %s','specific','ready','2025-12-15 05:49:53','2025-12-15 05:49:53'),(4,'Game ready','Hi %s and %s, I\'m happy to say that \'%s\' is ready to play. *system_admin','specific','ready','2025-12-15 05:49:53','2025-12-15 05:49:53'),(5,'Waiting','Hi %s, %s is waiting for you to finish plotting your fleet in the \'%s\' game. *system_admin','specific','ready','2025-12-15 05:49:53','2025-12-15 05:49:53'),(6,'Winner','Hi %s, you won the \'%s\' game.  Well done. %s','specific','ready','2025-12-15 05:49:53','2025-12-15 05:49:53'),(7,'Loser','Hi %s, sadly you lost the \'%s\' game.  Try again later. %s','specific','ready','2025-12-15 05:49:53','2025-12-15 05:49:53'),(8,'Player Two Error','Hi %s, sorry you cannot play \'%s\' against yourself. %s','specific','ready','2025-12-15 05:49:53','2025-12-15 05:49:53'),(9,'Welcome to Version 2','Hi %s, welcome to version two of my battleships game. *system_admin','broadcast','ready','2025-12-15 05:49:53','2025-12-15 05:49:53');
 /*!40000 ALTER TABLE `message_texts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -304,6 +304,7 @@ CREATE TABLE `users` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
   `password` varchar(60) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `password_hint` varchar(60) COLLATE utf8mb3_unicode_ci NOT NULL,
   `user_token` varchar(16) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `admin` tinyint(1) NOT NULL DEFAULT '0',
   `remember_token` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
@@ -324,7 +325,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'System Admin','$2y$10$2Eatc3Cy/XOHj1rbIkBM2OZEAdU0ZaAvYJssiW446iDqWPTaeGHVi','qh3xl9SVw82v4QJo',1,NULL,0,0,0,'2025-12-12 15:06:51','2025-12-12 15:06:51'),(2,'Brian','$2y$10$JXYQMycV6zpcL1zeLJ5vXebsMlVUuQwV07QdsyjUzXrLbE.Rhze/a','Y5jqkWn1opegNbdL',1,NULL,0,0,0,'2025-12-12 15:06:51','2025-12-12 15:06:51');
+INSERT INTO `users` VALUES (1,'System Admin','$2y$10$1GuWGFwpYASlnT3FfomHIOaN2KBAJdXaMedq2axg7/PlQNQaz8uTa','battle202','F6nwxUtXU6hwkSra',1,NULL,0,0,0,'2025-12-15 05:49:53','2025-12-15 05:49:53'),(2,'Brian','$2y$10$SgAlXivB/m0EOhO8I9y/c.t34/26DWxswdSHAynUgNUQdMoiBXNoO','battle101','SuHdJW16XJ5hAYl1',1,NULL,0,0,0,'2025-12-15 05:49:53','2025-12-15 05:49:53');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -352,7 +353,7 @@ CREATE TABLE `vessels` (
 
 LOCK TABLES `vessels` WRITE;
 /*!40000 ALTER TABLE `vessels` DISABLE KEYS */;
-INSERT INTO `vessels` VALUES (1,'aircraft-carrier',5,7,'2025-12-12 15:06:51','2025-12-12 15:06:51'),(2,'battleship',4,6,'2025-12-12 15:06:51','2025-12-12 15:06:51'),(3,'cruiser',3,5,'2025-12-12 15:06:51','2025-12-12 15:06:51'),(4,'submarine',3,5,'2025-12-12 15:06:51','2025-12-12 15:06:51'),(5,'destroyer',2,4,'2025-12-12 15:06:51','2025-12-12 15:06:51');
+INSERT INTO `vessels` VALUES (1,'aircraft-carrier',5,7,'2025-12-15 05:49:53','2025-12-15 05:49:53'),(2,'battleship',4,6,'2025-12-15 05:49:53','2025-12-15 05:49:53'),(3,'cruiser',3,5,'2025-12-15 05:49:53','2025-12-15 05:49:53'),(4,'submarine',3,5,'2025-12-15 05:49:53','2025-12-15 05:49:53'),(5,'destroyer',2,4,'2025-12-15 05:49:53','2025-12-15 05:49:53');
 /*!40000 ALTER TABLE `vessels` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -365,4 +366,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-12 15:07:23
+-- Dump completed on 2025-12-15  5:50:22
