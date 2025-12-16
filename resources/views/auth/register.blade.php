@@ -1,9 +1,9 @@
-@extends('layouts.app')
-@section('title') register @parent @endsection
-
 <?php
 use App\User;
 ?>
+
+@extends('layouts.app')
+@section('title') register @parent @endsection
 
 @section('content')
 
@@ -146,8 +146,10 @@ use App\User;
                     errors[errors.length] = 'The user name is too short. It should be a minimum of {{User::USR_MIN_LEN}} characters.';
                     atLeastOne = true;
                     userName.focus();
-                } else {
+                }
             }
+
+            console.log(errors);
 
             if (atLeastOne) {
                 let errMsgs = sep = "";
