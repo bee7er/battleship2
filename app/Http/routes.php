@@ -28,6 +28,7 @@ Route::get('/about', 'HomeController@about');
 Route::get('/playerTwo', 'HomeController@playerTwo');
 
 Route::get('/profile', 'HomeController@profile');
+Route::post('/updateProfile', 'HomeController@updateProfile');
 Route::get('/games', 'GamesController@index');
 Route::get('/addGame', 'GamesController@addGame');
 Route::post('/editGame', 'GamesController@editGame');

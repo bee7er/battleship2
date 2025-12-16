@@ -9,6 +9,7 @@ use App\Vessel;
 use Exception;
 use Illuminate\Auth\Guard;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -134,6 +135,38 @@ class HomeController extends Controller
 		$msgs = [];
 
 		return view('pages.profile', compact('loggedIn', 'user', 'errors', 'msgs'));
+	}
+
+	/**
+	 * Update the user profile.
+	 *
+	 * @param Request $request
+	 * @return Response
+	 */
+	public function updateProfile(Request $request)
+	{
+		if (!$this->auth->check()) {
+			return redirect()->intended('error');
+		}
+
+		$userId = intval($request->get('userId'));
+		try {
+			$user = User::getUser($userId);
+			$user->password_hint = $request->get('passwordHint');
+
+			if ("" != $request->get('password')) {
+				$user->password = Hash::make($request->get('password'));
+			}
+			if (!isset($user->user_token) || '' == $user->user_token) {
+				$user->user_token = User::getNewToken();
+			}
+			$user->save();
+
+		} catch(Exception $e) {
+			Log::notice("Error updating user profile: {$e->getMessage()} at {$e->getFile()}, {$e->getLine()}");
+		}
+
+		return redirect()->intended('/home');
 	}
 
 	/**

@@ -41,7 +41,7 @@ use App\User;
                         </tr>
                         <tr class="">
                             <td class="cell bs-section-title">
-                                User name:
+                                User name (any {{User::USR_MIN_LEN}} or more characters):
                             </td>
                             <td class="cell">
                                 <input type="text" id="userName" name="userName" value="@if (isset($user->id)){{$user->name}}@endif" />
@@ -49,7 +49,7 @@ use App\User;
                         </tr>
                         <tr class="">
                             <td class="cell bs-section-title">
-                                New password (or leave blank):
+                                New password (leave blank or any {{User::PWD_MIN_LEN}} or more characters):
                             </td>
                             <td class="cell">
                                 <input type="text" id="password" name="password" value="" />
@@ -57,7 +57,7 @@ use App\User;
                         </tr>
                         <tr class="">
                             <td class="cell bs-section-title">
-                                Repeat password (or leave blank):
+                                Repeat password (confirm or leave blank):
                             </td>
                             <td class="cell">
                                 <input type="text" id="repeat" name="repeat" value="" />
@@ -65,10 +65,10 @@ use App\User;
                         </tr>
                         <tr class="">
                             <td class="cell bs-section-title">
-                                Email:
+                                Password hint:
                             </td>
                             <td class="cell">
-                                <input type="text" id="userEmail" name="userEmail" value="@if (isset($user->id)){{$user->email}}@endif" />
+                                <input type="text" id="passwordHint" name="passwordHint" value="{{$user->password_hint}}" />
                             </td>
                         </tr>
                         <tr class="">
@@ -120,20 +120,25 @@ use App\User;
         {
             let f = $('#userForm');
             let userName = $('#userName');
-            let userEmail = $('#userEmail');
+            let passwordHint = $('#passwordHint');
             let password = $('#password');
             let repeat = $('#repeat');
 
             let errors = [];
             let atLeastOne = false;
             // NB Validate in reverse order so we focus on the first one, lower down
-            if ('' == userEmail.val()) {
-                errors[errors.length] = 'Please enter an email for this user';
+            if ('' == passwordHint.val()) {
+                errors[errors.length] = 'Please enter a password hint for this user';
                 atLeastOne = true;
-                userEmail.focus();
+                passwordHint.focus();
             }
             if ('{{$mode}}' == 'add' && '' == password.val()) {
                 errors[errors.length] = 'Password is required for a new user';
+                atLeastOne = true;
+                password.focus();
+            }
+            if ('' != password.val() && password.val().length < {{User::PWD_MIN_LEN}}) {
+                errors[errors.length] = 'The password is too short. It should be a minimum of {{User::PWD_MIN_LEN}} characters.';
                 atLeastOne = true;
                 password.focus();
             }
@@ -154,6 +159,12 @@ use App\User;
                 errors[errors.length] = 'Please enter a name for this user';
                 atLeastOne = true;
                 userName.focus();
+            } else {
+                if (userName.val().length < {{User::USR_MIN_LEN}}) {
+                    errors[errors.length] = 'The user name is too short. It should be a minimum of {{User::USR_MIN_LEN}} characters.';
+                    atLeastOne = true;
+                    userName.focus();
+                }
             }
 
             if (atLeastOne) {

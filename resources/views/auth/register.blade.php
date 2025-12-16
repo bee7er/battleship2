@@ -124,10 +124,16 @@ use App\User;
                 atLeastOne = true;
                 password.focus();
             } else {
-                if ('' != confirm.val() && confirm.val() != password.val()) {
-                    errors[errors.length] = 'The password and password confirmation do not match';
+                if (password.val().length < {{User::PWD_MIN_LEN}}) {
+                    errors[errors.length] = 'The password is too short. It should be a minimum of {{User::PWD_MIN_LEN}} characters.';
                     atLeastOne = true;
                     password.focus();
+                } else {
+                    if ('' != confirm.val() && confirm.val() != password.val()) {
+                        errors[errors.length] = 'The password and password confirmation do not match';
+                        atLeastOne = true;
+                        password.focus();
+                    }
                 }
             }
 
@@ -135,6 +141,12 @@ use App\User;
                 errors[errors.length] = 'Please enter a user name';
                 atLeastOne = true;
                 userName.focus();
+            } else {
+                if (userName.val().length < {{User::USR_MIN_LEN}}) {
+                    errors[errors.length] = 'The user name is too short. It should be a minimum of {{User::USR_MIN_LEN}} characters.';
+                    atLeastOne = true;
+                    userName.focus();
+                } else {
             }
 
             if (atLeastOne) {

@@ -119,7 +119,7 @@ class UsersController extends Controller
 		try {
 			$user = User::getUser($userId);
 			$user->name = $request->get('userName');
-			$user->email = $request->get('userEmail');
+			$user->password_hint = $request->get('passwordHint');
 			$user->games_played = $request->get('games_played');
 			$user->vessels_destroyed = $request->get('vessels_destroyed');
 			$user->points_scored = $request->get('points_scored');
@@ -127,7 +127,7 @@ class UsersController extends Controller
 			if ("" != $request->get('password')) {
 				$user->password = Hash::make($request->get('password'));
 			}
-			if ('add' == $mode) {
+			if ('add' == $mode || (!isset($user->user_token) || '' == $user->user_token)) {
 				$user->user_token = User::getNewToken();
 			}
 			$user->save();
