@@ -287,6 +287,7 @@ class GamesController extends Controller
 		$msgs = [];
 
 		$game = $theirUser = null;
+		$currentUserIsPlayerOne = false;
 		try {
 			$game = Game::getGameDetails($gameId);
 			if (Game::STATUS_DELETED == $game->status) {
@@ -294,8 +295,8 @@ class GamesController extends Controller
 				return redirect()->intended('/games');
 			}
 
-            // We use the total count of moves to determine whose go it is
-			$latestMove = Move::latest()->first();
+            // Find the latest move for the current game
+			$latestMove = Move::getLatestMove($gameId);
 
 			// We must be careful to distinguish between the game owner and the opponent, because
 			// when we get to the play grid it can be either.  We will call it 'myFleet' and 'theirFleet'

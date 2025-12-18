@@ -74,7 +74,7 @@ class Move extends Model
     }
 
     /**
-     * Gets the latest move and returns it if was by the specified user
+     * Gets the latest move for the specified game.
      *
      * @param $gameId
      * @return mixed

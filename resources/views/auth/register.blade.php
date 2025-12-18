@@ -149,8 +149,6 @@ use App\User;
                 }
             }
 
-            console.log(errors);
-
             if (atLeastOne) {
                 let errMsgs = sep = "";
                 for (let i=(errors.length - 1); i>=0; i--) {

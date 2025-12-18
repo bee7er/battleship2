@@ -82,7 +82,11 @@ class HomeController extends Controller
 
 		$gameToken = $request->get('gameToken');
 		$game = Game::getGameByPlayerTwoLinkToken($gameToken);
-		setSessionVariable(self::SESSION_VAR_GAME_TOKEN, $game);
+		if (isset($game->player_two_id) && null != $game->player_two_id) {
+			$errors[] = 'Sorry, that game has already been claimed by someone else. Login and add your own game.';
+		} else {
+			setSessionVariable(self::SESSION_VAR_GAME_TOKEN, $game);
+		}
 
 		return view('pages.playerTwo', compact('loggedIn', 'errors', 'msgs'));
 	}
