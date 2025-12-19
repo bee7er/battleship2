@@ -126,6 +126,7 @@ class HomeController extends Controller
 		}
 
 		$loggedIn = true;
+		$loggedInUser = $this->auth->user();
 		$userId = $request->get('userId');
 		if (null != $userId) {
 			$user = User::getUser($userId);
@@ -134,11 +135,12 @@ class HomeController extends Controller
 		}
 
 		$user->wins = Game::getWinnerCount($user->id);
+		$from = $request->get('from');
 
 		$errors = [];
 		$msgs = [];
 
-		return view('pages.profile', compact('loggedIn', 'user', 'errors', 'msgs'));
+		return view('pages.profile', compact('loggedIn', 'loggedInUser', 'user', 'from', 'errors', 'msgs'));
 	}
 
 	/**
@@ -170,7 +172,13 @@ class HomeController extends Controller
 			Log::notice("Error updating user profile: {$e->getMessage()} at {$e->getFile()}, {$e->getLine()}");
 		}
 
-		return redirect()->intended('/home');
+		$from = $request->get('from');
+		$redirectTo = '/home';
+		if ('lb' == $from) {
+			$redirectTo = '/leaderboard';
+		}
+
+		return redirect()->intended($redirectTo);
 	}
 
 	/**

@@ -23,16 +23,15 @@
                     <div class="content">
                         <p class="is-size-4">What You Have To Do</p>
                         <ol class="is-size-5">
-                            <li>If this is your first visit then you must <span class="has-text-link">Register</span>, with a simple name and password.</li>
-                            <li>Once you've logged in, go to <span class="has-text-link">My Games</span></li>
-                            <li>Click on <span class="has-text-link">Add Game</span></li>
-                            <li>Click on <span class="has-text-link">Edit Grid</span></li>
-                            <li>Click on the  <span class="has-text-link">Vessel Location Grid</span> to plot each vessel</li>
-                            <li>If you want to get the game to plot the vessels just click on the  <span class="has-text-link">Go Random</span> button</li>
-                            <li>When you have finished plotting your vessels the game status will change to <span class="has-text-link">Waiting</span></li>
-                            <li>Invite a friend to join you in battle by sending the <span class="has-text-link">Player 2</span> link to them </li>
+                            <li>If this is your first visit then you must <span class="bs-text">Register</span>, with a simple name and password.</li>
+                            <li>Once you've logged in, go to <span class="bs-text">My Games</span>.</li>
+                            <li>Click on <span class="bs-text">Add Game</span>.</li>
+                            <li>Click on <span class="bs-text">Edit Grid</span>.</li>
+                            <li>Click on the  <span class="bs-text">Vessel Location Grid</span> to plot each vessel.</li>
+                            <li>If you want to get the game to plot the vessels just click on the  <span class="bs-text">Go Random</span> button.</li>
+                            <li>When you have finished plotting your vessels the game status will change to <span class="bs-text">Waiting</span>.</li>
+                            <li>Invite a friend to join you in battle by sending the <span class="bs-text">Player 2</span> link to them.</li>
                         </ol>
-
                     </div>
                 </div>
             </section>

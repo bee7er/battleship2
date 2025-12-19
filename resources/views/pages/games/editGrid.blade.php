@@ -64,7 +64,7 @@ $fleetId = 0;
                                 @if (null != $game->player_two_name)
                                     {{$game->player_two_name}}
                                 @else
-                                    <span class="has-text-link" style="cursor:cell;margin-right: 8px;" onclick="copyFunc()" title="Copy to clipboard">{{$game->player_two_link}}</span>
+                                    <span class="bs-text" style="cursor:cell;margin-right: 8px;" onclick="copyFunc()" title="Copy to clipboard">{{$game->player_two_link}}</span>
                                     <img style="cursor:cell;" onclick="copyFunc()" src="{{env("BASE_URL", "/")}}images/clipboard.jpg" width="18px" title="Copy to clipboard" />
                                     <input type="text" value="{{$game->player_two_link}}" id="copyInp" style="position:absolute;left:-1000px;top:-1000px;">
                                 @endif

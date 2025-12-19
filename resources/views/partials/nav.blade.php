@@ -55,7 +55,7 @@
                                         </a>
                                     @endif
                                 @endif
-                                <a class="navbar-item {{(Request::is('profile') ? ' is-selected' : '')}}" href="{{ url('profile') }}">
+                                <a class="navbar-item {{(Request::is('profile') ? ' is-selected' : '')}}" href="{{ url('profile?&from=nv') }}">
                                     Your Profile
                                 </a>
                                 <hr class="navbar-divider">

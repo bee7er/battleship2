@@ -58,7 +58,7 @@
                                 <td>{{$user->wins}}</td>
                                 <td>{{$user->vessels_destroyed}}</td>
                                 <td>{{$user->points_scored}}</td>
-                                <td><div title="User profile"><a class="bs-games-button" href="javascript: location.href='/profile?userId={{$user->id}}'">Profile</a></div></td>
+                                <td><div title="User profile"><a class="bs-games-button" href="javascript: location.href='/profile?userId={{$user->id}}&from=lb'">Profile</a></div></td>
                             </tr>
                         @endforeach
                     @else

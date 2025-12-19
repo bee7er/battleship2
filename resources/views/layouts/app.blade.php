@@ -12,7 +12,7 @@
     <!-- Fonts -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
 
-    <link href="{{env("BASE_URL", "/")}}css/site.css?v20" rel="stylesheet">
+    <link href="{{env("BASE_URL", "/")}}css/site.css?v21" rel="stylesheet">
     <!-- Javascript -->
     <script type="text/javascript" src="{{env("BASE_URL", "/")}}js/smb.js?v4"></script>
 </head>

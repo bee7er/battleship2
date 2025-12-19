@@ -37,30 +37,32 @@ use App\User;
                                         {{$user->name}}
                                     </td>
                                 </tr>
-                                <tr class="">
-                                    <td class="cell bs-section-title">
-                                        New password (or leave blank):
-                                    </td>
-                                    <td class="cell">
-                                        <input type="text" id="password" name="password" value="" />
-                                    </td>
-                                </tr>
-                                <tr class="">
-                                    <td class="cell bs-section-title">
-                                        Repeat password (confirm or leave blank):
-                                    </td>
-                                    <td class="cell">
-                                        <input type="text" id="repeat" name="repeat" value="" />
-                                    </td>
-                                </tr>
-                                <tr class="">
-                                    <td class="cell bs-section-title">
-                                        Password hint:
-                                    </td>
-                                    <td class="cell">
-                                        <input type="text" id="passwordHint" name="passwordHint" value="{{$user->password_hint}}" />
-                                    </td>
-                                </tr>
+                                @if ($loggedInUser->id == $user->id)
+                                    <tr class="">
+                                        <td class="cell bs-section-title">
+                                            New password (or leave blank):
+                                        </td>
+                                        <td class="cell">
+                                            <input type="text" id="password" name="password" value="" />
+                                        </td>
+                                    </tr>
+                                    <tr class="">
+                                        <td class="cell bs-section-title">
+                                            Repeat password (confirm or leave blank):
+                                        </td>
+                                        <td class="cell">
+                                            <input type="text" id="repeat" name="repeat" value="" />
+                                        </td>
+                                    </tr>
+                                    <tr class="">
+                                        <td class="cell bs-section-title">
+                                            Password hint:
+                                        </td>
+                                        <td class="cell">
+                                            <input type="text" id="passwordHint" name="passwordHint" value="{{$user->password_hint}}" />
+                                        </td>
+                                    </tr>
+                                @endif
                                 <tr class="">
                                     <td class="cell bs-section-title">
                                         Games played:
@@ -123,35 +125,38 @@ use App\User;
         {
             let f = $('#userForm');
             let userName = $('#userName');
-            let password = $('#password');
-            let repeat = $('#repeat');
-            let passwordHint = $('#passwordHint');
-
             let errors = [];
             let atLeastOne = false;
-            // NB Validate in reverse order so we focus on the first one, lower down
-            if ('' == passwordHint.val()) {
-                errors[errors.length] = 'Please enter a password hint';
-                atLeastOne = true;
-                passwordHint.focus();
-            }
-            if ('' != password.val() && password.val().length < {{User::PWD_MIN_LEN}}) {
-                errors[errors.length] = 'The password is too short. It should be a minimum of {{User::PWD_MIN_LEN}} characters.';
-                atLeastOne = true;
-                password.focus();
-            }
-            if (('' != password.val() && '' == repeat.val())
-                    || ('' == password.val() && '' != repeat.val())) {
-                errors[errors.length] = 'When entering a password, then both password and repeated password are needed';
-                atLeastOne = true;
-                password.focus();
-            }
-            if (('' != password.val() && '' != repeat.val())
-                    && (password.val() != repeat.val())) {
-                errors[errors.length] = 'The password and repeated password do not match';
-                atLeastOne = true;
-                password.focus();
-            }
+
+            @if ($loggedInUser->id == $user->id)
+                let password = $('#password');
+                let repeat = $('#repeat');
+                let passwordHint = $('#passwordHint');
+
+                // NB Validate in reverse order so we focus on the first one, lower down
+                if ('' == passwordHint.val()) {
+                    errors[errors.length] = 'Please enter a password hint';
+                    atLeastOne = true;
+                    passwordHint.focus();
+                }
+                if ('' != password.val() && password.val().length < {{User::PWD_MIN_LEN}}) {
+                    errors[errors.length] = 'The password is too short. It should be a minimum of {{User::PWD_MIN_LEN}} characters.';
+                    atLeastOne = true;
+                    password.focus();
+                }
+                if (('' != password.val() && '' == repeat.val())
+                        || ('' == password.val() && '' != repeat.val())) {
+                    errors[errors.length] = 'When entering a password, then both password and repeated password are needed';
+                    atLeastOne = true;
+                    password.focus();
+                }
+                if (('' != password.val() && '' != repeat.val())
+                        && (password.val() != repeat.val())) {
+                    errors[errors.length] = 'The password and repeated password do not match';
+                    atLeastOne = true;
+                    password.focus();
+                }
+            @endif
 
             if (atLeastOne) {
                 let errMsgs = sep = "";
@@ -165,7 +170,7 @@ use App\User;
             }
 
             f.attr('method', 'POST');
-            f.attr('action', '{{env("BASE_URL", "/")}}updateProfile');
+            f.attr('action', '{{env("BASE_URL", "/")}}updateProfile?from={{$from}}');
             f.submit();
             return false;
         }
@@ -177,7 +182,7 @@ use App\User;
         {
             let f = $('#userForm');
             f.attr('method', 'GET');
-            f.attr('action', '{{env("BASE_URL", "/")}}home');
+            f.attr('action', '{{env("BASE_URL", "/")}}{{$from=="lb" ? "leaderboard": "home"}}');
             f.submit();
             return false;
         }

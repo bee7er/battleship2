@@ -150,6 +150,10 @@ hr {
     font-weight: bold;
     color: #c40000;
 }
+.bs-text {
+    font-weight: bold;
+    color: #c40000;
+}
 .bs-plot-table, .bs-progress-table {
     text-align: center;
     margin-left: auto;
